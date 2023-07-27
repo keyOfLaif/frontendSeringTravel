@@ -91,7 +91,6 @@ const Admin = () => {
             </div>
             {navAdmin__links[selectedNavLinkAdmin].content}
           </div>
-
         </div>
       </div>
     

@@ -77,4 +77,5 @@
     height: 100%;
     border-radius: 5px;
     background-color: #e4e4e6;
+    overflow-y: auto;
 }

@@ -19,3 +19,21 @@
 .topNavReportManagement h5{
     padding-right: 1rem;
 }
+
+.cards__Container{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 1rem;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.card__Report{
+    display: flex;
+    justify-content: space-around;
+    width: 150px;
+    border-radius: 25px;
+    background-color: white;
+    padding: 5px;
+}

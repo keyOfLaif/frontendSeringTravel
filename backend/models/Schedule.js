@@ -19,9 +19,6 @@ const scheduleSchema = new mongoose.Schema(
       required: true
     },
     participants: [
-      {
-        type: String,
-      },
     ],
     
   },
