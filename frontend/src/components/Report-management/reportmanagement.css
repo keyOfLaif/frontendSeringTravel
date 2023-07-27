@@ -1,0 +1,21 @@
+.listsTripCount{
+    display: flex;
+    padding: 0;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.listsTripCount li{
+    padding: 0.2rem;
+    border-bottom: 1px solid #5f5f61;
+}
+
+.topNavReportManagement{
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.topNavReportManagement h5{
+    padding-right: 1rem;
+}

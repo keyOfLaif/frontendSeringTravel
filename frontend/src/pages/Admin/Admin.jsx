@@ -7,6 +7,7 @@ import './admin.css'
 import HomepageManagement from '../../components/Home-page-management/HomepageManagement'
 import Paymentmanagement from '../../components/Payment-management/Paymentmanagement'
 import Tripsmanagement from '../../components/Trips-management/Tripsmanagement'
+import Reportmanagement from '../../components/Report-management/Reportmanagement'
 
 const Admin = () => {
   //coba
@@ -27,7 +28,7 @@ const Admin = () => {
     },
     {
       title:'Laporan',
-      content:'Laporan',
+      content:<Reportmanagement/>,
     },
   ]
 
@@ -47,11 +48,14 @@ const Admin = () => {
 
         <div className='leftNavbarContainer'>
           <div className='leftNavbar d-flex flex-column'>
-            <div className='logo leftTopNav'>
+            <div className='leftTopNav'>
               <img src={logo} alt="" />
+              <h6>
+                Web Management
+              </h6>
             </div>
 
-            <div className='mt-4 leftNavbarMainContent'>
+            <div className='leftNavbarMainContent'>
               <ul className="gap-1 adminLists">
                 {
                   navAdmin__links.map((item,index)=>
@@ -59,11 +63,20 @@ const Admin = () => {
                     key={index}
                     className={`navAdmin__item ${index === selectedNavLinkAdmin ? 'selected' : ''}`}
                     onClick={()=>handleNavLinkSelected(index)}
-                  >{item.title}
+                  >
+                    {item.title}
                   </li>
                   )
                 }
               </ul>
+            </div>
+
+            <div>
+              <span>
+              <i className='ri-log-out-line'>
+              </i>
+                Keluar
+              </span>
             </div>
             
           </div>
