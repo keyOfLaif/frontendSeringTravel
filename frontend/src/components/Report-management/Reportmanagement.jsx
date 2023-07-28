@@ -2,72 +2,78 @@ import React, {useState, useEffect} from 'react'
 
 import { Table } from 'reactstrap'
 // import partisipantsData from '../../assets/data/partisipants.json'
-// import partisipantsTripData from '../../assets/data/trip_schedules.json'
+import jsonData from '../../assets/data/trip_schedules.json'
 
 import './reportmanagement.css'
 
 const Reportmanagement = () => {
-  const [tripData, setTripData] = useState([]); // To store trip data (tripDate, tripPrice, maxParticipant)
-  const [participantsData, setParticipantsData] = useState([]); // To store participants data
+
+  const [tripDataPerSchedule, setTripDataPerSchedule] = useState([])
+  const [tripParticipantsPerSchedule, setTripParticipantsPerSchedule] = useState([])
+  const [buttonIndex, setButtonIndex] = useState([])
+
   const [selectedTripIndex, setSelectedTripIndex] = useState(null); // To store the index of the selected trip
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch('../assets/data/trip_schedules.json'); // Adjust the path to the JSON file based on your project setup
-        if (!response.ok) {
-          throw new Error('Failed to fetch data.');
-        }
-        const jsonData = await response.json();
-
-        // Extract trip data (tripDate, tripPrice, maxParticipant) and participants data
-        const tripDataArray = jsonData.map(({ tripDate, tripPrice, maxParticipant, participants }) => ({
-          tripDate,
-          tripPrice,
-          maxParticipant,
-        }));
-        const participantsDataArray = jsonData.map(({ participants }) => participants);
-
-        setTripData(tripDataArray);
-        setParticipantsData(participantsDataArray);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleTripButtonClick = (index) => {
     setSelectedTripIndex(index);
   };
 
+  useEffect(() => {
+    const tripDataArray = jsonData.map(({ tripDate, tripPrice, maxParticipant, participants, index }) => ({
+      tripDate,
+      tripPrice,
+      maxParticipant,
+      participants,
+      index
+    }));
+    const participantsDataArray = jsonData.map(({ participants }) => participants);
+    // const indexData = jsonData.map(({index}))
+
+    setTripDataPerSchedule(tripDataArray);
+    setTripParticipantsPerSchedule(participantsDataArray);
+    // setButtonIndex(indexData);
+  }, []);
+
   return (
-    <div>
-      {tripData.map((trip, index) => (
-        <div key={index}>
-          <h2>Trip Data:</h2>
-          <p>Trip Date: {trip.tripDate}</p>
-          <p>Trip Price: {trip.tripPrice}</p>
-          <p>Max Participant: {trip.maxParticipant}</p>
+    <div className='adminSectionMainContent'>
+        <div className='topNavReportManagement'>
+           <h5>Bromo</h5>
+           <ul className='listsTripCount'>
+               <li>All</li>
+               <li>Trip 1</li>
+               <li>Trip 2</li>
+           </ul>
+         </div>
+            <div>
+              {tripDataPerSchedule.map((trip, index) => (
+                <div key={index}>
+                  
 
-          <button onClick={() => handleTripButtonClick(index)}>Show Participants</button>
+                  <li onClick={() => handleTripButtonClick(index)}>Show Participants</li>
 
-          {selectedTripIndex === index && (
-            <>
-              <h2>Participants Data:</h2>
-              {participantsData[index].map((participant, pIndex) => (
-                <div key={pIndex}>
-                  <p>Name: {participant.name}</p>
-                  <p>Gender: {participant.gender}</p>
-                  {/* Display other participant details as needed */}
+                  {selectedTripIndex === index && (
+
+                    <div>
+                      <h2>Trip Data:</h2>
+                      <p>Trip Date: {trip.tripDate}</p>
+                      <p>Trip Price: {trip.tripPrice}</p>
+                      <p>Max Participant: {trip.maxParticipant}</p>
+                      <h2>Participants Data:</h2>
+                      {trip.participants.map((participant, pIndex) => (
+                        <div key={pIndex}>
+                          <p>Name: {participant.name}</p>
+                          <p>Gender: {participant.gender}</p>
+                          {/* Display other participant details as needed */}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
                 </div>
               ))}
-            </>
-          )}
-        </div>
-      ))}
+            </div>
     </div>
+
     // <div className='adminSectionMainContent'>
     //     <div className='topNavReportManagement'>
     //       <h5>Bromo</h5>
@@ -77,6 +83,7 @@ const Reportmanagement = () => {
     //           <li>Trip 2</li>
     //       </ul>
     //     </div>
+
     //     <div className='cards__Container'>
     //       <div className='card__Report'>
     //         <div>
