@@ -46,8 +46,16 @@
 }
 
 .leftNavbarMainContent{
-    height: 100%;
+    height: auto;
     margin-top: 1rem;
+}
+
+.menu__title{
+    color: #beb3b3;
+    font-weight: 700;
+    font-size: smaller;
+    margin-left: 1rem;
+    margin-bottom: 0;
 }
 
 .adminLists{
@@ -57,12 +65,31 @@
     margin-bottom: 0;
 }
 
-.adminLists li{
-    padding: 0 0 0 1rem;
-    font-size: 0.9rem;
+.navAdmin__item i{
+    color: #35abfa;
 }
 
-.adminLists li.selected{
+.adminLists li{
+    padding: 0.3rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.adminLists li:hover{
+    background-color: #e9e9e9;
+}
+
+.selected {
+    background-color: #35abfa;
+    color: white;
+    font-weight: bold;
+}
+
+.selected i{
+    color: white;
+}
+
+.adminLists li.selected:hover {
     background-color: #35abfa;
 }
 
@@ -78,4 +105,21 @@
     border-radius: 5px;
     background-color: #e4e4e6;
     overflow-y: auto;
+}
+
+.other__lists{
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin-top: auto;
+}
+
+.other__lists li{
+    padding: 0.3rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;   
+}
+
+.other__lists li:hover{
+    color: #35abfa;
 }

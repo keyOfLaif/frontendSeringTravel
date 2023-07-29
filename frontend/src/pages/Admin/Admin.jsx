@@ -56,7 +56,8 @@ const Admin = () => {
             </div>
 
             <div className='leftNavbarMainContent'>
-              <ul className="gap-1 adminLists">
+              <h6 className='menu__title'>Menu</h6>
+              <ul className="adminLists">
                 {
                   navAdmin__links.map((item,index)=>
                   <li 
@@ -64,19 +65,32 @@ const Admin = () => {
                     className={`navAdmin__item ${index === selectedNavLinkAdmin ? 'selected' : ''}`}
                     onClick={()=>handleNavLinkSelected(index)}
                   >
-                    {item.title}
+                      <i class="ri-menu-4-line align-bottom me-1"></i>
+                    <span>
+                      {item.title}
+                    </span>
                   </li>
                   )
                 }
               </ul>
             </div>
 
-            <div>
-              <span>
-              <i className='ri-log-out-line'>
-              </i>
-                Keluar
-              </span>
+            <div className='pt-2 mt-auto'>
+              <h6 className='menu__title'>Lainnya</h6>
+              <ul className='other__lists'>
+                <li>
+                  <i className="ri-account-circle-line align-bottom me-1"></i>
+                  <span>
+                    Admin
+                  </span>
+                </li>
+                <li>
+                  <i className="ri-shut-down-line align-bottom me-1"></i>
+                  <span>
+                    Keluar
+                  </span>
+                </li>
+              </ul>
             </div>
             
           </div>
