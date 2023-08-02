@@ -13,21 +13,11 @@ const bookingSchema = new mongoose.Schema(
     },
 
     noBooking: {
+      required: true,
       type: String,
     },
 
     bookersDetail: [
-      {
-        name: {
-          type: String,
-        },
-        city: {
-          type: String,
-        },
-        gender: {
-          type: String,
-        },
-      },
     ],
 
     bookingStatus: {

@@ -5,7 +5,7 @@ const router = express.Router()
 import { verifyAdmin, verifyUser } from "../utils/verifyToken.js";
 
 // update USer
-router.put("/:id", verifyUser, updateUser);
+router.put("/:id", updateUser);
 
 // delete user
 router.delete("/:id", verifyUser, deleteUser);
