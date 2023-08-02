@@ -3,7 +3,9 @@ import {Row, Col, Container, Card, CardBody, CardText,CardSubtitle, CardTitle, M
 import './profile.css'
 
 import { AuthContext } from './../../context/AuthContext'
+import { BASE_URL } from '../../utils/config';
 import Payment from '../../components/Payment-confirmation/Payment'
+
 const Profile = () => {
   const {user} = useContext(AuthContext);
   const [modalEditProfile, setModalEditProfile] = useState(false);
@@ -20,7 +22,7 @@ const Profile = () => {
     birthDate: user.birthDate ? user.birthDate.split('T')[0] : '',
     gender: user.gender || '',
     photo: user.photo || '',
-    whatsapp: user.whatsApp || '',
+    whatsApp: user.whatsApp || '',
   });
 
   // Handle perubahan nilai input pada form
@@ -32,11 +34,33 @@ const Profile = () => {
   };
 
   // Handle submit form saat pengguna mengubah data
-  const handleSubmit = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     // Lakukan aksi update ke backend dengan formData
     // Implementasi kode untuk mengirim data ke backend, misalnya menggunakan fetch atau Axios
     // Setelah berhasil mengirim, Anda bisa mengganti data user pada state atau refresh halaman jika diperlukan
     console.log('Data yang akan diupdate:', formData);
+    
+    try {
+
+      const res = await fetch(`${BASE_URL}/users/${user._id}`, {
+        method: 'PUT',
+        headers: {
+          'content-type':'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const result = await res.json()
+      if (!res.ok) {
+        return alert(result.message);
+      }
+
+      alert(result.message)
+
+    } catch (err) {
+      alert(err.message)
+    }
 
     // Setelah berhasil diupdate, tutup modal
     toggleEditProfile();
@@ -56,7 +80,7 @@ const Profile = () => {
             </span>
           </h4>
           <React.Fragment>
-            <Modal isOpen={modalEditProfile} toggle={toggleEditProfile} fullscreen innerRef={modalRef} unstable_strictmode="false">
+            <Modal isOpen={modalEditProfile} toggle={toggleEditProfile} innerRef={modalRef} unstable_strictmode="false">
                   <ModalHeader toggle={toggleEditProfile}>Edit Profile</ModalHeader>
                   <ModalBody>
                     <Form>
@@ -104,7 +128,11 @@ const Profile = () => {
                         value={formData.city}
                         onChange={handleChange}
                       >
-                        <option>1</option>
+                        <option value='jakarta'>Jakarta</option>
+                        <option value='bogor'>Bogor</option>
+                        <option value='depok'>Depok</option>
+                        <option value='tangerang'>Tangerang</option>
+                        <option value='bekasi'>Bekasi</option>
                       </Input>
 
                       <Label>Tanggal Lahir:</Label>
@@ -129,14 +157,14 @@ const Profile = () => {
                         <option>perempuan</option>
                       </Input>
 
-                      <Label>Foto Profil:</Label>
-                      {/* Menampilkan gambar profil sebelumnya jika ada */}
+                      {/* <Label>Foto Profil:</Label>
+                      
                       {user.photo && <img src={user.photo} alt='Foto Profil' style={{ width: '100px' }} />}
                       <Input
                         name='photo'
-                        type='file' // Ganti menjadi 'file' agar dapat memilih gambar dari perangkat
-                        onChange={handleChange} // Tambahkan onChange untuk meng-handle pemilihan gambar
-                      />
+                        type='file' 
+                        onChange={handleChange} 
+                      /> */}
 
                       <Label>WhatsApp:</Label>
                       <Input
