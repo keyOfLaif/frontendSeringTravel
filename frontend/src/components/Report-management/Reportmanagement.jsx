@@ -6,6 +6,8 @@ import jsonData from '../../assets/data/trip_schedules.json'
 
 import './reportmanagement.css'
 
+import Chart from './Chart'
+
 const Reportmanagement = () => {
 
   const [tripDataPerSchedule, setTripDataPerSchedule] = useState([])
@@ -18,27 +20,77 @@ const Reportmanagement = () => {
   };
 
   useEffect(() => {
-    const tripDataArray = jsonData.map(({ tripDate, tripPrice, maxParticipant, participants }) => ({
-      tripDate,
-      tripPrice,
-      maxParticipant,
-      participants
-    }));
-    // const indexData = jsonData.map(({index}))
 
-    setTripDataPerSchedule(tripDataArray);
+    const calculatePercentagesPerTrip = (b) => {
+      const totalParticipants = b.length;
+      let maleCount = 0;
+      let femaleCount = 0;
+      let cityCounts = {};
+      let jobCounts = {};
+  
+      b.forEach((participant) => {
+        if (participant.gender === 'laki-laki') {
+          maleCount++;
+        } else if (participant.gender === 'perempuan') {
+          femaleCount++;
+        }
+  
+        cityCounts[participant.city] = (cityCounts[participant.city] || 0) + 1;
+        jobCounts[participant.job] = (jobCounts[participant.job] || 0) + 1;
+      });
+  
+      const genderPercentage = {
+        male: (maleCount / totalParticipants) * 100,
+        female: (femaleCount / totalParticipants) * 100,
+      };
+  
+      const cityPercentage = {};
+      Object.keys(cityCounts).forEach((city) => {
+        cityPercentage[city] = (cityCounts[city] / totalParticipants) * 100;
+      });
+  
+      const jobPercentage = {};
+      Object.keys(jobCounts).forEach((job) => {
+        jobPercentage[job] = (jobCounts[job] / totalParticipants) * 100;
+      });
+  
+      return {
+        genderPercentage,
+        cityPercentage,
+        jobPercentage,
+      };
+    };
+
+    const tripInformation = jsonData.map(({ tripDate, tripPrice, maxParticipant, participants }, index) => {
+      const participantsPerSchedule = jsonData[index].participants;
+      const percentages = calculatePercentagesPerTrip(participantsPerSchedule);
+      // You can use the percentages and other information as needed here
+  
+      return {
+        tripDate,
+        tripPrice,
+        maxParticipant,
+        participants,
+        ...percentages,
+      };
+    });
+
+    setTripDataPerSchedule(tripInformation);
     // setButtonIndex(indexData);
   }, []);
+
+ 
 
   const selectedReport = tripDataPerSchedule.find((selectedTripReport) => selectedTripReport.tripDate === selectedTripIndex);
 
   return (
     <div className='adminSectionMainContent'>
         <div className='topNavReportManagement'>
+          
            <h5>Bromo</h5>
            <ul className='listsTripCount'>
             {tripDataPerSchedule.map((tripData, index) => (
-              <button key={tripData.tripDate} onClick={()=>handleShowReport(tripData.tripDate)}>Trip ke-{index+1}</button>
+              <button className={`btn__Trip ${selectedTripIndex === tripData.tripDate ? 'selectedButton' : ''}`} key={tripData.tripDate} onClick={()=>handleShowReport(tripData.tripDate)}>Trip ke-{index+1}</button>
             ))
             }
            </ul>
@@ -49,6 +101,56 @@ const Reportmanagement = () => {
             <h2>{selectedReport.tripDate}</h2>
             <p>Trip Price: {selectedReport.tripPrice}</p>
             <p>Max Participant: {selectedReport.maxParticipant}</p>
+            <div className='frame__chartCard'>
+
+              <div className='chartCard'>
+                <span>
+                  <h6>Female : {selectedReport.genderPercentage.female.toFixed(2)}%</h6>
+                  <h6>Male : {selectedReport.genderPercentage.male.toFixed(2)}%</h6>
+                </span>
+                <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]}/>
+              </div>
+
+              <div className='chartCard'>
+                <span>
+                  <h6>Pekerja : {selectedReport.jobPercentage.bekerja.toFixed(2)}%</h6>
+                  <h6>Pelajar : {selectedReport.jobPercentage.pelajar.toFixed(2)}%</h6>
+                </span>
+                <Chart 
+                  data={
+                    [
+                      selectedReport.jobPercentage.bekerja,
+                      selectedReport.jobPercentage.pelajar
+                    ]
+                  }
+                />
+              </div>
+
+              <div className='chartCard'>
+                <span>
+                  <h6>Jakarta : {selectedReport.cityPercentage.Jakarta.toFixed(2)}%</h6>
+                  <h6>Depok : {selectedReport.cityPercentage.Depok.toFixed(2)}%</h6>
+                  <h6>Tangerang : {selectedReport.cityPercentage.Tangerang.toFixed(2)}%</h6>
+                  <h6>Bekasi : {selectedReport.cityPercentage.Bekasi.toFixed(2)}%</h6>
+                </span>
+                <Chart 
+                  data={
+                    [
+                      selectedReport.cityPercentage.Jakarta,
+                      selectedReport.cityPercentage.Depok,
+                      selectedReport.cityPercentage.Tangerang,
+                      selectedReport.cityPercentage.Bekasi,
+                    ]
+                  }
+                />
+              </div>
+
+              <div className='chartCard'>
+              </div>
+            </div>
+
+            
+            
             <h5>Participants Data:</h5>
             <Table
               bordered
@@ -106,73 +208,6 @@ const Reportmanagement = () => {
           </div>
         )}
         </div>
-
-    {/* <div className='adminSectionMainContent'>
-        <div className='topNavReportManagement'>
-          <h5>Bromo</h5>
-          <ul className='listsTripCount'>
-              <li>All</li>
-              <li>Trip 1</li>
-              <li>Trip 2</li>
-          </ul>
-        </div>
-
-        <div className='cards__Container'>
-          <div className='card__Report'>
-            <div>
-              Total
-            </div>
-            <div className='border border-left border-dark'>
-              20
-            </div>
-          </div>
-          <div className='card__Report'>
-
-          </div>
-          <div className='card__Report'>
-
-          </div>
-
-        </div>
-        <div className='reportTable'>
-            <Table
-              bordered
-              hover
-              responsive
-              >
-              <thead>
-                  <tr>
-                  <th>
-                      No
-                  </th>
-                  <th>
-                      Nama
-                  </th>
-                  <th>
-                      City
-                  </th>
-                  </tr>
-              </thead>
-              {partisipantsTripData.map((trip, index) => (
-              <tbody key={index}>
-                  <tr>
-                  <th scope="row">
-                    {index+1}
-                  </th>
-                  <td>
-                    {item.participants.name}
-                  </td>
-                  <td>
-                    {item.participants.city}
-                  </td>
-                  </tr>
-                  
-              </tbody>
-          ))
-          }
-            </Table>
-        </div>
-    </div> */}
     </div>
 
   )

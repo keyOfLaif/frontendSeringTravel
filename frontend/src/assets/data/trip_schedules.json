@@ -253,16 +253,6 @@
             "city": "Tangerang",
             "phone": "107890123456",
             "job": "bekerja"
-          },
-          {
-            "name": "Sinta Wijaya",
-            "gender": "perempuan",
-            "email": "sinta.wijaya@example.com",
-            "username": "sinta.wijaya",
-            "birthDay": "03/12/1994",
-            "city": "Bekasi",
-            "phone": "108901234567",
-            "job": "bekerja"
           }
       ]
     },
