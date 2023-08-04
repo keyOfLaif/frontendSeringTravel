@@ -17,17 +17,17 @@ const bookingSchema = new mongoose.Schema(
       type: String,
     },
 
-    bookersDetail: [
-    ],
+    participantCount: {
+      type: Number,
+      required: true,
+    },
 
     bookingStatus: {
       type: Number,
       default: 0,
     },
 
-    paymentSign: {
-      type: String
-    },
+    paymentSign: [],
 
     bookingExpiration: {
       type: Date,

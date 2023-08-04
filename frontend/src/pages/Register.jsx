@@ -13,7 +13,7 @@ import { BASE_URL } from './../utils/config'
 const Register = () => {
 
 const [credentials, setCredentials] = useState({
-    userName:undefined,
+    username:undefined,
     email:undefined,
     password:undefined,
 });
@@ -29,6 +29,7 @@ const handleClick = async e => {
   e.preventDefault();
 
   try {
+    console.log(credentials)
     const res = await fetch(`${BASE_URL}/auth/register`,{
       method: 'post',
       headers: {
@@ -66,7 +67,7 @@ const handleClick = async e => {
 
               <Form onSubmit={handleClick}>
                 <FormGroup>
-                  <input type="text" placeholder='Username' id='userName' required onChange={handleChange}/>
+                  <input type="text" placeholder='Username' id='username' required onChange={handleChange}/>
                 </FormGroup>
                 <FormGroup>
                   <input type="email" placeholder='Email' id="email" required onChange={handleChange}/>

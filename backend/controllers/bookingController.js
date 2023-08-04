@@ -11,11 +11,14 @@ export const createBooking = async(req,res) =>{
 
     try {
         const savedBooking = await newBooking.save()
-        const userBookers = await User.findById(userID)
 
-        await Schedule.findByIdAndUpdate(scheduleID, {
-            $push: {participants: userBookers}
-        })
+        await Schedule.findByIdAndUpdate(scheduleID,
+            {
+                $inc: {maxParticipants : -newBooking.participantCount},
+                $push : {tripBooked: savedBooking}
+            },
+            {new : true},
+        )
 
         await User.findByIdAndUpdate(userID, {
             $push: {followedTrip: savedBooking}

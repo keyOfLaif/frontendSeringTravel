@@ -12,6 +12,7 @@ const { user } = useContext(AuthContext);
 
 const [selectedSchedule, setSelectedSchedule] = useState(null);
 const [participantsCounts, setParticipantCounts] = useState(null);
+const [codeBooking, setCodeBooking] = useState('');
 
     const handleChangeSchedule = (event) => {
     const selectedScheduleId = event.target.value;
@@ -29,7 +30,15 @@ const [participantsCounts, setParticipantCounts] = useState(null);
     };
 
     const generateBookingCode = () =>{
-
+      if (!selectedSchedule) {
+        return; // Do nothing if selectedSchedule is null
+      }
+      if (selectedSchedule.participants.length === 0) {
+        setCodeBooking(`Bromo1`)
+      }
+      else {
+        setCodeBooking(`Bromo${selectedSchedule.participants.length + 1}`)
+      }
     }
 
     
@@ -47,11 +56,11 @@ const [participantsCounts, setParticipantCounts] = useState(null);
           return alert('Please sign in');
         }
 
+        generateBookingCode();
+
         const booking = {
-            bookersCount : participantsCounts,
-            tripScheduleSelected : selectedSchedule._id,
-            bookersId : user._id,
-            scheduleDate : selectedSchedule.tripDate
+            noBooking : codeBooking,
+            participantCount : participantsCounts
         };
 
         console.log(booking)

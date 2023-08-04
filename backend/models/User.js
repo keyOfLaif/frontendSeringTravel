@@ -33,7 +33,6 @@ const userSchema = new mongoose.Schema(
 
     gender: {
       type: Boolean,
-      required: true,
     },
 
     photo: {
