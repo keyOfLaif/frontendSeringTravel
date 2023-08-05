@@ -22,9 +22,14 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
 
-    bookingStatus: {
-      type: Number,
-      default: 0,
+    dp: {
+      type: Boolean,
+      default: false,
+    },
+    
+    fullPayment: {
+      type: Boolean,
+      default: false,
     },
 
     paymentSign: [],

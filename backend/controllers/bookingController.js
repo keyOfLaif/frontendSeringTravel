@@ -59,10 +59,10 @@ export const  getBooking = async(req,res)=>{
 }
 
 // get All booking
-export const  getAllBooking = async(req,res)=>{
+export const getAllBooking = async(req,res)=>{
 
     try {
-        const books = await Booking.find({}).populate("userBooking").populate('tripBooked')
+        const books = await Booking.find({})
 
         res.status(200).json({
             success: true,
@@ -79,22 +79,34 @@ export const  getAllBooking = async(req,res)=>{
 
 // updating booking status
 export const updateBookingStatus = async (req, res) =>{
-    const idBooking = req.params.idBooking
-    
-    try{
-        const updatedBooking = await Booking.findByIdAndUpdate(idBooking,{
-            $set: req.body
-        }, {new:true})
+    const bookingId = req.params.idBooking;
+  const { paymentStage } = req.params;
+  const { value } = req.body;
 
-        res.status(200).json({
-            success: true,
-            message: "Successfully updated booking status",
-            data: updatedBooking,
-        })
-    } catch (err) {
-        res.status(500).json({
-            success: false,
-            message: "failed to update booking status, try again",
-        })
+  try {
+    let updateObject = {};
+
+    if (paymentStage === 'dp') {
+      // Update dp paymentStage based on the value received from the client
+      updateObject.dp = value === 'true';
+    } else if (paymentStage === 'fullPayment') {
+      // Update fullPayment paymentStage based on the value received from the client
+      updateObject.fullPayment = value === 'true';
+    } else {
+      return res.status(400).json({ success: false, message: 'Invalid field parameter' });
     }
+
+    // Perform the update based on the updateObject
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      bookingId,
+      updateObject,
+      { new: true }
+    );
+
+    // Send the updated booking back to the client
+    res.status(200).json({ success: true, data: updatedBooking });
+  } catch (err) {
+    console.error('Error updating booking:', err);
+    res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 }

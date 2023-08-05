@@ -39,10 +39,14 @@ const handleClick = async e => {
     })
     const result = await res.json()
 
-    if(!res.ok) alert(result.message)
+    if(!res.ok){
+      console.log(result.message)
+      alert(result.message)
+    } else {
+      dispatch({type: 'REGISTER_SUCCESS'})
+      navigate('/login')
+    }
 
-    dispatch({type: 'REGISTER_SUCCESS'})
-    navigate('/login')
 
   } catch (err) {
     alert(err.message)
