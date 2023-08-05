@@ -13,8 +13,8 @@ const bookingSchema = new mongoose.Schema(
     },
 
     noBooking: {
-      required: true,
       type: String,
+      required: true,
     },
 
     participantCount: {
@@ -39,7 +39,7 @@ const bookingSchema = new mongoose.Schema(
 bookingSchema.pre('save', function (next) {
   // Jika batas waktu belum diatur, set batas waktu menjadi 3 jam dari waktu pembuatan booking
   if (!this.bookingExpiration) {
-    this.bookingExpiration = moment(this.createdAt).add(3, 'hours');
+    this.bookingExpiration = new Date(this.createdAt.getTime() + 3 * 60 * 60 * 1000);
   }
 
   next();

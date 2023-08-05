@@ -15,21 +15,22 @@ export const createBooking = async(req,res) =>{
         await Schedule.findByIdAndUpdate(scheduleID,
             {
                 $inc: {maxParticipants : -newBooking.participantCount},
-                $push : {tripBooked: savedBooking}
+                $push : {tripBooked: savedBooking._id}
             },
             {new : true},
         )
 
         await User.findByIdAndUpdate(userID, {
-            $push: {followedTrip: savedBooking}
+            $push: {followedTrip: savedBooking._id}
         })
 
         res.status(200).json({
             success: true,
-            message: 'Yout Trip is booked',
+            message: 'Your Trip is booked',
             data: savedBooking
         })
     } catch (err) {
+        console.error("Error create booking:", err)
         res.status(500).json({
             success: false,
             message: "internal server error"
@@ -61,7 +62,7 @@ export const  getBooking = async(req,res)=>{
 export const  getAllBooking = async(req,res)=>{
 
     try {
-        const books = await Booking.find()
+        const books = await Booking.find({}).populate("userBooking").populate('tripBooked')
 
         res.status(200).json({
             success: true,
@@ -70,8 +71,30 @@ export const  getAllBooking = async(req,res)=>{
         })
     } catch (err) {
         res.status(500).json({
-            success: true,
+            success: false,
             message: "internal server error"
+        })
+    }
+}
+
+// updating booking status
+export const updateBookingStatus = async (req, res) =>{
+    const idBooking = req.params.idBooking
+    
+    try{
+        const updatedBooking = await Booking.findByIdAndUpdate(idBooking,{
+            $set: req.body
+        }, {new:true})
+
+        res.status(200).json({
+            success: true,
+            message: "Successfully updated booking status",
+            data: updatedBooking,
+        })
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            message: "failed to update booking status, try again",
         })
     }
 }

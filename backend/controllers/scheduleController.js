@@ -29,3 +29,32 @@ export const createSchedule = async (req,res)  => {
     }
 };
 
+export const getAllSchedules = async(req,res)=>{
+
+
+    //for pagination
+    const page = parseInt(req.query.page)
+
+    try {
+        const trips = await Trip.find({})
+            .populate("reviews").populate("schedules")
+            .skip(page * 8)
+            .limit(8);
+
+        res.status(200).json({
+            success: true,
+            count: trips.length,
+            message: "Successfully",
+            data: trips
+        })
+        
+    } catch (err) {
+        res
+        .status(404)
+        .json({
+            success: false,
+            message: "Not Found.",
+        })   
+    }
+}
+
