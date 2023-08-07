@@ -7,12 +7,12 @@ const scheduleSchema = new mongoose.Schema(
       ref: "Trip",
     },
     tripDate:{
-        type: Date,
-        required: true,
+      type: Date,
+      required: true,
     },
     maxParticipants:{
-        type: Number,
-        required: true,
+      type: Number,
+      required: true,
     },
     price:{
       type: Number,

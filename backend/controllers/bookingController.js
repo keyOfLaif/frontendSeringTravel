@@ -21,7 +21,7 @@ export const createBooking = async(req,res) =>{
         )
 
         await User.findByIdAndUpdate(userID, {
-            $push: {followedTrip: savedBooking._id}
+            $push: {bookings: savedBooking._id}
         })
 
         res.status(200).json({

@@ -79,6 +79,7 @@ const Profile = () => {
 
   return (
     <div className='outerContainer'>
+      {console.log(user)}
       <Container className='p-3'>
         <Row>
           <Col lg='8'>
