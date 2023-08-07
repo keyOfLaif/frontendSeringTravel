@@ -1,10 +1,12 @@
 import React from 'react'
 import { Form, FormGroup, Button, Label, Input, Row, Col } from 'reactstrap'
+
+import './payment.css'
 const Payment = () => {
   return (
-    <div>
+    <div className='frame__payment'>
         <h4>Payment</h4>
-        <Row>
+        
           <Form>
           <Col>
             <FormGroup>
@@ -39,7 +41,7 @@ const Payment = () => {
               Bayar
             </Button>
           </Form>
-        </Row>
+        
     </div>
   )
 }

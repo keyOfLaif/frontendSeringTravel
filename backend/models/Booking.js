@@ -32,6 +32,11 @@ const bookingSchema = new mongoose.Schema(
       default: false,
     },
 
+    bookingStatus: {
+      type: Number,
+      default: 0,
+    },
+
     paymentSign: [],
 
     bookingExpiration: {

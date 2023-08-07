@@ -42,11 +42,20 @@ const userSchema = new mongoose.Schema(
     whatsApp: {
       type: Number,
     },
+
+    notifications: [],
     
     followedTrip: [
       {
       type: mongoose.Types.ObjectId,
       ref: "Schedule",
+      }
+    ],
+
+    bookings: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Booking"
       }
     ],
 

@@ -3,10 +3,6 @@ import {
   Row,
   Col,
   Container,
-  Card,
-  CardBody,
-  CardSubtitle,
-  CardTitle,
   Modal,
   ModalBody,
   ModalHeader,
@@ -20,11 +16,14 @@ import './profile.css';
 import { AuthContext } from './../../context/AuthContext';
 import { BASE_URL } from '../../utils/config';
 import Payment from '../../components/Payment-confirmation/Payment';
+import BiographyForm from '../../components/Biography-form/BiographyForm';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [modalEditProfile, setModalEditProfile] = useState(false);
-  const modalRef = useRef(null);
+  const [numOfParticipants, setNumOfParticipants] = useState(1);
+  
+
   const formRef = useRef(null)
 
   const toggleEditProfile = () => setModalEditProfile(!modalEditProfile);
@@ -45,6 +44,10 @@ const Profile = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleSubmitParticipants = (formData) =>{
+    console.log(formData);
   };
 
   const handleSubmit = async (e) => {
@@ -140,23 +143,43 @@ const Profile = () => {
             </div>
             <p>Alamat Jalan Jend Sudirman</p>
             <div className='ps-0 p-4'>
-              <Card style={{ width: '12rem' }} className='p-1'>
-                <i className='ri-close-circle-line position-absolute start'></i>
-                <CardBody className='p-3'>
-                  <CardTitle tag='h5'>Judul Trip</CardTitle>
-                  <CardSubtitle className='mb-2 text-muted' tag='h6'>
-                    20/04/2018
-                  </CardSubtitle>
-                </CardBody>
-                <CardBody className='p-2 py-0'>
-                  <CardSubtitle>Booked.</CardSubtitle>
-                </CardBody>
-              </Card>
+              <ul className='p-0'>
+                <li className='d-flex'>
+                  <h6 className='align-tex-middle me-4'>Bromo Trip ke-30 (20 Agustus 2012)</h6> Proses
+                </li>
+                <li className='d-flex'>
+                  <h6 className='align-tex-middle me-4'>Bromo Trip ke-30 (20 Agustus 2012)</h6> Proses
+                </li>
+              </ul>
+              
+            </div>
+
+            
+            <div className='booking__process'>
+              <div className='box__process'>
+                <Payment />
+              </div>
+              <div className='box__process'>
+                <BiographyForm numOfParticipants={2} onSubmit={handleSubmitParticipants}/>
+              </div>
             </div>
           </Col>
 
           <Col lg='4'>
-            <Payment />
+            <div>
+              <h4>Notifications</h4>
+              <ul className='p-0'>
+                <li>
+                  Lengkapi data diri peserta
+                </li>
+                <li>
+                  Selesaikan dp
+                </li>
+                <li>
+                  Selesaikan pembayaran
+                </li>
+              </ul>
+            </div>
           </Col>
         </Row>
       </Container>
