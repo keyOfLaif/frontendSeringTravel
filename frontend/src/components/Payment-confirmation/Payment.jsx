@@ -33,6 +33,23 @@ const Payment = () => {
               />
             </FormGroup>
 
+            <FormGroup>
+              <Label for="paymentStage">Jenis Kelamin</Label>
+              <Input
+                id="paymentStage"
+                name="paymentStage"
+                type="select"
+                
+              >
+                  <option>
+                    Dp                    
+                  </option>
+                  <option>
+                    Pelunasan                    
+                  </option>
+              </Input>
+            </FormGroup>
+
           </Col>
           <Col>
           <h4>Detail Pemesan</h4>

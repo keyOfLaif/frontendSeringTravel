@@ -82,7 +82,7 @@ const Profile = () => {
       {console.log(user)}
       <Container className='p-3'>
         <Row>
-          <Col lg='8'>
+          <Col lg='9'>
             <div>
               <h4>
                 {user.username}
@@ -144,6 +144,7 @@ const Profile = () => {
             </div>
             <p>Alamat Jalan Jend Sudirman</p>
             <div className='ps-0 p-4'>
+              <h5>Trip Pesanan</h5>
               <ul className='p-0'>
                 <li className='d-flex'>
                   <h6 className='align-tex-middle me-4'>Bromo Trip ke-30 (20 Agustus 2012)</h6> Proses
@@ -166,9 +167,9 @@ const Profile = () => {
             </div>
           </Col>
 
-          <Col lg='4'>
+          <Col lg='3'>
             <div>
-              <h4>Notifications</h4>
+              <h4>Notifikasi</h4>
               <ul className='p-0'>
                 <li>
                   Lengkapi data diri peserta
@@ -178,6 +179,22 @@ const Profile = () => {
                 </li>
                 <li>
                   Selesaikan pembayaran
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4>Riwayat Trip</h4>
+              <h6>Trip Bromo</h6>
+              <ul className='p-0'>
+                <li>
+                  20 Januari 2019
+                </li>
+                <li>
+                  30 April 2019
+                </li>
+                <li>
+                  20 Maret 2020
                 </li>
               </ul>
             </div>

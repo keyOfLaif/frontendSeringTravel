@@ -7,18 +7,16 @@ export const createBooking = async(req,res) =>{
 
     const userID = req.params.userID
     const scheduleID = req.params.scheduleID
-    const newBooking = new Booking({...req.body})
+    // Create a new booking instance and set the userBooking and tripBooked fields
+    const newBooking = new Booking({
+        ...req.body,
+        userBooking: userID,
+        tripBooked: scheduleID,
+    });
 
     try {
-        const savedBooking = await newBooking.save()
 
-        await Schedule.findByIdAndUpdate(scheduleID,
-            {
-                $inc: {maxParticipants : -newBooking.participantCount},
-                $push : {tripBooked: savedBooking._id}
-            },
-            {new : true},
-        )
+        const savedBooking = await newBooking.save()
 
         await User.findByIdAndUpdate(userID, {
             $push: {bookings: savedBooking._id}

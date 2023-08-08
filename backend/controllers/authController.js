@@ -62,7 +62,11 @@ export const login = async (req, res) => {
 
     try {
 
-        const user = await User.findOne({email})
+        const user = await User.findOne({email}).populate({path:'bookings', populate : {
+            path:'tripBooked', populate : {
+                path:'productIdofTrip'
+            }
+        }})
 
         // if user doesn't exist
         if(!user){
