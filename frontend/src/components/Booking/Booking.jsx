@@ -40,9 +40,6 @@ const [codeBooking, setCodeBooking] = useState('');
         setCodeBooking(`Bromo${selectedSchedule.participants.length + 1}`)
       }
     }
-
-    
-
     const serviceFee = 10;
     const price = selectedSchedule ? selectedSchedule.price : null;
 
@@ -62,8 +59,6 @@ const [codeBooking, setCodeBooking] = useState('');
             noBooking : codeBooking,
             participantCount : participantsCounts
         };
-
-        console.log(booking)
     
         try {
           const res = await fetch(`${BASE_URL}/bookings/${user._id}/${selectedSchedule._id}`, {

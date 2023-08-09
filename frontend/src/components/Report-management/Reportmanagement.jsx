@@ -104,18 +104,10 @@ const Reportmanagement = () => {
             <div className='frame__chartCard'>
 
               <div className='chartCard'>
-                <span>
-                  <h6>Female : {selectedReport.genderPercentage.female.toFixed(2)}%</h6>
-                  <h6>Male : {selectedReport.genderPercentage.male.toFixed(2)}%</h6>
-                </span>
-                <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]}/>
+                <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]} dataIndicator={["Female","Male"]}/>
               </div>
 
               <div className='chartCard'>
-                <span>
-                  <h6>Pekerja : {selectedReport.jobPercentage.bekerja.toFixed(2)}%</h6>
-                  <h6>Pelajar : {selectedReport.jobPercentage.pelajar.toFixed(2)}%</h6>
-                </span>
                 <Chart 
                   data={
                     [
@@ -123,16 +115,12 @@ const Reportmanagement = () => {
                       selectedReport.jobPercentage.pelajar
                     ]
                   }
+                  dataIndicator={["Pekerja","Pelajar"]}
+                  
                 />
               </div>
 
               <div className='chartCard'>
-                <span>
-                  <h6>Jakarta : {selectedReport.cityPercentage.Jakarta.toFixed(2)}%</h6>
-                  <h6>Depok : {selectedReport.cityPercentage.Depok.toFixed(2)}%</h6>
-                  <h6>Tangerang : {selectedReport.cityPercentage.Tangerang.toFixed(2)}%</h6>
-                  <h6>Bekasi : {selectedReport.cityPercentage.Bekasi.toFixed(2)}%</h6>
-                </span>
                 <Chart 
                   data={
                     [
@@ -142,6 +130,7 @@ const Reportmanagement = () => {
                       selectedReport.cityPercentage.Bekasi,
                     ]
                   }
+                  dataIndicator={["Jakarta","Depok","Tangerang","Bekasi"]}
                 />
               </div>
 
