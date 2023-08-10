@@ -24,14 +24,17 @@
     display: flex;
     flex-wrap: wrap;
     padding: 1rem;
+    justify-content: center;
     gap: 1rem;
     width: 90%;
+    margin: 1rem auto;
 }
 
 .chartCard{
     background-color: white;
     padding: 1rem;
     border-radius: 10px;
+    width: 350px;
 }
 
 .chart__main{
@@ -79,6 +82,7 @@
     width: 80%;
     overflow: auto;
     height: 50vh;
+    margin: 1rem auto;
 }
 
 .table__container{
@@ -110,4 +114,10 @@
 .reportCapsule div{
     width: 250px;
     display: flex;
+}
+
+.frame__report{
+    width: 90%;
+    margin: 1rem auto;
+    padding: 0 1.25rem;
 }

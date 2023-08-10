@@ -13,15 +13,10 @@ const Reportmanagement = () => {
   const [tripDataPerSchedule, setTripDataPerSchedule] = useState([])
 
   const [selectedTripIndex, setSelectedTripIndex] = useState('all')
-  const [selectedAll, setSelectedAll] = useState()
   
 
   const handleShowReport = (index) => {
-    if(index==='all'){
-      setSelectedAll('all');
-    }
     setSelectedTripIndex(index);
-    setSelectedAll();
   };
 
   useEffect(() => {
@@ -105,7 +100,9 @@ const Reportmanagement = () => {
         </div>
 
         <div className='botNavReportManagement'>
-          <div className='reportAll'>
+          
+          {
+            selectedTripIndex === "all" && <div className='reportAll'>
             <div className='reportCapsule'>
               <div>
                 Trip
@@ -132,15 +129,14 @@ const Reportmanagement = () => {
               </div>
             </div>
           </div>
-          {
-            selectedAll && <div>Pilih semua</div>
           }
           
           {selectedReport && (
-            <div>
-              <h2>{selectedReport.tripDate}</h2>
-              <p>Trip Price: {selectedReport.tripPrice}</p>
-              <p>Max Participant: {selectedReport.maxParticipant}</p>
+            <div className='frame__report'>
+              <h6>Jadwal : {selectedReport.tripDate}</h6>
+              <h6>Harga : {selectedReport.tripPrice}</h6>
+              <h6>Peserta : {selectedReport.maxParticipant}</h6>
+              
               <div className='frame__chartCard'>
 
                 <div className='chartCard'>
@@ -180,8 +176,8 @@ const Reportmanagement = () => {
 
               
               
-              <h5>Participants Data:</h5>
               <div className='table__container'>
+              <h5>Data Peserta</h5>
                 <Table
                   bordered
                   hover
