@@ -12,11 +12,16 @@ const Reportmanagement = () => {
 
   const [tripDataPerSchedule, setTripDataPerSchedule] = useState([])
 
-  const [selectedTripIndex, setSelectedTripIndex] = useState('')
+  const [selectedTripIndex, setSelectedTripIndex] = useState('all')
+  const [selectedAll, setSelectedAll] = useState()
   
 
   const handleShowReport = (index) => {
+    if(index==='all'){
+      setSelectedAll('all');
+    }
     setSelectedTripIndex(index);
+    setSelectedAll();
   };
 
   useEffect(() => {
@@ -88,114 +93,152 @@ const Reportmanagement = () => {
         <div className='topNavReportManagement'>
           
            <h5>Bromo</h5>
-           <ul className='listsTripCount'>
+           <div className='listsTripCount'>
+            <div className={`btn__Trip ${selectedTripIndex === 'all' ? 'selectedButton' : ''}`} key={'all'} onClick={()=>handleShowReport('all')}>
+              All
+            </div>
             {tripDataPerSchedule.map((tripData, index) => (
-              <button className={`btn__Trip ${selectedTripIndex === tripData.tripDate ? 'selectedButton' : ''}`} key={tripData.tripDate} onClick={()=>handleShowReport(tripData.tripDate)}>Trip ke-{index+1}</button>
+              <div className={`btn__Trip ${selectedTripIndex === tripData.tripDate ? 'selectedButton' : ''}`} key={tripData.tripDate} onClick={()=>handleShowReport(tripData.tripDate)}>Trip ke-{index+1}</div>
             ))
             }
-           </ul>
+           </div>
         </div>
-        <div>
-        {selectedReport && (
-          <div>
-            <h2>{selectedReport.tripDate}</h2>
-            <p>Trip Price: {selectedReport.tripPrice}</p>
-            <p>Max Participant: {selectedReport.maxParticipant}</p>
-            <div className='frame__chartCard'>
 
-              <div className='chartCard'>
-                <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]} dataIndicator={["Female","Male"]}/>
-              </div>
-
-              <div className='chartCard'>
-                <Chart 
-                  data={
-                    [
-                      selectedReport.jobPercentage.bekerja,
-                      selectedReport.jobPercentage.pelajar
-                    ]
-                  }
-                  dataIndicator={["Pekerja","Pelajar"]}
-                  
-                />
-              </div>
-
-              <div className='chartCard'>
-                <Chart 
-                  data={
-                    [
-                      selectedReport.cityPercentage.Jakarta,
-                      selectedReport.cityPercentage.Depok,
-                      selectedReport.cityPercentage.Tangerang,
-                      selectedReport.cityPercentage.Bekasi,
-                    ]
-                  }
-                  dataIndicator={["Jakarta","Depok","Tangerang","Bekasi"]}
-                />
-              </div>
-
-              <div className='chartCard'>
+        <div className='botNavReportManagement'>
+          <div className='reportAll'>
+            <div className='reportCapsule'>
+              <div>
+                Trip
               </div>
             </div>
-
-            
-            
-            <h5>Participants Data:</h5>
-            <Table
-              bordered
-              hover
-              responsive
-              >
-              <thead>
-                  <tr>
-                  <th>
-                      No
-                  </th>
-                  <th>
-                      Nama
-                  </th>
-                  <th>
-                      Tanggal Lahir
-                  </th>
-                  <th>
-                      Gender
-                  </th>
-                  <th>
-                      Pekerjaan
-                  </th>
-                  <th>
-                      City
-                  </th>
-                  </tr>
-              </thead>
-              <tbody>
-                {selectedReport.participants.map((participant, pIndex) => (
-                    
-                    <tr key={pIndex}>
-                      <th scope="row">
-                        {pIndex+1}
-                      </th>
-                      <td>
-                        {participant.name}
-                      </td>
-                      <td>
-                        {participant.birthDay}
-                      </td>
-                      <td>
-                        {participant.gender}
-                      </td>
-                      <td>
-                        {participant.job}
-                      </td>
-                      <td>
-                        {participant.city}
-                      </td>
-                    </tr>
-                ))}
-              </tbody>
-            </Table>
+            <div className='reportCapsule'>
+              <div>
+              Peserta
+              </div>
+            </div>
+            <div className='reportCapsule'>
+              <div>
+              Pemasukan
+              </div>
+            </div>
+            <div className='reportCapsule'>
+              <div>
+              Selesai
+              </div>
+            </div>
+            <div className='reportCapsule'>
+              <div>
+              Berjalan
+              </div>
+            </div>
           </div>
-        )}
+          {
+            selectedAll && <div>Pilih semua</div>
+          }
+          
+          {selectedReport && (
+            <div>
+              <h2>{selectedReport.tripDate}</h2>
+              <p>Trip Price: {selectedReport.tripPrice}</p>
+              <p>Max Participant: {selectedReport.maxParticipant}</p>
+              <div className='frame__chartCard'>
+
+                <div className='chartCard'>
+                  <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]} dataIndicator={["Female","Male"]}/>
+                </div>
+
+                <div className='chartCard'>
+                  <Chart 
+                    data={
+                      [
+                        selectedReport.jobPercentage.bekerja,
+                        selectedReport.jobPercentage.pelajar
+                      ]
+                    }
+                    dataIndicator={["Pekerja","Pelajar"]}
+                    
+                  />
+                </div>
+
+                <div className='chartCard'>
+                  <Chart 
+                    data={
+                      [
+                        selectedReport.cityPercentage.Jakarta,
+                        selectedReport.cityPercentage.Depok,
+                        selectedReport.cityPercentage.Tangerang,
+                        selectedReport.cityPercentage.Bekasi,
+                      ]
+                    }
+                    dataIndicator={["Jakarta","Depok","Tangerang","Bekasi"]}
+                  />
+                </div>
+
+                <div className='chartCard'>
+                </div>
+              </div>
+
+              
+              
+              <h5>Participants Data:</h5>
+              <div className='table__container'>
+                <Table
+                  bordered
+                  hover
+                  responsive
+                  >
+                  <thead>
+                      <tr>
+                      <th>
+                          No
+                      </th>
+                      <th>
+                          Nama
+                      </th>
+                      <th>
+                          Tanggal Lahir
+                      </th>
+                      <th>
+                          Gender
+                      </th>
+                      <th>
+                          Pekerjaan
+                      </th>
+                      <th>
+                          City
+                      </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    {selectedReport.participants.map((participant, pIndex) => (
+                        
+                        <tr key={pIndex}>
+                          <th scope="row">
+                            {pIndex+1}
+                          </th>
+                          <td>
+                            {participant.name}
+                          </td>
+                          <td>
+                            {participant.birthDay}
+                          </td>
+                          <td>
+                            {participant.gender}
+                          </td>
+                          <td>
+                            {participant.job}
+                          </td>
+                          <td>
+                            {participant.city}
+                          </td>
+                        </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
+            </div>
+          )}
+
         </div>
     </div>
 

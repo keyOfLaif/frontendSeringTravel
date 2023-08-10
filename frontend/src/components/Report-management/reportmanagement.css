@@ -20,19 +20,17 @@
     padding-right: 1rem;
 }
 
-
-
 .frame__chartCard{
     display: flex;
     flex-wrap: wrap;
     padding: 1rem;
     gap: 1rem;
+    width: 90%;
 }
 
 .chartCard{
     background-color: white;
     padding: 1rem;
-    width: 400px;
     border-radius: 10px;
 }
 
@@ -59,8 +57,57 @@
     padding: 0.2rem;
     border: none;
     background: none;
+    cursor: pointer;
+}
+
+.btn__Trip:hover{
+    background: #e4e4e6;
+    border-bottom: 1px solid black;
 }
 
 .selectedButton{
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid #35abfa;
+    font-weight: bold;
+    color: #35abfa;
+}
+
+.selectedButton:hover{
+    border-bottom: 2px solid #35abfa;
+}
+
+.table__container{
+    width: 80%;
+    overflow: auto;
+    height: 50vh;
+}
+
+.table__container{
+    background-color: #f1f1f1;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    scrollbar-color: #f1f1f1 lightgray;
+}
+
+.table__container::-webkit-scrollbar{
+    display: none;
+}
+
+.reportAll{
+    padding-top: 30px;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.reportCapsule{
+    padding: 1rem;
+    border-radius: 45px;
+    background: white;
+    display: flex;
+}
+
+.reportCapsule div{
+    width: 250px;
+    display: flex;
 }

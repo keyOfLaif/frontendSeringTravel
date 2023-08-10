@@ -96,6 +96,7 @@ const Admin = () => {
           </div>
 
         </div>
+
         <div className='rightMainContainer'>
           <div className='mainContent'>
             <div className='topBarMainContent'>

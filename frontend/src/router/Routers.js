@@ -12,6 +12,7 @@ import Admin from '../pages/Admin/Admin';
 import Owner from '../pages/Owner/Owner';
 import Profile from '../pages/User/Profile';
 import About from '../pages/About/About';
+import Gallery from '../pages/Gallery';
 
 const Routers = () => {
 
@@ -36,6 +37,7 @@ const Routers = () => {
         <Route path='/:slug' element={<Profile/>} />
         <Route path='/thank-you' element={<ThankYou/>} />
         <Route path='/trip/search' element={<SearchResultList/>} />
+        <Route path='/gallery' element={<Gallery/>} />
     </Routes>
   )
 }
