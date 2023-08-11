@@ -183,8 +183,8 @@ const Profile = () => {
                       {notif.bookingStatus === 0 ? 'Bayar DP' : 'Lunasi Pembayaran'}
                     </div>
                     <div>
-                      {notif.bookings.participants.length === 0 ? (
-                        <div onClick={()=>handleShowInputDataComponent(index)}></div>
+                      {notif.participants.length === 0 ? (
+                        <div onClick={()=>handleShowInputDataComponent(index)}>Isi Data</div>
                       ) : (
                         <div>Kamus sudah mengisi data peserta, Mau mengisi lagi?</div>
                       )}
@@ -210,8 +210,8 @@ const Profile = () => {
               {
                 showInputDataComponent && (
                   <div>
-                    <BiographyForm numOfParticipants={selectedBookingProcess.bookings.participantCount} onSubmit={handleSubmitParticipants}/>
-                    <button onClick={handleCloseInputDataComponent}></button>
+                    <BiographyForm numOfParticipants={selectedBookingProcess.participantCount} onSubmit={handleSubmitParticipants}/>
+                    <button onClick={handleCloseInputDataComponent}>Close</button>
                   </div>
                 )
               }
