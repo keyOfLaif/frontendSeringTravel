@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext } from 'react'
+import React, { useRef, useEffect, useContext, useState } from 'react'
 import { Container, Row, Button, Badge } from 'reactstrap'
 import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom'
 
@@ -25,6 +25,7 @@ const nav__links=[
 
 const Header = () => {
 
+const [showNotifications, setShowNotifications] = useState();
 
 const headerRef = useRef(null)
 const menuRef = useRef(null)
@@ -92,12 +93,16 @@ if(location.pathname === "/admin" || location.pathname === "/owner"){
                 user ? (
                   <>
                     <Button className='btn secondary__btn'>
-                      <div className='position-relative'><Link to={`/${user.username}`}>
-                        {user.username}
-                          <Badge pill color='danger' className='position-absolute p-1'>
-                            <span className='visually-hidden'></span>
-                          </Badge>
-                      </Link></div>
+                      <div className='position-relative' data-bs-toggle="tooltip" data-bs-placement="bottom" title={`${user.bookings.length} pesanan`}>
+                        <Link to={`/${user.username}`}>
+                          {user.username}
+                          {user.bookings && user.bookings.length > 0 && (
+                            <Badge pill color='danger' className="position-absolute p-1">
+                              <span className='visually-hidden'></span>
+                            </Badge>
+                          )}  
+                        </Link>
+                      </div>
                     </Button>
                     <Button className='btn primary__btn' onClick={logout}>
                       Logout
