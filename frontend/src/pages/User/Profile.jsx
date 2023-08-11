@@ -28,6 +28,7 @@ const Profile = () => {
   
   const formRef = useRef(null)
   const paymentRef = useRef(null)
+  const inputBiodataRef = useRef(null)
 
   const scrollToPayment = () => {
     // Mencari referensi ke komponen Payment dan menjalankan scrollIntoView()
