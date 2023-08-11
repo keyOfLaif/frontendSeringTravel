@@ -94,3 +94,7 @@
         width: calc(100% - 50%);
     }
 }
+
+.hide__notifications{
+    display: none;
+}
