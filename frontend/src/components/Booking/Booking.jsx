@@ -27,7 +27,21 @@ const [participantsCounts, setParticipantCounts] = useState(null);
     const handleChangeParticipantsCounts = (event) => {
     setParticipantCounts(event.target.value);
     };
+
+    const generateBookingCode = () =>{
+      if (!selectedSchedule) {
+        return; // Do nothing if selectedSchedule is null
+      }
+      if (selectedSchedule.participants.length === 0) {
+        setCodeBooking(`Bromo1`)
+      }
+      else {
+        setCodeBooking(`Bromo${selectedSchedule.participants.length + 1}`)
+      }
+    }
+
     
+
     const serviceFee = 10;
     const price = selectedSchedule ? selectedSchedule.price : null;
 
@@ -51,8 +65,6 @@ const [participantsCounts, setParticipantCounts] = useState(null);
             noBooking : codeBooking,
             participantCount : participantsCounts
         };
-
-        console.log(booking)
     
         try {
           const res = await fetch(`${BASE_URL}/bookings/${user._id}/${selectedSchedule._id}`, {

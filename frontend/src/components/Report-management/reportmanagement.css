@@ -20,32 +20,39 @@
     padding-right: 1rem;
 }
 
-
-
 .frame__chartCard{
     display: flex;
     flex-wrap: wrap;
     padding: 1rem;
+    justify-content: center;
     gap: 1rem;
+    width: 90%;
+    margin: 1rem auto;
 }
 
 .chartCard{
     background-color: white;
     padding: 1rem;
-    width: 400px;
     border-radius: 10px;
+    width: 350px;
 }
 
+.chart__main{
+    display: flex;
+}
 
 .chart {
-    display: flex;
-    align-items: center;
-    height: 10px;
     width: 100%;
 }
 
+.bar__frame{
+    width: 100%;
+    background-color: #e4e4e6;
+    border-radius: 5px;
+}
+
 .bar {
-    height: 100%;
+    height: 10px;
     border-radius: 5px;
 }
 
@@ -53,8 +60,64 @@
     padding: 0.2rem;
     border: none;
     background: none;
+    cursor: pointer;
+}
+
+.btn__Trip:hover{
+    background: #e4e4e6;
+    border-bottom: 1px solid black;
 }
 
 .selectedButton{
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid #35abfa;
+    font-weight: bold;
+    color: #35abfa;
+}
+
+.selectedButton:hover{
+    border-bottom: 2px solid #35abfa;
+}
+
+.table__container{
+    width: 80%;
+    overflow: auto;
+    height: 50vh;
+    margin: 1rem auto;
+}
+
+.table__container{
+    background-color: #f1f1f1;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    scrollbar-color: #f1f1f1 lightgray;
+}
+
+.table__container::-webkit-scrollbar{
+    display: none;
+}
+
+.reportAll{
+    padding-top: 30px;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.reportCapsule{
+    padding: 1rem;
+    border-radius: 45px;
+    background: white;
+    display: flex;
+}
+
+.reportCapsule div{
+    width: 250px;
+    display: flex;
+}
+
+.frame__report{
+    width: 90%;
+    margin: 1rem auto;
+    padding: 0 1.25rem;
 }

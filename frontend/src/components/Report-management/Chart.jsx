@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const getRandomColor = () => {
     const letters = '0123456789ABCDEF';
@@ -9,7 +9,7 @@ const getRandomColor = () => {
   return color;
 }
 
-const Chart = ({data}) => {
+const Chart = ({data, dataIndicator}) => {
     // const total = data.reduce((acc, value) => acc + value, 0);
     
     const barStyles = data.map((percentage) => ({
@@ -17,11 +17,24 @@ const Chart = ({data}) => {
         backgroundColor: getRandomColor(),
     }));
 
+
   return (
-    <div className="chart">
-      {barStyles.map((style, index) => (
-        <div className="bar" key={index} style={style}></div>
-      ))}
+    <div className='chart__main'>
+      
+      <div className="chart">
+        {
+        barStyles.map((style, index) => (
+          <div key={index}>
+            <div>{dataIndicator[index]} {data[index].toFixed(2)}%</div>
+            <div className='bar__frame'>
+              <div className="bar" style={style}></div>
+            </div>
+          </div>
+        ))
+        }
+      </div> 
+
+
     </div>
   );
 }
