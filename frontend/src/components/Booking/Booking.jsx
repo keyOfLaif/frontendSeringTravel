@@ -12,7 +12,6 @@ const { user } = useContext(AuthContext);
 
 const [selectedSchedule, setSelectedSchedule] = useState(null);
 const [participantsCounts, setParticipantCounts] = useState(null);
-const [codeBooking, setCodeBooking] = useState('');
 
     const handleChangeSchedule = (event) => {
     const selectedScheduleId = event.target.value;
@@ -28,21 +27,7 @@ const [codeBooking, setCodeBooking] = useState('');
     const handleChangeParticipantsCounts = (event) => {
     setParticipantCounts(event.target.value);
     };
-
-    const generateBookingCode = () =>{
-      if (!selectedSchedule) {
-        return; // Do nothing if selectedSchedule is null
-      }
-      if (selectedSchedule.participants.length === 0) {
-        setCodeBooking(`Bromo1`)
-      }
-      else {
-        setCodeBooking(`Bromo${selectedSchedule.participants.length + 1}`)
-      }
-    }
-
     
-
     const serviceFee = 10;
     const price = selectedSchedule ? selectedSchedule.price : null;
 
@@ -56,7 +41,11 @@ const [codeBooking, setCodeBooking] = useState('');
           return alert('Please sign in');
         }
 
-        generateBookingCode();
+        const codeBooking = `Bromo${selectedSchedule.participants.length+1}`
+
+        if(!codeBooking){
+          return alert('Sistem bermasalah, gagal memesan')
+        }
 
         const booking = {
             noBooking : codeBooking,
@@ -122,6 +111,7 @@ const [codeBooking, setCodeBooking] = useState('');
                   placeholder='Jumlah'
                   id='maxParticipants'
                   bsSize='sm'
+                  max={selectedSchedule ?  selectedSchedule.maxParticipants : 0}
                   required
                   onChange={handleChangeParticipantsCounts}
                 />

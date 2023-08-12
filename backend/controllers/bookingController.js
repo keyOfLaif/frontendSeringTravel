@@ -18,6 +18,14 @@ export const createBooking = async(req,res) =>{
 
         const savedBooking = await newBooking.save()
 
+        if(!savedBooking){
+            return res.status(400).json({success:false, message:'Gagal Memesan Trip'})
+        }
+
+        await Schedule.findByIdAndUpdate(scheduleID,{
+            $inc: {maxParticipants : -newBooking.participantCount}
+        })
+
         await User.findByIdAndUpdate(userID, {
             $push: {bookings: savedBooking._id}
         })
@@ -107,4 +115,30 @@ export const updateBookingStatus = async (req, res) =>{
     console.error('Error updating booking:', err);
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
+}
+
+export const deleteBooking = async(req,res) =>{
+    const bookingId = req.params.idBooking;
+    
+    try {
+        const deleteBooking = await Booking.findByIdAndDelete(bookingId)
+
+        if(!deleteBooking){
+            return res.status(400).json({success: false, message: "Failed to delete booking"})
+        }
+
+        const tripBooked = deleteBooking.tripBooked._id
+        if(tripBooked){
+            await Schedule.findByIdAndUpdate(tripBooked,
+                {
+                    $inc : {maxParticipants : deleteBooking.participantCount},
+                }
+            )
+        }
+
+        res.status(200).json({success: true, data: deleteBooking})
+    } catch (error) {
+        console.err("Error:", error)
+        res.status(500).json({success: false, message: 'Internal server error'})
+    }
 }

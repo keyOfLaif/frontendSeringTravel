@@ -17,6 +17,7 @@ import { AuthContext } from './../../context/AuthContext';
 import { BASE_URL } from '../../utils/config';
 import Payment from '../../components/Payment-confirmation/Payment';
 import BiographyForm from '../../components/Biography-form/BiographyForm';
+import EditProfile from '../../components/Edit-profile/EditProfile';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
@@ -25,6 +26,7 @@ const Profile = () => {
   const [showPaymentComponent, setShowPaymentComponent] = useState(false);
   const [selectedBookingProcess, setSelectedBookingProcess] = useState([]);
   const [showInputDataComponent, setShowInputDataComponent] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false)
   
   const formRef = useRef(null)
   const paymentRef = useRef(null)
@@ -35,6 +37,10 @@ const Profile = () => {
     if (paymentRef.current) {
       paymentRef.current.scrollIntoView({ behavior: "smooth" });
     }
+  }
+
+  const handleShowEditProfile = () => {
+    setShowEditProfile(true);
   }
 
   const handleShowInputDataComponent = (index) => {
@@ -55,9 +61,13 @@ const Profile = () => {
     setShowPaymentComponent(false);
   }
 
+  const handleCloseEditProfile = ()=>{
+    setShowEditProfile(false);
+  }
+
   const toggleEditProfile = () => setModalEditProfile(!modalEditProfile);
 
-  const [formData, setFormData] = useState({
+  const [profileData, setProfileData] = useState({
     username: user.username || '',
     fullName: user.fullName || '',
     email: user.email || '',
@@ -69,46 +79,35 @@ const Profile = () => {
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setProfileData({
+      ...profileData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleSubmitParticipants = (formData) =>{
-    console.log(formData);
+  const handleSubmitParticipants = (profileData) =>{
+    console.log(profileData);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log('Data yang akan diupdate:', formData);
-
+  const deleteBooking = async (e) => {
     try {
-      const formData = new FormData(formRef.current)
-      const res = await fetch(`${BASE_URL}/users/${user._id}`, {
-        method: 'PUT',
+      const response = await fetch(`${BASE_URL}/bookings/${e}`, {
+        method: 'DELETE',
         headers: {
           'content-type': 'application/json',
-        },
-        body: JSON.stringify(formData),
+        }
       });
 
-      const result = await res.json();
-      if (!res.ok) {
-        return alert(result.message);
-      }
-
-      alert(result.message);
-    } catch (err) {
-      alert(err.message);
+      const dataReponse = await response.json();
+      return dataReponse;
+    } catch (error) {
+      console.error(error);
     }
-
-    toggleEditProfile();
-  };
+  }
 
   return (
     <div className='outerContainer'>
-      {console.log(user)}
+      
       <Container className='p-3'>
         <Row>
           <Col lg='9'>
@@ -120,13 +119,13 @@ const Profile = () => {
                 </span>
               </h4>
 
-              <Modal isOpen={modalEditProfile} toggle={toggleEditProfile}>
+              {/* <Modal isOpen={modalEditProfile} toggle={toggleEditProfile}>
                 <ModalHeader toggle={toggleEditProfile}>Edit Profile</ModalHeader>
                 <ModalBody>
 
                   <Form innerRef={formRef}>
                     <Label>Username:</Label>
-                    <Input name='username' type='text' value={formData.username} onChange={handleChange} />
+                    <Input name='username' type='text' value={profileData.username} onChange={handleChange} />
 
                     <Label>Password:</Label>
                     <Input name='password' type='password' disabled />
@@ -169,8 +168,22 @@ const Profile = () => {
                     Batal
                   </Button>
                 </ModalFooter>
-              </Modal>
+              </Modal> */}
+
+              <div>
+                {
+                  showEditProfile &&
+                  <div className='edit__profile'>
+                    <EditProfile user={user} close={()=>handleCloseEditProfile}/>
+                    <div className='btn__closeEditProfile' onClick={handleCloseEditProfile}>
+                      <i className="ri-close-line"></i>
+                    </div>
+                  </div>
+                }
+              </div>
+
             </div>
+
             <p>Alamat Jalan Jend Sudirman</p>
             <div className='ps-0 p-4'>
               <h5>Trip Pesanan</h5>
@@ -178,7 +191,12 @@ const Profile = () => {
                 {
                   user.bookings.map((notif,index)=>
                   <div className='bookings__lists' key={index} onClick={() => handleShowPayment(index)}>
-                    <h6>Trip {notif.tripBooked.tripDate} </h6>
+                    <div className='d-flex'>
+                      Trip {notif.tripBooked.tripDate}
+                      <div onClick={()=>deleteBooking(notif._id)} className='deleteBooking__button'>
+                        <i className="ri-close-line"></i>
+                      </div>
+                    </div>
                     <div>
                       {notif.bookingStatus === 0 ? 'Bayar DP' : 'Lunasi Pembayaran'}
                     </div>
@@ -263,7 +281,7 @@ const Profile = () => {
               </ul>
             </div>
 
-            <div className='atur-akun'>
+            <div className='atur-akun' onClick={handleShowEditProfile}>
               <span>
                Ubah Akun <i className='ri-arrow-right-s-line'></i>
               </span> 
