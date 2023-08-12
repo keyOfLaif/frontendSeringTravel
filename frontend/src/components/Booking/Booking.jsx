@@ -28,17 +28,17 @@ const [participantsCounts, setParticipantCounts] = useState(null);
     setParticipantCounts(event.target.value);
     };
 
-    const generateBookingCode = () =>{
-      if (!selectedSchedule) {
-        return; // Do nothing if selectedSchedule is null
-      }
-      if (selectedSchedule.participants.length === 0) {
-        setCodeBooking(`Bromo1`)
-      }
-      else {
-        setCodeBooking(`Bromo${selectedSchedule.participants.length + 1}`)
-      }
-    }
+    // const generateBookingCode = () =>{
+    //   if (!selectedSchedule) {
+    //     return; // Do nothing if selectedSchedule is null
+    //   }
+    //   if (selectedSchedule.participants.length === 0) {
+    //     setCodeBooking(`Bromo1`)
+    //   }
+    //   else {
+    //     setCodeBooking(`Bromo${selectedSchedule.participants.length + 1}`)
+    //   }
+    // }
 
     
 
