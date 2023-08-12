@@ -46,7 +46,7 @@ const [participantsCounts, setParticipantCounts] = useState(null);
     const price = selectedSchedule ? selectedSchedule.price : null;
 
 
-    // send data to the server
+    // send data to the 
 
     const handleClick = async (e) => {
         e.preventDefault();
