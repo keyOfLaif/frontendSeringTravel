@@ -42,6 +42,16 @@ const AuthReducer = (state, action) => {
                     loading: false,
                     error: null, 
                 }
+            case 'UPDATE_USER_DATA' :
+                return{
+                    ...state,
+                    user: {
+                        ...state.user,
+                        ...action.payload,
+                    },
+                    loading: false,
+                    error: null, 
+                }
             
                 default :
                 return state

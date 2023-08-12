@@ -20,7 +20,7 @@ import BiographyForm from '../../components/Biography-form/BiographyForm';
 import EditProfile from '../../components/Edit-profile/EditProfile';
 
 const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
   const [modalEditProfile, setModalEditProfile] = useState(false);
   const [numOfParticipants, setNumOfParticipants] = useState(1);
   const [showPaymentComponent, setShowPaymentComponent] = useState(false);
@@ -67,23 +67,23 @@ const Profile = () => {
 
   const toggleEditProfile = () => setModalEditProfile(!modalEditProfile);
 
-  const [profileData, setProfileData] = useState({
-    username: user.username || '',
-    fullName: user.fullName || '',
-    email: user.email || '',
-    city: user.city || '',
-    birthDate: user.birthDate ? user.birthDate.split('T')[0] : '',
-    gender: user.gender || '',
-    photo: user.photo || '',
-    whatsApp: user.whatsApp || '',
-  });
+  // const [profileData, setProfileData] = useState({
+  //   username: user.username || '',
+  //   fullName: user.fullName || '',
+  //   email: user.email || '',
+  //   city: user.city || '',
+  //   birthDate: user.birthDate ? user.birthDate.split('T')[0] : '',
+  //   gender: user.gender || '',
+  //   photo: user.photo || '',
+  //   whatsApp: user.whatsApp || '',
+  // });
 
-  const handleChange = (e) => {
-    setProfileData({
-      ...profileData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   setProfileData({
+  //     ...profileData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   const handleSubmitParticipants = (profileData) =>{
     console.log(profileData);
@@ -119,62 +119,12 @@ const Profile = () => {
                 </span>
               </h4>
 
-              {/* <Modal isOpen={modalEditProfile} toggle={toggleEditProfile}>
-                <ModalHeader toggle={toggleEditProfile}>Edit Profile</ModalHeader>
-                <ModalBody>
-
-                  <Form innerRef={formRef}>
-                    <Label>Username:</Label>
-                    <Input name='username' type='text' value={profileData.username} onChange={handleChange} />
-
-                    <Label>Password:</Label>
-                    <Input name='password' type='password' disabled />
-
-                    <Label>Nama Lengkap:</Label>
-                    <Input name='fullName' type='text' value={formData.fullName} onChange={handleChange} />
-
-                    <Label>Email:</Label>
-                    <Input name='email' type='email' value={formData.email} onChange={handleChange} />
-
-                    <Label>Asal Kota:</Label>
-                    <Input name='city' type='select' value={formData.city} onChange={handleChange}>
-                      <option value='jakarta'>Jakarta</option>
-                      <option value='bogor'>Bogor</option>
-                      <option value='depok'>Depok</option>
-                      <option value='tangerang'>Tangerang</option>
-                      <option value='bekasi'>Bekasi</option>
-                    </Input>
-
-                    <Label>Tanggal Lahir:</Label>
-                    <Input name='birthDate' type='date' value={formData.birthDate} onChange={handleChange} />
-
-                    <Label>Jenis Kelamin:</Label>
-                    <Input name='gender' type='select' value={formData.gender} onChange={handleChange}>
-                      <option></option>
-                      <option value={1}>laki-laki</option>
-                      <option value={0}>perempuan</option>
-                    </Input>
-
-                    <Label>WhatsApp:</Label>
-                    <Input name='whatsApp' type='text' value={formData.whatsApp} onChange={handleChange} />
-                  </Form>
-                </ModalBody>
-
-                <ModalFooter>
-                  <Button color='primary' onClick={handleSubmit}>
-                    Simpan Perubahan
-                  </Button>{' '}
-                  <Button color='secondary' onClick={toggleEditProfile}>
-                    Batal
-                  </Button>
-                </ModalFooter>
-              </Modal> */}
 
               <div>
                 {
                   showEditProfile &&
                   <div className='edit__profile'>
-                    <EditProfile user={user} close={()=>handleCloseEditProfile}/>
+                    <EditProfile user={user} dispatch={dispatch} />
                     <div className='btn__closeEditProfile' onClick={handleCloseEditProfile}>
                       <i className="ri-close-line"></i>
                     </div>
