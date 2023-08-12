@@ -5,7 +5,6 @@ const initial_state = {
     user: localStorage.getItem('user') !== "" ? JSON.parse(localStorage.getItem('user')) : null,
     loading: false,
     error: null
-    
 };
 
 

@@ -12,3 +12,27 @@
     flex: 0 0 auto;
     width: 100%;
 }
+
+.deleteBooking__button{
+    cursor: pointer;
+}
+
+.edit__profile{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+}
+
+.btn__closeEditProfile{
+    cursor: pointer;
+    margin: 0 auto;
+    width: fit-content;
+    padding: 0.5rem;
+}
+
+.btn__closeEditProfile:hover{
+    color: red;
+}
