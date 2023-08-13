@@ -52,39 +52,39 @@ const handleClick = async e => {
 };
 
 
-  return <section>
-    <Container>
-      <Row>
-        <Col lg='8' className='m-auto'>
-          <div className="login__container d-flex justify-content-between">
-            <div className="login__img">
-              <img src={loginImg} alt="" />
-            </div>
+  return (
+  <section>
+    <div className='login__frame'>
+      <div className="login__container d-flex justify-content-between">
+        
+        <div className="login__img">
+          <img src={loginImg} alt="" />
+        </div>
 
-            <div className="login__form">
-              <div className="user">
-                <img src={userIcon} alt="" />
-              </div>
-              <h2>Login</h2>
-
-              <Form onSubmit={handleClick}>
-                <FormGroup>
-                  <input type="email" placeholder='Email' id='email' required onChange={handleChange}/>
-                </FormGroup>
-                <FormGroup>
-                  <input type="password" placeholder='Password' id='password' required onChange={handleChange}/>
-                </FormGroup>
-                <Button className='btn secondary__btn auth__btn' type='submit'>
-                  Login
-                </Button>
-              </Form>
-              <p>Don't have an account? <Link to='/register'>Create</Link></p>
-            </div>
+        <div className="login__form">
+          <div className="user">
+            <img src={userIcon} alt="" />
           </div>
-        </Col>
-      </Row>
-    </Container>
+          <h2>Login</h2>
+
+          <Form onSubmit={handleClick}>
+            <FormGroup>
+              <input type="email" placeholder='Email' id='email' required onChange={handleChange}/>
+            </FormGroup>
+            <FormGroup>
+              <input type="password" placeholder='Password' id='password' required onChange={handleChange}/>
+            </FormGroup>
+            <Button className='btn secondary__btn auth__btn' type='submit'>
+              Login
+            </Button>
+          </Form>
+          <p>Don't have an account? <Link to='/register'>Create</Link></p>
+        </div>
+
+      </div>
+    </div>
   </section>
+  )
 }
 
 export default Login;
