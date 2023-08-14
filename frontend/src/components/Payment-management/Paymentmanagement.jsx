@@ -69,72 +69,70 @@ const Paymentmanagement = () => {
       };
 
   return (
-    <section>
-        <div className='p-3'>
-            <h4>Payment</h4>
-            <Table
-            bordered
-            hover
-            responsive
-            >
-            <thead>
-                <tr>
-                <th>
-                    Booking Code
-                </th>
-                <th>
-                    Pembayaran
-                </th>
-                </tr>
-            </thead>
-            <tbody>
-            {
-                payments.map((payment, index) =>
-                <tr key={payment._id}>
-                <th scope="row">
-                    {payment.noBooking}
-                </th>
-                <td>
-                <Form>
-                    <FormGroup
-                    check
-                    inline
-                    >
-                    <Input 
-                        type="checkbox" 
-                        name="dp"
-                        checked={dpState[payment._id] || false}
-                        onChange={(e) => handleDpCheckboxChange(e, payment)}
-                    />
-                    <Label check>
-                        DP
-                    </Label>
-                    </FormGroup>
+    <div className='p-3'>
+        <h4>Payment</h4>
+        <Table
+        bordered
+        hover
+        responsive
+        >
+        <thead>
+            <tr>
+            <th>
+                Booking Code
+            </th>
+            <th>
+                Pembayaran
+            </th>
+            </tr>
+        </thead>
+        <tbody>
+        {
+            payments.map((payment, index) =>
+            <tr key={payment._id}>
+            <th scope="row">
+                {payment.noBooking}
+            </th>
+            <td>
+            <Form>
+                <FormGroup
+                check
+                inline
+                >
+                <Input 
+                    type="checkbox" 
+                    name="dp"
+                    checked={dpState[payment._id] || false}
+                    onChange={(e) => handleDpCheckboxChange(e, payment)}
+                />
+                <Label check>
+                    DP
+                </Label>
+                </FormGroup>
 
-                    <FormGroup
-                    check
-                    inline
-                    >
-                    <Input 
-                        type="checkbox"
-                        name="fullPayment"
-                        checked={fullPaymentState[payment._id] || false}
-                        onChange={(e) => handleFullPaymentCheckboxChange(e, payment)}
-                    />
-                    <Label check>
-                        Pelunasan
-                    </Label>
-                    </FormGroup>
-                </Form>
-                </td>
-                </tr>
-                )
-            }
-                
-            </tbody>
-            </Table>
-        </div>
-    </section>
+                <FormGroup
+                check
+                inline
+                >
+                <Input 
+                    type="checkbox"
+                    name="fullPayment"
+                    checked={fullPaymentState[payment._id] || false}
+                    onChange={(e) => handleFullPaymentCheckboxChange(e, payment)}
+                />
+                <Label check>
+                    Pelunasan
+                </Label>
+                </FormGroup>
+            </Form>
+            </td>
+            </tr>
+            )
+        }
+            
+        </tbody>
+        </Table>
+    </div>
   )
 }
 

@@ -2,6 +2,20 @@
     height: 100vh;
     width: 100%;
     overflow: hidden;
+    background-color: rgb(31, 28, 28);
+}
+
+.leftNavbarContainer{
+    width: 350px;
+    height: 100vh;
+    padding: 0.5rem 0;
+    color: white;
+}
+
+.rightMainContainer{
+    height: 100vh;
+    width: 100%;
+    padding: 0.5rem 0.5rem 0.5rem 0;
 }
 
 .adminSectionMainContent{
@@ -14,8 +28,20 @@
     border-radius: 5px 5px 0 0;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid#5f5f61;
+    border-bottom: 1px solid white;
     padding-left: 1rem;
+}
+
+
+
+.mainContent{
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+    /* background-color: #f1f1f1; */
+    background-color: rgb(53, 53, 53);
+    overflow-y: scroll;
+    color: white;
 }
 
 .Content__title{
@@ -35,11 +61,7 @@
     height: 95%;
 }
 
-.leftNavbarContainer{
-    width: 350px;
-    height: 100vh;
-    padding: 0.5rem 0;
-}
+
 
 .leftNavbar{
     width: 100%;
@@ -94,19 +116,7 @@
     background-color: #35abfa;
 }
 
-.rightMainContainer{
-    height: 100vh;
-    width: 100%;
-    padding: 0.5rem 0.5rem 0.5rem 0;
-}
 
-.mainContent{
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    background-color: #f1f1f1;
-    overflow-y: scroll;
-}
 
 .mainContent::-webkit-scrollbar{
     display: none;

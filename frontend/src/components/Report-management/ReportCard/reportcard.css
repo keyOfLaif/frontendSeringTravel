@@ -1,0 +1,22 @@
+.reportCardCapsule{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border-top: 1px solid #35abfa;
+    border-left: 1px solid #35abfa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+}
+
+.reportCardIcon{
+    color: white;
+    background-color: #35abfa;
+    border-radius: 50%;
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+}

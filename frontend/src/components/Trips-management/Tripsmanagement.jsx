@@ -4,6 +4,8 @@ import { Row, Col, Form, FormGroup, Button, Collapse, Card, CardTitle, Input } f
 import useFetch from '../../hooks/useFetch'
 import { BASE_URL } from '../../utils/config'
 
+import './tripsmanagement.css'
+
 const Tripsmanagement = () => {
 
     const {
@@ -97,157 +99,127 @@ const Tripsmanagement = () => {
       }
 
     return (
-    <section>
-            <div className='p-3'>
-                <h4>Trips</h4>
-                <div className='mt-2'>
-                {
-                trips?.map(trip => (
-                    <div key={trip._id} lg='3' md='6' sm='6' className='mb-4'>
-                    {trip.schedules && trip.schedules.length > 0 ? (
-            <p>Schedule Count: {trip.schedules.length}</p>
-            ) : (
-            <p>No schedules available for this trip.</p>
-            )}
-                    <span>
-                        {trip.title}                    
-                        <i onClick={()=>toggleEdit(trip._id)} className="ri-edit-box-fill"></i>
-                        <i onClick={()=>toggleEditSchedule(trip._id)} className="ri-add-line ms-auto"></i>
-                    </span>
-                    {
-                        editBox === trip._id && (
-                        <Form onReset={closeEdit} onSubmit={submitUpdate}>
-                                <div className='row row-cols-3 gap-2'>
-                                <div className='col-2 p-2'>
-                                    <Input
-                                    type="text"
-                                    placeholder={trip.title}
-                                    id="title"
-                                    required
-                                    onChange={(e) => setUpdateTitle(e.target.value === "" ? trip.title : e.target.value)}
-                                    bsSize='sm'
-                                    />
-                                </div>
-                                <div className='col-4 d-flex p-2 gap-2'>
-                                    <Button size='sm' className="btn secondary__btn auth__btn" type="submit">
-                                    Save
-                                    </Button>
-                                    <Button size='sm' className="btn secondary__btn auth__btn" type='reset'>
-                                    Cancel
-                                    </Button>
-                                </div>
-                                </div>
-                        </Form>                      
-                        )
-                    }
-                    {
-                        editSchedule === trip._id && (
-                        <Form onSubmit={submitNewTripDate}>
-                        <div className='row row-cols-4 gap-2'>
-                            <div className='col-2 p-2'>
+      <div className='p-3'>
+        <h4>Trips</h4>
+        <div >
+        {
+        trips?.map(trip => (
+            <div key={trip._id} lg='3' md='6' sm='6' className='mb-4'>
+            {trip.schedules && trip.schedules.length > 0 ? (
+    <p>Schedule Count: {trip.schedules.length}</p>
+    ) : (
+    <p>No schedules available for this trip.</p>
+    )}
+            <span>
+                {trip.title}                    
+                <i onClick={()=>toggleEdit(trip._id)} className="ri-edit-box-fill"></i>
+                <i onClick={()=>toggleEditSchedule(trip._id)} className="ri-add-line ms-auto"></i>
+            </span>
+            {
+                editBox === trip._id && (
+                <Form onReset={closeEdit} onSubmit={submitUpdate}>
+                        <div className='row row-cols-3 gap-2'>
+                        <div className='col-2 p-2'>
                             <Input
-                                type="Number"
-                                placeholder="Tarif"
-                                id="price"
-                                onChange={(e) => setPrice(e.target.value)}
-                                bsSize="sm"
+                            type="text"
+                            placeholder={trip.title}
+                            id="title"
+                            required
+                            onChange={(e) => setUpdateTitle(e.target.value === "" ? trip.title : e.target.value)}
+                            bsSize='sm'
                             />
-                            </div>
-                            <div className='col-2 p-2'>
-                            <Input
-                                type="Number"
-                                placeholder="Total Participant"
-                                id="maxParticipants"
-                                onChange={(e) => setMaxParticipant(e.target.value)}
-                                bsSize="sm"
-                            />
-                            </div>
-                            <div className='col-4 p-2'>
-                            <Input
-                                type="Date"
-                                placeholder=""
-                                id="tripDate"
-                                onChange={(e) => setNewTripDate(e.target.value)}
-                                bsSize="sm"
-                            />
-                            </div>
-                            <div className='col col-4 d-flex gap-2 p-2'>
+                        </div>
+                        <div className='col-4 d-flex p-2 gap-2'>
                             <Button size='sm' className="btn secondary__btn auth__btn" type="submit">
-                            Add
+                            Save
                             </Button>
                             <Button size='sm' className="btn secondary__btn auth__btn" type='reset'>
                             Cancel
                             </Button>
-                            </div>
-                        </div>                          
-                        </Form>
-                        )
-                    }
-                    
-                    </div>)
-                    )
-                }
-                
-                </div>
-                
-                <Row className='text-center mt-5 d-flex flex-column'>
-                <React.StrictMode>
-                <i className="ri-add-circle-fill" onClick={toggleAddTrip} style={{fontSize:'2rem', cursor:'pointer'}}></i>
-                <Col className='mx-auto' sm='6'>
-                    <Collapse isOpen={isOpen}>
-                    <Card body>
-                    <CardTitle className='mb-3'>ADD New Trip</CardTitle>
-                    <Form>
-                        <FormGroup className='d-flex flex-column align-items-start'>
-                            <label htmlFor="">
-                            Trips Title
-                            </label>
-                            <input
-                            type="text"
-                            placeholder="Trip Title"
-                            id="title"
-                            required
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                
-                            <label>
-                            Trips Price
-                            </label>
-                            <input
-                            type="text"
-                            placeholder="Trip Price"
-                            id="price"
-                            required
-                            />
-                
-                        </FormGroup>
-                        <FormGroup>
-                
-                            <label>
-                            New Schedule
-                            </label>
-                            <input
-                            type="date"
-                            placeholder=""
-                            id="price"
-                            />
-                
-                        </FormGroup>
-                        <Button className="btn secondary__btn auth__btn" type="submit">
-                            Save
-                        </Button>
-                        <Button className="btn secondary__btn auth__btn" type='reset'>
-                            Cancel
-                        </Button>
-                        </Form>
-                    </Card>
-                    </Collapse>
-                </Col>
-                </React.StrictMode>
-                </Row>
+                        </div>
+                        </div>
+                </Form>                      
+                )
+            }
+            {
+                editSchedule === trip._id && (
+                <Form onSubmit={submitNewTripDate}>
+                <div className='row row-cols-4 gap-2'>
+                    <div className='col-2 p-2'>
+                    <Input
+                        type="Number"
+                        placeholder="Tarif"
+                        id="price"
+                        onChange={(e) => setPrice(e.target.value)}
+                        bsSize="sm"
+                    />
+                    </div>
+                    <div className='col-2 p-2'>
+                    <Input
+                        type="Number"
+                        placeholder="Total Participant"
+                        id="maxParticipants"
+                        onChange={(e) => setMaxParticipant(e.target.value)}
+                        bsSize="sm"
+                    />
+                    </div>
+                    <div className='col-4 p-2'>
+                    <Input
+                        type="Date"
+                        placeholder=""
+                        id="tripDate"
+                        onChange={(e) => setNewTripDate(e.target.value)}
+                        bsSize="sm"
+                    />
+                    </div>
+                    <div className='col col-4 d-flex gap-2 p-2'>
+                    <Button size='sm' className="btn secondary__btn auth__btn" type="submit">
+                    Add
+                    </Button>
+                    <Button size='sm' className="btn secondary__btn auth__btn" type='reset'>
+                    Cancel
+                    </Button>
+                    </div>
+                </div>                          
+                </Form>
+                )
+            }
+            
+            </div>)
+            )
+        }
+        
+        </div>
+          
+         
+            <div style={{width:'min-content', margin:'0 auto'}}>
+              <i className="ri-add-circle-fill" onClick={toggleAddTrip} style={{fontSize:'2rem', cursor:'pointer'}}></i>
             </div>
-            </section>
+            <Collapse isOpen={isOpen}>
+              <div className='bg-black w-50 p-4' style={{margin:'0 auto'}}>
+                <div className='mb-3 mt-2'>Tambah Trip Baru</div>
+                <Form>
+                  <FormGroup className='d-flex flex-column align-items-start'>
+                      <label htmlFor="">
+                        Nama Trip
+                      </label>
+                      <input
+                      type="text"
+                      placeholder="Trip Title"
+                      id="title"
+                      required
+                      />
+                  </FormGroup>
+                  <Button className="btn secondary__btn auth__btn" type="submit">
+                      Save
+                  </Button>
+                  <Button onClick={toggleAddTrip} className="btn secondary__btn auth__btn my-2" type='reset'>
+                      Cancel
+                  </Button>
+                </Form>
+              </div>
+            </Collapse>
+      </div>
     )
 }
 

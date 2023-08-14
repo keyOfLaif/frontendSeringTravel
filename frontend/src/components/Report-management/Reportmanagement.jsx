@@ -7,9 +7,11 @@ import jsonData from '../../assets/data/trip_schedules.json'
 import './reportmanagement.css'
 
 import Chart from './Chart'
+import ReportCard from './ReportCard/ReportCard'
 
 const Reportmanagement = () => {
 
+  const [selectedOption, setSelectedOption] = useState('all')
   const [tripDataPerSchedule, setTripDataPerSchedule] = useState([])
 
   const [selectedTripIndex, setSelectedTripIndex] = useState('all')
@@ -61,76 +63,78 @@ const Reportmanagement = () => {
       };
     };
 
-    const tripInformation = jsonData.map(({ tripDate, tripPrice, maxParticipant, participants }, index) => {
-      const participantsPerSchedule = jsonData[index].participants;
-      const percentages = calculatePercentagesPerTrip(participantsPerSchedule);
-      // You can use the percentages and other information as needed here
+    const selectedTripData = jsonData.find(trip=>trip.title === selectedOption)
+
+    if(selectedTripData) {
+      const tripInformation = selectedTripData.schedules.map(( schedule, index ) => {
+        // const participantsPerSchedule = jsonData[index].participants;
+        const percentages = calculatePercentagesPerTrip(schedule.participants);
+        
+        
+        // You can use the percentages and other information as needed here
+    
+        return {
+          tripDate: schedule.tripDate,
+          tripPrice: schedule.tripPrice,
+          maxParticipant: schedule.maxParticipant,
+          participants: schedule.participants,
+          ...percentages,
+        };
+      });
   
-      return {
-        tripDate,
-        tripPrice,
-        maxParticipant,
-        participants,
-        ...percentages,
-      };
-    });
-
-    setTripDataPerSchedule(tripInformation);
+      setTripDataPerSchedule(tripInformation);
+    } else {
+      setTripDataPerSchedule([])
+    }
+    
     // setButtonIndex(indexData);
-  }, []);
+  }, [selectedOption]);
 
- 
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+    setSelectedTripIndex('all'); // Mengubah state ketika opsi select berubah
+  };
 
   const selectedReport = tripDataPerSchedule.find((selectedTripReport) => selectedTripReport.tripDate === selectedTripIndex);
 
   return (
     <div className='adminSectionMainContent'>
-        <div className='topNavReportManagement'>
-          
-           <h5>Bromo</h5>
-           <div className='listsTripCount'>
-            <div className={`btn__Trip ${selectedTripIndex === 'all' ? 'selectedButton' : ''}`} key={'all'} onClick={()=>handleShowReport('all')}>
-              All
-            </div>
-            {tripDataPerSchedule.map((tripData, index) => (
-              <div className={`btn__Trip ${selectedTripIndex === tripData.tripDate ? 'selectedButton' : ''}`} key={tripData.tripDate} onClick={()=>handleShowReport(tripData.tripDate)}>Trip ke-{index+1}</div>
-            ))
-            }
-           </div>
-        </div>
+      <div className='topNavReportManagement'>
+        {/* pada bagian ini saya ingin menampilkan pilihan untuk setiap title yang ada pada data jsonData dan pilihan All (default) */}
+      <select name="" id="" onChange={handleOptionChange}>
+        <option value="all">All</option>
+        {jsonData.map((trips, index) => (
+          <option value={trips.title} key={index}>
+            {trips.title}
+          </option>
+        ))}
+      </select>
+      {/* pada bagian ini adalah menampilkan schedules/jadwal yang ada pada data yang terpilih sebelumnya pada select tag */}
+      {selectedOption !== 'all' &&(
+        <div className='listsTripCount'>
+          <div className={`btn__Trip ${selectedTripIndex === 'all' ? 'selectedButton' : ''}`} key={'all'} onClick={()=>handleShowReport('all')}>
+            All
+          </div>
+          {tripDataPerSchedule.map((tripData, index) => (
+            <div className={`btn__Trip ${selectedTripIndex === tripData.tripDate ? 'selectedButton' : ''}`} key={tripData.tripDate} onClick={()=>handleShowReport(tripData.tripDate)}>Trip ke-{index+1}</div>
+          ))
+          }
+      </div>
+      )}
+        
+
+      </div>
 
         <div className='botNavReportManagement'>
-          
+          {/* ini adalah yang ditampilkan ketika memilih select trip dari jsonData maka otomatis menampilkan tampilan all */}
           {
-            selectedTripIndex === "all" && <div className='reportAll'>
-            <div className='reportCapsule'>
-              <div>
-                Trip
-              </div>
+            selectedTripIndex === "all" && 
+            <div className='reportAll'>
+              <ReportCard/>
+              
             </div>
-            <div className='reportCapsule'>
-              <div>
-              Peserta
-              </div>
-            </div>
-            <div className='reportCapsule'>
-              <div>
-              Pemasukan
-              </div>
-            </div>
-            <div className='reportCapsule'>
-              <div>
-              Selesai
-              </div>
-            </div>
-            <div className='reportCapsule'>
-              <div>
-              Berjalan
-              </div>
-            </div>
-          </div>
           }
-          
+          {/* bagian ini adalah menampilkan data yang dipilih dari schedules yang ada pada setiap Trip */}
           {selectedReport && (
             <div className='frame__report'>
               <h6>Jadwal : {selectedReport.tripDate}</h6>
@@ -176,9 +180,9 @@ const Reportmanagement = () => {
 
               
               
-              <div className='table__container'>
+              <div className='table__container bg-black'>
               <h5>Data Peserta</h5>
-                <Table
+                <Table color='black'
                   bordered
                   hover
                   responsive

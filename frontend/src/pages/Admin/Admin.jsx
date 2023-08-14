@@ -47,6 +47,7 @@ const Admin = () => {
       <div className='outerAdminContainer d-flex'>
 
         <div className='leftNavbarContainer'>
+          
           <div className='leftNavbar d-flex flex-column'>
             <div className='leftTopNav'>
               <img src={logo} alt="" />
