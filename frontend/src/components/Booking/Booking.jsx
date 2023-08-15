@@ -8,7 +8,7 @@ import { BASE_URL } from '../../utils/config';
 const Booking = ({ trip, avgRating }) => {
 const { schedules, reviews, title } = trip;
 const navigate = useNavigate();
-const { user } = useContext(AuthContext);
+const { user, dispatch } = useContext(AuthContext);
 
 const [selectedSchedule, setSelectedSchedule] = useState(null);
 const [participantsCounts, setParticipantCounts] = useState(null);
@@ -25,20 +25,10 @@ const [participantsCounts, setParticipantCounts] = useState(null);
     };
 
     const handleChangeParticipantsCounts = (event) => {
-    setParticipantCounts(event.target.value);
+      setParticipantCounts(event.target.value);
     };
 
-    // const generateBookingCode = () =>{
-    //   if (!selectedSchedule) {
-    //     return; // Do nothing if selectedSchedule is null
-    //   }
-    //   if (selectedSchedule.participants.length === 0) {
-    //     setCodeBooking(`Bromo1`)
-    //   }
-    //   else {
-    //     setCodeBooking(`Bromo${selectedSchedule.participants.length + 1}`)
-    //   }
-    // }
+    
 
     
 
@@ -81,6 +71,14 @@ const [participantsCounts, setParticipantCounts] = useState(null);
           if (!res.ok) {
             return alert(result.message);
           }
+
+          console.log(result.data)
+          const bookingsDataUpdated = {
+            ...user,
+            bookings:[...user.bookings, result.data]
+          }
+
+          dispatch({type:'UPDATE_USER_DATA', payload: bookingsDataUpdated})
     
           navigate('/thank-you');
         } catch (err) {

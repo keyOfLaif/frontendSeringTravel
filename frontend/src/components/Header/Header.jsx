@@ -97,7 +97,6 @@ if(location.pathname === "/admin" || location.pathname === "/owner"){
                 user ? (
                   <>
                     <Button className='btn secondary__btn'>
-                      {console.log(user)}
                       <div className='position-relative' data-bs-toggle="tooltip" data-bs-placement="bottom" title={`${user.bookings.length} pesanan`}>
                         <Link to={`/${user.username}`}>
                           {user.username}

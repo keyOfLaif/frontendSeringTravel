@@ -26,23 +26,13 @@ const Profile = () => {
 
 
 
-  const [modalEditProfile, setModalEditProfile] = useState(false);
-  const [numOfParticipants, setNumOfParticipants] = useState(1);
   const [showPaymentComponent, setShowPaymentComponent] = useState(false);
   const [selectedBookingProcess, setSelectedBookingProcess] = useState([]);
   const [showInputDataComponent, setShowInputDataComponent] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false)
   
-  const formRef = useRef(null)
   const paymentRef = useRef(null)
   const inputBiodataRef = useRef(null)
-
-  const scrollToPayment = () => {
-    // Mencari referensi ke komponen Payment dan menjalankan scrollIntoView()
-    if (paymentRef.current) {
-      paymentRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }
 
   const handleShowEditProfile = () => {
     setShowEditProfile(true);
@@ -70,25 +60,8 @@ const Profile = () => {
     setShowEditProfile(false);
   }
 
-  const toggleEditProfile = () => setModalEditProfile(!modalEditProfile);
 
-  // const [profileData, setProfileData] = useState({
-  //   username: user.username || '',
-  //   fullName: user.fullName || '',
-  //   email: user.email || '',
-  //   city: user.city || '',
-  //   birthDate: user.birthDate ? user.birthDate.split('T')[0] : '',
-  //   gender: user.gender || '',
-  //   photo: user.photo || '',
-  //   whatsApp: user.whatsApp || '',
-  // });
-
-  // const handleChange = (e) => {
-  //   setProfileData({
-  //     ...profileData,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
+  
 
   const handleSubmitParticipants = (profileData) =>{
     console.log(profileData);
@@ -146,6 +119,7 @@ const Profile = () => {
             
             <div className='ps-0 p-4'>
               <h5>Trip Pesanan</h5>
+              {console.log(user)}
               <div>
                 {
                   user.bookings.map((notif,index)=>

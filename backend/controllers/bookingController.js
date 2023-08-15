@@ -16,7 +16,7 @@ export const createBooking = async(req,res) =>{
 
     try {
 
-        const savedBooking = await newBooking.save()
+        const savedBooking = await (await newBooking.save()).populate('tripBooked')
 
         if(!savedBooking){
             return res.status(400).json({success:false, message:'Gagal Memesan Trip'})
@@ -35,6 +35,7 @@ export const createBooking = async(req,res) =>{
             message: 'Your Trip is booked',
             data: savedBooking
         })
+        
     } catch (err) {
         console.error("Error create booking:", err)
         res.status(500).json({
