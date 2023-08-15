@@ -58,6 +58,22 @@
     background-color: white;
 }
 
+.btn__editProfile{
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn__editProfile i {
+    margin-left: 0.3rem;
+    transition: right 0.3s ease;
+}
+
+.btn__editProfile:hover i{
+    transform: translateX(0.1rem);
+}
+
 .btn__closeEditProfile{
     cursor: pointer;
     margin: 0 auto;

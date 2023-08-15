@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   Row,
   Col,
@@ -15,6 +15,21 @@ import EditProfile from '../../components/Edit-profile/EditProfile';
 
 const Profile = () => {
   const { user, dispatch } = useContext(AuthContext);
+
+  const initialBookingStates = user.bookings.map(() => ({
+    showPayment: false,
+    showInputData: false,
+  }));
+  const [bookingStates, setBookingStates] = useState(initialBookingStates);
+
+  // useEffect(()=>{
+  //   const initialState = user.bookings.map(()=>({
+  //     showPayment: false,
+  //     showInputData: false,
+  //   }));
+  //   setBookingStates(initialState);
+  // }, [user.bookings])
+
   let profilePict = profilePictDefault;
 
   try {
@@ -27,30 +42,45 @@ const Profile = () => {
 
 
 
-  const [showPaymentComponent, setShowPaymentComponent] = useState(false);
-  const [selectedBookingProcess, setSelectedBookingProcess] = useState([]);
-  const [showInputDataComponent, setShowInputDataComponent] = useState(false);
-  const [showEditProfile, setShowEditProfile] = useState(false)
-  
-  const paymentRef = useRef(null)
-  const inputBiodataRef = useRef(null)
+  // const [showPaymentComponent, setShowPaymentComponent] = useState(false);
+  // const [selectedBookingProcess, setSelectedBookingProcess] = useState([]);
+  // const [showInputDataComponent, setShowInputDataComponent] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
+
+
 
   const handleShowEditProfile = () => {
     setShowEditProfile(!showEditProfile);
   }
 
   const handleShowInputDataComponent = (index) => {
-    setSelectedBookingProcess(user.bookings[index]);
-    setShowInputDataComponent(!showInputDataComponent);
+    // const updatedBookingStates = [...bookingStates];
+    // updatedBookingStates[index].showInputData = !updatedBookingStates[index].showInputData;
+    // setBookingStates(updatedBookingStates);
+    const updatedBookingStates = [...bookingStates];
+    updatedBookingStates[index] = {
+      ...updatedBookingStates[index],
+      showInputData: !updatedBookingStates[index].showInputData,
+    };
+    setBookingStates(updatedBookingStates);
+    // setSelectedBookingProcess(user.bookings[index]);
+    // console.log(selectedBookingProcess);
+    // setShowInputDataComponent(!showInputDataComponent);
   }
   
   const handleShowPayment = (index) =>{
-    setSelectedBookingProcess(user.bookings[index]);
-    setShowPaymentComponent(!showPaymentComponent);
+    // const updatedBookingStates = [...bookingStates];
+    // updatedBookingStates[index].showPayment = !updatedBookingStates[index].showPayment;
+    // setBookingStates(updatedBookingStates);
+    const updatedBookingStates = [...bookingStates];
+    updatedBookingStates[index] = {
+      ...updatedBookingStates[index],
+      showPayment: !updatedBookingStates[index].showPayment,
+    };
+    setBookingStates(updatedBookingStates);
+    // setSelectedBookingProcess(user.bookings[index]);
+    // setShowPaymentComponent(!showPaymentComponent[index]);
   }
-
-
-  
 
   const handleSubmitParticipants = (profileData) =>{
     console.log(profileData);
@@ -93,19 +123,6 @@ const Profile = () => {
                 </div>
               </div>
 
-              {/* <div>
-                
-                {
-                  showEditProfile &&
-                  <div className='edit__profile'>
-                    <EditProfile user={user} dispatch={dispatch} />
-                    <div className='btn__closeEditProfile' onClick={handleCloseEditProfile}>
-                      <i className="ri-close-line"></i>
-                    </div>
-                  </div>
-                }
-              </div> */}
-
             </div>
 
             
@@ -115,9 +132,9 @@ const Profile = () => {
               <div>
                 {
                   user.bookings.map((notif,index)=>
-                  <div className='bookings__lists' key={index}>
+                  <div className='bookings__lists mb-2' key={index}>
                     <div className='d-flex align-items-center justify-content-between'>
-                      Trip {notif.tripBooked.tripDate}
+                      Trip {notif.tripBooked.tripDate} {notif.participantCount}
 
                       <div onClick={() => handleShowPayment(index)} className='btn__payBooking clicked'>
                         {notif.bookingStatus === 0 ? 'Bayar DP' : 'Lunasi Pembayaran'}
@@ -125,7 +142,7 @@ const Profile = () => {
                       </div>
 
                         {notif.participants.length === 0 ? (
-                          <div onClick={()=>handleShowInputDataComponent(index)} className='btn__inputData'>
+                          <div onClick={() => handleShowInputDataComponent(index)} className='btn__inputData'>
                             Isi Data Pemesan
                             <i className='ri-arrow-down-s-line'></i>
                           </div>
@@ -134,7 +151,14 @@ const Profile = () => {
                         )}
                         <i onClick={()=>deleteBooking(notif._id)} className="ri-close-line btn__deleteBooking"></i>
                     </div>
+
+                    <Collapse isOpen={bookingStates[index].showPayment}>
+                      <Payment dataBookingProcessSent={notif}/>
+                    </Collapse>
                     
+                    <Collapse isOpen={bookingStates[index].showInputData}>
+                      <BiographyForm numOfParticipants={notif.participantCount - notif.participants.length} onSubmit={handleSubmitParticipants}/>
+                    </Collapse>
                   </div>
                   )
                 }
@@ -143,12 +167,9 @@ const Profile = () => {
             </div>
 
             <div>
-              <Collapse isOpen={showPaymentComponent}>
-                <Payment dataBookingProcessSent={selectedBookingProcess}/>
-              </Collapse>
-              <Collapse isOpen={showInputDataComponent}>
-                <BiographyForm numOfParticipants={selectedBookingProcess.participantCount} onSubmit={handleSubmitParticipants}/>
-              </Collapse>
+              
+
+
               <Collapse isOpen={showEditProfile}>
                   <div className='edit__profile'>
                     <EditProfile user={user} dispatch={dispatch} />
@@ -198,9 +219,9 @@ const Profile = () => {
             </div>
 
             <div className='atur-akun' onClick={handleShowEditProfile}>
-              <span>
+              <div className='btn__editProfile'>
                Ubah Akun <i className='ri-arrow-right-s-line'></i>
-              </span> 
+              </div> 
             </div>
           </Col>
         </Row>
