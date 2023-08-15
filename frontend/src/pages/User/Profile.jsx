@@ -3,6 +3,7 @@ import {
   Row,
   Col,
   Container,
+  Collapse
 } from 'reactstrap';
 import './profile.css';
 import profilePictDefault from '../../assets/images/profile_pic/default.jpg'
@@ -18,7 +19,7 @@ const Profile = () => {
 
   try {
     // Coba memuat gambar sesuai dengan direktori
-    profilePict = require(`../../assets/images/profile_pic/${user.username}a.JPG`);
+    profilePict = require(`../../assets/images/profile_pic/${user.username}.JPG`);
   } catch (error) {
     // Gambar sesuai direktori tidak ditemukan, gunakan gambar default
     console.error("Gambar tidak ditemukan:", error);
@@ -35,29 +36,17 @@ const Profile = () => {
   const inputBiodataRef = useRef(null)
 
   const handleShowEditProfile = () => {
-    setShowEditProfile(true);
+    setShowEditProfile(!showEditProfile);
   }
 
   const handleShowInputDataComponent = (index) => {
     setSelectedBookingProcess(user.bookings[index]);
-    setShowInputDataComponent(true);
+    setShowInputDataComponent(!showInputDataComponent);
   }
   
   const handleShowPayment = (index) =>{
     setSelectedBookingProcess(user.bookings[index]);
-    setShowPaymentComponent(true);
-  }
-
-  const handleCloseInputDataComponent = () =>{
-    setShowInputDataComponent(false);
-  }
-
-  const handleClosePayment = () =>{
-    setShowPaymentComponent(false);
-  }
-
-  const handleCloseEditProfile = ()=>{
-    setShowEditProfile(false);
+    setShowPaymentComponent(!showPaymentComponent);
   }
 
 
@@ -69,15 +58,17 @@ const Profile = () => {
 
   const deleteBooking = async (e) => {
     try {
-      const response = await fetch(`${BASE_URL}/bookings/${e}`, {
-        method: 'DELETE',
-        headers: {
-          'content-type': 'application/json',
-        }
-      });
-
-      const dataReponse = await response.json();
-      return dataReponse;
+      const confirmed = window.confirm("Apakah Anda yakin ingin menghapus pesanan ini?");
+      if(confirmed){
+        const response = await fetch(`${BASE_URL}/bookings/${e}`, {
+          method: 'DELETE',
+          headers: {
+            'content-type': 'application/json',
+          }
+        });
+        const dataReponse = await response.json();
+        return dataReponse;
+      }
     } catch (error) {
       console.error(error);
     }
@@ -102,7 +93,8 @@ const Profile = () => {
                 </div>
               </div>
 
-              <div>
+              {/* <div>
+                
                 {
                   showEditProfile &&
                   <div className='edit__profile'>
@@ -112,7 +104,7 @@ const Profile = () => {
                     </div>
                   </div>
                 }
-              </div>
+              </div> */}
 
             </div>
 
@@ -123,23 +115,26 @@ const Profile = () => {
               <div>
                 {
                   user.bookings.map((notif,index)=>
-                  <div className='bookings__lists' key={index} onClick={() => handleShowPayment(index)}>
-                    <div className='d-flex'>
+                  <div className='bookings__lists' key={index}>
+                    <div className='d-flex align-items-center justify-content-between'>
                       Trip {notif.tripBooked.tripDate}
-                      <div onClick={()=>deleteBooking(notif._id)} className='deleteBooking__button'>
-                        <i className="ri-close-line"></i>
+
+                      <div onClick={() => handleShowPayment(index)} className='btn__payBooking clicked'>
+                        {notif.bookingStatus === 0 ? 'Bayar DP' : 'Lunasi Pembayaran'}
+                        <i className='ri-arrow-down-s-line'></i>
                       </div>
+
+                        {notif.participants.length === 0 ? (
+                          <div onClick={()=>handleShowInputDataComponent(index)} className='btn__inputData'>
+                            Isi Data Pemesan
+                            <i className='ri-arrow-down-s-line'></i>
+                          </div>
+                        ) : (
+                          <div>Kamus sudah mengisi data peserta, Mau mengisi lagi?</div>
+                        )}
+                        <i onClick={()=>deleteBooking(notif._id)} className="ri-close-line btn__deleteBooking"></i>
                     </div>
-                    <div>
-                      {notif.bookingStatus === 0 ? 'Bayar DP' : 'Lunasi Pembayaran'}
-                    </div>
-                    <div>
-                      {notif.participants.length === 0 ? (
-                        <div onClick={()=>handleShowInputDataComponent(index)}>Isi Data</div>
-                      ) : (
-                        <div>Kamus sudah mengisi data peserta, Mau mengisi lagi?</div>
-                      )}
-                    </div>
+                    
                   </div>
                   )
                 }
@@ -147,35 +142,23 @@ const Profile = () => {
               
             </div>
 
-            <div ref={paymentRef}>
-              {showPaymentComponent && (
-                <div>
-                  <Payment dataBookingProcessSent = {selectedBookingProcess}/>
-                  <button onClick={handleClosePayment}>Close</button>
-                </div>
-              )
-              }
-            </div>
-
-            <div ref={inputBiodataRef}>
-              {
-                showInputDataComponent && (
-                  <div>
-                    <BiographyForm numOfParticipants={selectedBookingProcess.participantCount} onSubmit={handleSubmitParticipants}/>
-                    <button onClick={handleCloseInputDataComponent}>Close</button>
+            <div>
+              <Collapse isOpen={showPaymentComponent}>
+                <Payment dataBookingProcessSent={selectedBookingProcess}/>
+              </Collapse>
+              <Collapse isOpen={showInputDataComponent}>
+                <BiographyForm numOfParticipants={selectedBookingProcess.participantCount} onSubmit={handleSubmitParticipants}/>
+              </Collapse>
+              <Collapse isOpen={showEditProfile}>
+                  <div className='edit__profile'>
+                    <EditProfile user={user} dispatch={dispatch} />
+                    <div className='btn__closeEditProfile' onClick={handleShowEditProfile}>
+                      <i className="ri-close-line"></i>
+                    </div>
                   </div>
-                )
-              }
+              </Collapse>
             </div>
             
-            {/* <div className='booking__process'>
-              <div className='box__process'>
-                <Payment />
-              </div>
-              <div className='box__process'>
-                <BiographyForm numOfParticipants={2} onSubmit={handleSubmitParticipants}/>
-              </div>
-            </div> */}
 
           </Col>
 

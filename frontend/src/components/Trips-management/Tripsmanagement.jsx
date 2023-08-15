@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 
-import { Row, Col, Form, FormGroup, Button, Collapse, Card, CardTitle, Input } from 'reactstrap'
+import { Form, FormGroup, Button, Collapse, Input } from 'reactstrap'
 import useFetch from '../../hooks/useFetch'
 import { BASE_URL } from '../../utils/config'
 
