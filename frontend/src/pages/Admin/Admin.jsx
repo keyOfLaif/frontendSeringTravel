@@ -66,7 +66,7 @@ const Admin = () => {
                     className={`navAdmin__item ${index === selectedNavLinkAdmin ? 'selected' : ''}`}
                     onClick={()=>handleNavLinkSelected(index)}
                   >
-                      <i class="ri-menu-4-line align-bottom me-1"></i>
+                      <i className="ri-menu-4-line align-bottom me-1"></i>
                     <span>
                       {item.title}
                     </span>

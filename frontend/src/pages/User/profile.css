@@ -36,3 +36,17 @@
 .btn__closeEditProfile:hover{
     color: red;
 }
+
+.profile__information{
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.profile__picture img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    object-position: 20% 20%;
+}

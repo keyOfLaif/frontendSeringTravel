@@ -3,16 +3,9 @@ import {
   Row,
   Col,
   Container,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-  Button,
-  Label,
-  Input,
-  Form,
 } from 'reactstrap';
 import './profile.css';
+import profilePictDefault from '../../assets/images/profile_pic/default.jpg'
 import { AuthContext } from './../../context/AuthContext';
 import { BASE_URL } from '../../utils/config';
 import Payment from '../../components/Payment-confirmation/Payment';
@@ -21,6 +14,18 @@ import EditProfile from '../../components/Edit-profile/EditProfile';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
+  let profilePict = profilePictDefault;
+
+  try {
+    // Coba memuat gambar sesuai dengan direktori
+    profilePict = require(`../../assets/images/profile_pic/${user.username}a.JPG`);
+  } catch (error) {
+    // Gambar sesuai direktori tidak ditemukan, gunakan gambar default
+    console.error("Gambar tidak ditemukan:", error);
+  }
+
+
+
   const [modalEditProfile, setModalEditProfile] = useState(false);
   const [numOfParticipants, setNumOfParticipants] = useState(1);
   const [showPaymentComponent, setShowPaymentComponent] = useState(false);
@@ -112,64 +117,18 @@ const Profile = () => {
         <Row>
           <Col lg='9'>
             <div>
-              <h4>
-                {user.username}
-                <span>
-                  <i className='ri-pencil-line ms-4 align-bottom' onClick={toggleEditProfile}></i>
-                </span>
-              </h4>
-
-              {/* <Modal isOpen={modalEditProfile} toggle={toggleEditProfile}>
-                <ModalHeader toggle={toggleEditProfile}>Edit Profile</ModalHeader>
-                <ModalBody>
-
-                  <Form innerRef={formRef}>
-                    <Label>Username:</Label>
-                    <Input name='username' type='text' value={profileData.username} onChange={handleChange} />
-
-                    <Label>Password:</Label>
-                    <Input name='password' type='password' disabled />
-
-                    <Label>Nama Lengkap:</Label>
-                    <Input name='fullName' type='text' value={formData.fullName} onChange={handleChange} />
-
-                    <Label>Email:</Label>
-                    <Input name='email' type='email' value={formData.email} onChange={handleChange} />
-
-                    <Label>Asal Kota:</Label>
-                    <Input name='city' type='select' value={formData.city} onChange={handleChange}>
-                      <option value='jakarta'>Jakarta</option>
-                      <option value='bogor'>Bogor</option>
-                      <option value='depok'>Depok</option>
-                      <option value='tangerang'>Tangerang</option>
-                      <option value='bekasi'>Bekasi</option>
-                    </Input>
-
-                    <Label>Tanggal Lahir:</Label>
-                    <Input name='birthDate' type='date' value={formData.birthDate} onChange={handleChange} />
-
-                    <Label>Jenis Kelamin:</Label>
-                    <Input name='gender' type='select' value={formData.gender} onChange={handleChange}>
-                      <option></option>
-                      <option value={1}>laki-laki</option>
-                      <option value={0}>perempuan</option>
-                    </Input>
-
-                    <Label>WhatsApp:</Label>
-                    <Input name='whatsApp' type='text' value={formData.whatsApp} onChange={handleChange} />
-                  </Form>
-                </ModalBody>
-
-                <ModalFooter>
-                  <Button color='primary' onClick={handleSubmit}>
-                    Simpan Perubahan
-                  </Button>{' '}
-                  <Button color='secondary' onClick={toggleEditProfile}>
-                    Batal
-                  </Button>
-                </ModalFooter>
-              </Modal> */}
-
+              <div className='profile__information'>
+                <div className='profile__picture'>
+                  <img src={profilePict} alt="" />
+                </div>
+                <div>
+                  <h4>
+                  {user.username}
+                  </h4>
+                  <p>Alamat Jalan Jend Sudirman</p>
+                </div>
+              </div>
+                
               <div>
                 {
                   showEditProfile &&
@@ -184,7 +143,7 @@ const Profile = () => {
 
             </div>
 
-            <p>Alamat Jalan Jend Sudirman</p>
+            
             <div className='ps-0 p-4'>
               <h5>Trip Pesanan</h5>
               <div>
