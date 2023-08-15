@@ -13,7 +13,7 @@ import BiographyForm from '../../components/Biography-form/BiographyForm';
 import EditProfile from '../../components/Edit-profile/EditProfile';
 
 const Profile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, dispatch } = useContext(AuthContext);
   let profilePict = profilePictDefault;
 
   try {
@@ -72,23 +72,23 @@ const Profile = () => {
 
   const toggleEditProfile = () => setModalEditProfile(!modalEditProfile);
 
-  const [profileData, setProfileData] = useState({
-    username: user.username || '',
-    fullName: user.fullName || '',
-    email: user.email || '',
-    city: user.city || '',
-    birthDate: user.birthDate ? user.birthDate.split('T')[0] : '',
-    gender: user.gender || '',
-    photo: user.photo || '',
-    whatsApp: user.whatsApp || '',
-  });
+  // const [profileData, setProfileData] = useState({
+  //   username: user.username || '',
+  //   fullName: user.fullName || '',
+  //   email: user.email || '',
+  //   city: user.city || '',
+  //   birthDate: user.birthDate ? user.birthDate.split('T')[0] : '',
+  //   gender: user.gender || '',
+  //   photo: user.photo || '',
+  //   whatsApp: user.whatsApp || '',
+  // });
 
-  const handleChange = (e) => {
-    setProfileData({
-      ...profileData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   setProfileData({
+  //     ...profileData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   const handleSubmitParticipants = (profileData) =>{
     console.log(profileData);
@@ -128,12 +128,12 @@ const Profile = () => {
                   <p>Alamat Jalan Jend Sudirman</p>
                 </div>
               </div>
-                
+
               <div>
                 {
                   showEditProfile &&
                   <div className='edit__profile'>
-                    <EditProfile user={user} close={()=>handleCloseEditProfile}/>
+                    <EditProfile user={user} dispatch={dispatch} />
                     <div className='btn__closeEditProfile' onClick={handleCloseEditProfile}>
                       <i className="ri-close-line"></i>
                     </div>
