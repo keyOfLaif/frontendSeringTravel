@@ -6,6 +6,8 @@ import multer from 'multer';
 import Image from '../models/Image.js'; // Import the Image model or schema
 
 
+
+
 export const insertImage = async (req, res) => {
     const directory = req.query.directory;
     const storage = multer.diskStorage({

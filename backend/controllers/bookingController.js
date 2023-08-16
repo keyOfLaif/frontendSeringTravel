@@ -2,6 +2,9 @@ import User from '../models/User.js'
 import Booking from '../models/Booking.js'
 import Trip from '../models/Trip.js'
 import Schedule from '../models/Schedule.js'
+import multer from 'multer'
+
+
 
 export const createBooking = async(req,res) =>{
 
@@ -144,26 +147,63 @@ export const deleteBooking = async(req,res) =>{
     }
 }
 
-export const payBooking = async(req, res) =>{
+export const payBooking = async (req, res) => {
     const bookingId = req.params.idBooking;
-    const { paymentType, paymentProof } = req.body;
-    try{
-        const booking = await Booking.findById(bookingId);
-        if(!booking){
-            return res.status(404).json({message :'Booking not Found'})
+    const { paymentType } = req.body;
+  
+    const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, '../frontend/public/paymentProofs'); // Ganti dengan direktori yang sesuai
+      },
+      filename: (req, file, cb) => {
+        const paymentType = req.body.paymentType;
+        const paymentProofName = paymentType; // Gunakan paymentType sebagai nama file
+        const fileExtension = file.originalname.split('.').pop();
+        const fileName = `${paymentProofName}.${fileExtension}`;
+        cb(null, fileName);
+      },
+    });
+  
+    const upload = multer({ storage: storage });
+  
+    try {
+      const booking = await Booking.findById(bookingId);
+      if (!booking) {
+        return res.status(404).json({ message: 'Booking not Found' });
+      }
+  
+      // Handle upload di dalam fungsi payBooking
+      upload.single('paymentProof')(req, res, async (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: 'Error uploading paymentProof' });
         }
-        booking.paymentProofs.push(paymentProof);
-        if(paymentType === 'DP'){
-            booking.dp = 1;
-        } else if (paymentType === 'FullPayment'){
-            booking.fullPayment = 1;
+  
+        const { paymentProof } = req.file;
+  
+        // Menentukan objek bukti pembayaran sesuai dengan paymentType
+        let paymentProofObject;
+        if (paymentType === 'DP') {
+          paymentProofObject = { DP: paymentProof };
+          booking.dp = 1;
+        } else if (paymentType === 'FullPayment') {
+          paymentProofObject = { FullPayment: paymentProof };
+          booking.fullPayment = 1;
         }
-
-        await booking.save();
-        return res.json({message : "Payment processed Successfully"})
-        
-    } catch (error){
-        console.log(error)
-        return res.status(500).json({message: 'Internal Server Error'})
+  
+        // Menyimpan objek bukti pembayaran ke paymentProofs
+        booking.paymentProofs.push(paymentProofObject);
+  
+        try {
+          await booking.save();
+          return res.json({ message: 'Payment processed Successfully' });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ message: 'Error saving booking data' });
+        }
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
-}
+  };

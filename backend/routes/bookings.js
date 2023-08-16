@@ -9,7 +9,7 @@ const router = express.Router()
 router.post('/:userID/:scheduleID', createBooking)
 router.get('/:id', getBooking)
 router.get('/', getAllBooking)
-router.put('/:idBooking/:paymentStage', updateBookingStatus)
+// router.put('/:idBooking/:paymentStage', updateBookingStatus)
 router.delete('/:idBooking', deleteBooking)
 router.put('/:idBooking', payBooking)
 export default router;
