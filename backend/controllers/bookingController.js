@@ -143,3 +143,10 @@ export const deleteBooking = async(req,res) =>{
         res.status(500).json({success: false, message: 'Internal server error'})
     }
 }
+
+export const payBooking = async(req, res) =>{
+    const bookingId = req.params.idBooking;
+    try{
+        const deleteBooking 
+    }
+}

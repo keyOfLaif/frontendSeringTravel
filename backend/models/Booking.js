@@ -25,18 +25,27 @@ const bookingSchema = new mongoose.Schema(
     participants:[],
 
     dp: {
-      type: Boolean,
-      default: false,
+      type: Number,
+      enum: [0,1,2],
+      default: 0,
     },
     
     fullPayment: {
-      type: Boolean,
-      default: false,
+      type: Number,
+      enum: [0,1,2],
+      default: 0,
     },
 
-    bookingStatus: {
-      type: Number,
-      default: 0,
+    paymentProofs:[
+      {
+        type: String,
+      }
+    ],
+
+    paymentStatus: {
+      type: String,
+      enum: ['pending', 'dpPaid', 'fullyPaid'],
+      default: 'pending',
     },
 
     bookingExpiration: {

@@ -136,8 +136,23 @@ const Profile = () => {
                     <div className='d-flex align-items-center justify-content-between'>
                       Trip {notif.tripBooked.tripDate} {notif.participantCount}
 
+                      <div>
+                        Dp
+                        {
+                          notif.dp === 0 && <i className='ri-arrow-down-s-line'></i>
+                        }
+                        {
+                          notif.dp === 1 && <i class="ri-loader-2-line"></i>
+                        }
+                        {
+                          notif.dp === 2 && <i class="ri-loader-2-line"></i>
+                        }
+                      </div>
+
                       <div onClick={() => handleShowPayment(index)} className='btn__payBooking clicked'>
-                        {notif.bookingStatus === 0 ? 'Bayar DP' : 'Lunasi Pembayaran'}
+                        {
+                        notif.paymentStatus === 0 ? 'Bayar DP' : 'Lunasi Pembayaran'
+                        }
                         <i className='ri-arrow-down-s-line'></i>
                       </div>
 

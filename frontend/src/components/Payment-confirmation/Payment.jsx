@@ -23,6 +23,8 @@ const Payment = ({dataBookingProcessSent}) => {
     }
   }
 
+  
+
   return (
     <div className='frame__payment'>
           {
@@ -33,9 +35,12 @@ const Payment = ({dataBookingProcessSent}) => {
               )
           }
           <form action="">
-            <div className='mb-3'>
-              <label htmlFor="" className='me-3'>Kode Booking</label>
-              <input type="text" />
+            <div>
+              {console.log(dataBookingProcessSent)}
+              <select name="" id="">
+                <option value="DP">Bayar DP Rp.{dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price/2)}</option>
+                <option value="FullPayment">Bayar Pelunasan {dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price)}</option>
+              </select>
             </div>
             <div>
               <input type="file" accept="image/*" onChange={handleImageInputted} />

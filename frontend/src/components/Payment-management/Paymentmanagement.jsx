@@ -70,7 +70,7 @@ const Paymentmanagement = () => {
 
   return (
     <div className='p-3'>
-        <h4>Payment</h4>
+        <h4>Konfirmasi Pembayaran</h4>
         <Table
         bordered
         hover
