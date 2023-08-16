@@ -146,7 +146,24 @@ export const deleteBooking = async(req,res) =>{
 
 export const payBooking = async(req, res) =>{
     const bookingId = req.params.idBooking;
+    const { paymentType, paymentProof } = req.body;
     try{
-        const deleteBooking 
+        const booking = await Booking.findById(bookingId);
+        if(!booking){
+            return res.status(404).json({message :'Booking not Found'})
+        }
+        booking.paymentProofs.push(paymentProof);
+        if(paymentType === 'DP'){
+            booking.dp = 1;
+        } else if (paymentType === 'FullPayment'){
+            booking.fullPayment = 1;
+        }
+
+        await booking.save();
+        return res.json({message : "Payment processed Successfully"})
+        
+    } catch (error){
+        console.log(error)
+        return res.status(500).json({message: 'Internal Server Error'})
     }
 }

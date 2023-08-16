@@ -1,6 +1,6 @@
 
 import express from 'express'
-import { createBooking, getAllBooking, getBooking, updateBookingStatus, deleteBooking } from '../controllers/bookingController.js';
+import { createBooking, getAllBooking, getBooking, updateBookingStatus, deleteBooking, payBooking } from '../controllers/bookingController.js';
 import { verifyAdmin, verifyUser } from '../utils/verifyToken.js'
 
 
@@ -11,4 +11,5 @@ router.get('/:id', getBooking)
 router.get('/', getAllBooking)
 router.put('/:idBooking/:paymentStage', updateBookingStatus)
 router.delete('/:idBooking', deleteBooking)
+router.put('/:idBooking', payBooking)
 export default router;

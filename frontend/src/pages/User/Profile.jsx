@@ -137,24 +137,38 @@ const Profile = () => {
                       Trip {notif.tripBooked.tripDate} {notif.participantCount}
 
                       <div>
-                        Dp
+                        Dp (
                         {
-                          notif.dp === 0 && <i className='ri-arrow-down-s-line'></i>
+                          notif.dp === 0 && <i className='ri-close-line'></i>
                         }
                         {
                           notif.dp === 1 && <i class="ri-loader-2-line"></i>
                         }
                         {
                           notif.dp === 2 && <i class="ri-loader-2-line"></i>
-                        }
+                        } )
                       </div>
 
-                      <div onClick={() => handleShowPayment(index)} className='btn__payBooking clicked'>
+                      <div>
+                        Lunas (
                         {
-                        notif.paymentStatus === 0 ? 'Bayar DP' : 'Lunasi Pembayaran'
+                          notif.fullPayment === 0 && <i className='ri-close-line'></i>
                         }
-                        <i className='ri-arrow-down-s-line'></i>
+                        {
+                          notif.fullPayment === 1 && <i class="ri-loader-2-line"></i>
+                        }
+                        {
+                          notif.fullPayment === 2 && <i class="ri-loader-2-line"></i>
+                        } )
                       </div>
+
+                      {
+                        notif.paymentStatus !== 'fullyPaid' &&
+                        <div onClick={() => handleShowPayment(index)} className='btn__payBooking clicked'>
+                        Bayar
+                        <i className='ri-arrow-down-s-line'></i>
+                        </div>
+                      }
 
                         {notif.participants.length === 0 ? (
                           <div onClick={() => handleShowInputDataComponent(index)} className='btn__inputData'>

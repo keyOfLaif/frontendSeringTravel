@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import { Form, FormGroup, Button, Label, Input, Row, Col } from 'reactstrap'
 
 import './payment.css'
 
@@ -23,22 +22,18 @@ const Payment = ({dataBookingProcessSent}) => {
     }
   }
 
-  
+
 
   return (
     <div className='frame__payment'>
-          {
-            dataBookingProcessSent.bookingStatus === 0 ? (
-                <h5>Bayar DP</h5>
-              ) : (
-                <h5>Bayar Pelunasan</h5>
-              )
-          }
-          <form action="">
+          Pembayaran
+          <form>
             <div>
               {console.log(dataBookingProcessSent)}
               <select name="" id="">
-                <option value="DP">Bayar DP Rp.{dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price/2)}</option>
+                {
+                  dataBookingProcessSent.dp === 0 && <option value="DP">Bayar DP Rp.{dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price/2)}</option>
+                }
                 <option value="FullPayment">Bayar Pelunasan {dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price)}</option>
               </select>
             </div>
