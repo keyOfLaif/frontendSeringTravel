@@ -36,11 +36,10 @@ const bookingSchema = new mongoose.Schema(
       default: 0,
     },
 
-    paymentProofs:[
-      {
-        type: String,
-      }
-    ],
+    paymentProofs:{
+      dp : { type : String},
+      fullPayment : {type : String},
+    },
 
     paymentStatus: {
       type: String,

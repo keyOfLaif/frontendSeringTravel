@@ -13,8 +13,11 @@ const Payment = ({dataBookingProcessSent}) => {
 
   const handlePaymentTypeChange = (event) => {
     const selectedPaymentType = event.target.value;
+    console.log('Selected payment Type:', selectedPaymentType)
     setPaymentType(selectedPaymentType);
   };
+
+
   const handleImageInputted = (event) =>{
     const file = event.target.files[0];
     const allowedTypes = ['image/jpeg', 'image/png'];
@@ -30,7 +33,9 @@ const Payment = ({dataBookingProcessSent}) => {
 
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("paymenttypebefor:", paymentType)
     const formData = new FormData();
     formData.append('paymentType', paymentType);
     formData.append('paymentProof', selectedImage);
@@ -44,7 +49,6 @@ const Payment = ({dataBookingProcessSent}) => {
         });
   
         const responseData = await response.json();
-        console.log(responseData); // Success message from server
       }
     } 
     catch (error) {
@@ -57,20 +61,15 @@ const Payment = ({dataBookingProcessSent}) => {
     <div className='frame__payment'>
           Pembayaran
           <form>
-            <div>
-              {console.log(dataBookingProcessSent)}
-              <select required onChange={handlePaymentTypeChange}>
+              <select required name="paymentType" id="paymentType" onChange={handlePaymentTypeChange}>
                 {
                   dataBookingProcessSent.dp === 0 && <option value="DP">Bayar DP Rp.{dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price/2)}</option>
                 }
                 <option value="FullPayment">Bayar Pelunasan {dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price)}</option>
               </select>
-            </div>
 
-            <div>
-              <input type="file" accept="image/*" onChange={handleImageInputted} />
+              <input type="file" name="paymentProof" id='paymentProof' accept="image/*" onChange={handleImageInputted} />
               <ImagePreview selectedImage={selectedImage}/>
-            </div>
 
             <button type="button" onClick={handleSubmit}>
               Kirim Bukti Pembayaran
