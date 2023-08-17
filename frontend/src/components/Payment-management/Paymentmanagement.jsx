@@ -3,6 +3,7 @@ import { Form, FormGroup, Table, Label, Input } from 'reactstrap'
 
 import { BASE_URL } from '../../utils/config'
 import useFetch from '../../hooks/useFetch'
+import './details__booking.css'
 
 const Paymentmanagement = () => {
 
@@ -12,7 +13,7 @@ const Paymentmanagement = () => {
     const [fullPaymentState, setFullPaymentState] = useState({});
 
     const {
-        data:payments, 
+        data:bookings, 
         loading, 
         error,
       } = useFetch(`${BASE_URL}/bookings`)
@@ -69,69 +70,77 @@ const Paymentmanagement = () => {
       };
 
   return (
-    <div className='p-3'>
-        <h4>Konfirmasi Pembayaran</h4>
-        <Table
-        bordered
-        hover
-        responsive
-        >
-        <thead>
-            <tr>
-            <th>
-                Booking Code
-            </th>
-            <th>
-                Pembayaran
-            </th>
-            </tr>
-        </thead>
-        <tbody>
-        {
-            payments.map((payment, index) =>
-            <tr key={payment._id}>
-            <th scope="row">
-                {payment.noBooking}
-            </th>
-            <td>
-            <Form>
-                <FormGroup
-                check
-                inline
+    <div className='p-3 bg-primary'>
+        <div className='booking__frame'>
+            <div className='booking__lists'>
+                <h4>Konfirmasi Pembayaran</h4>
+                {console.log(bookings)}
+                <Table
+                bordered
+                hover
+                responsive
                 >
-                <Input 
-                    type="checkbox" 
-                    name="dp"
-                    checked={dpState[payment._id] || false}
-                    onChange={(e) => handleDpCheckboxChange(e, payment)}
-                />
-                <Label check>
-                    DP
-                </Label>
-                </FormGroup>
+                <thead>
+                    <tr>
+                    <th>
+                        Booking Code
+                    </th>
+                    <th>
+                        Pembayaran
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                {
+                    bookings.map((booking, index) =>
+                    <tr key={booking._id}>
+                    <th scope="row">
+                        {booking.noBooking} Bukti Pembayaran "{booking.paymentProofs.fullPayment}"
+                    </th>
+                    <td>
+                    <Form>
+                        <FormGroup
+                        check
+                        inline
+                        >
+                        <Input 
+                            type="checkbox" 
+                            name="dp"
+                            checked={dpState[booking._id] || false}
+                            onChange={(e) => handleDpCheckboxChange(e, booking)}
+                        />
+                        <Label check>
+                            DP
+                        </Label>
+                        </FormGroup>
 
-                <FormGroup
-                check
-                inline
-                >
-                <Input 
-                    type="checkbox"
-                    name="fullPayment"
-                    checked={fullPaymentState[payment._id] || false}
-                    onChange={(e) => handleFullPaymentCheckboxChange(e, payment)}
-                />
-                <Label check>
-                    Pelunasan
-                </Label>
-                </FormGroup>
-            </Form>
-            </td>
-            </tr>
-            )
-        }
-            
-        </tbody>
-        </Table>
+                        <FormGroup
+                        check
+                        inline
+                        >
+                        <Input 
+                            type="checkbox"
+                            name="fullPayment"
+                            checked={fullPaymentState[booking._id] || false}
+                            onChange={(e) => handleFullPaymentCheckboxChange(e, booking)}
+                        />
+                        <Label check>
+                            Pelunasan
+                        </Label>
+                        </FormGroup>
+                    </Form>
+                    </td>
+                    </tr>
+                    )
+                }
+                    
+                </tbody>
+                </Table>
+            </div>
+            <div className='booking__details'>
+                <h4>Detail</h4>
+            </div>
+        </div>
     </div>
   )
 }

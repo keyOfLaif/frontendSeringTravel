@@ -87,6 +87,35 @@ export const getAllBooking = async(req,res)=>{
     }
 }
 
+//updateParticipantDataBooking
+export const updateBookers = async (req, res) => {
+  const bookingId = req.params.idBooking;
+  const participants = req.body; // Assumption: req.body.participants is an array of participant objects
+  console.log("dataParticipants :",participants)
+
+  try {
+    
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      bookingId,
+      {
+        $push: {
+          participants: participants
+        }
+      },
+      { new: true } // Ini akan mengembalikan dokumen yang sudah diperbarui
+    );
+
+    if (updatedBooking) {
+      res.status(200).json({ message: "Participants data updated successfully", updatedBooking });
+    } else {
+      res.status(404).json({ message: "Booking not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred", error });
+    console.log("an error:",error)
+  }
+};
+
 // updating booking status
 export const updateBookingStatus = async (req, res) =>{
     const bookingId = req.params.idBooking;
@@ -121,6 +150,7 @@ export const updateBookingStatus = async (req, res) =>{
   }
 }
 
+//deleting a booking
 export const deleteBooking = async(req,res) =>{
     const bookingId = req.params.idBooking;
     
@@ -147,6 +177,7 @@ export const deleteBooking = async(req,res) =>{
     }
 }
 
+//sending payment proof
 export const payBooking = async (req, res) => {
     const bookingId = req.params.idBooking;
     console.log("paymentType", req.body)

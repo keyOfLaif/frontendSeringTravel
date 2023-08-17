@@ -1,0 +1,14 @@
+.booking__frame{
+    display: flex;
+    gap: 1rem;
+}
+
+.booking__details{
+    background-color: white;
+    height: 60vh;
+    width: 25%;
+}
+
+.booking__lists{
+    width: 75%;
+}

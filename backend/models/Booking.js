@@ -22,7 +22,27 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
 
-    participants:[],
+    participants:[{
+      participantName : {
+        type:String
+      },
+      participantEmail : {
+        type:String
+      },
+      participantPhoneNumber : {
+        type:String
+      },
+      participantCity : {
+        type:String
+      },
+      participantGender : {
+        type:String
+      },
+      participantJob : {
+        type:String
+      },
+    }
+    ],
 
     dp: {
       type: Number,

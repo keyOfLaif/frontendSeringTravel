@@ -3,7 +3,7 @@ import { Form, FormGroup, Label, Input, Button } from 'reactstrap'
 
 import './biographyForm.css'
 
-  const BiographyForm = ({numOfParticipants, onSubmit}) => {
+  const BiographyForm = ({numOfParticipants, idUpdatedData, onSubmit}) => {
     const initialFormData = {
       participantName: '',
       participantEmail: '',
@@ -27,7 +27,7 @@ import './biographyForm.css'
   
     const handleSubmit = (event) => {
       event.preventDefault();
-      onSubmit(formData);
+      onSubmit(formData, idUpdatedData);
     };
 
   return (

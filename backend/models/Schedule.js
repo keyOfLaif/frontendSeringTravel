@@ -18,7 +18,26 @@ const scheduleSchema = new mongoose.Schema(
       type: Number,
       required: true
     },
-    participants: [
+    participants: [{
+      participantName : {
+        type:String
+      },
+      participantEmail : {
+        type:String
+      },
+      participantPhoneNumber : {
+        type:String
+      },
+      participantCity : {
+        type:String
+      },
+      participantGender : {
+        type:String
+      },
+      participantJob : {
+        type:String
+      }
+    }
     ],
     
   },

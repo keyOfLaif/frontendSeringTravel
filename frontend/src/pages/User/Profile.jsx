@@ -82,8 +82,22 @@ const Profile = () => {
     // setShowPaymentComponent(!showPaymentComponent[index]);
   }
 
-  const handleSubmitParticipants = (profileData) =>{
-    console.log(profileData);
+  const handleSubmitParticipants = async (arrayParticipants, idUpdatedData) =>{
+    console.log(arrayParticipants);
+    try {
+      const response = await fetch(`${BASE_URL}/bookings/updateBookers/${idUpdatedData}`, {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(arrayParticipants),
+      });
+      const dataReponse = await response.json();
+      return dataReponse;
+    } catch (error) {
+      console.error("Error: ", error)
+          alert(error.message);
+    }
   };
 
   const deleteBooking = async (e) => {
@@ -142,10 +156,10 @@ const Profile = () => {
                           notif.dp === 0 && <i className='ri-close-line'></i>
                         }
                         {
-                          notif.dp === 1 && <i class="ri-loader-2-line"></i>
+                          notif.dp === 1 && <i className="ri-loader-2-line"></i>
                         }
                         {
-                          notif.dp === 2 && <i class="ri-loader-2-line"></i>
+                          notif.dp === 2 && <i className="ri-loader-2-line"></i>
                         } )
                       </div>
 
@@ -155,15 +169,15 @@ const Profile = () => {
                           notif.fullPayment === 0 && <i className='ri-close-line'></i>
                         }
                         {
-                          notif.fullPayment === 1 && <i class="ri-loader-2-line"></i>
+                          notif.fullPayment === 1 && <i className="ri-loader-2-line"></i>
                         }
                         {
-                          notif.fullPayment === 2 && <i class="ri-loader-2-line"></i>
+                          notif.fullPayment === 2 && <i className="ri-loader-2-line"></i>
                         } )
                       </div>
 
                       {
-                        notif.paymentStatus !== 'fullyPaid' &&
+                        notif.paymentStatus !== 'pending' &&
                         <div onClick={() => handleShowPayment(index)} className='btn__payBooking clicked'>
                         Bayar
                         <i className='ri-arrow-down-s-line'></i>
@@ -186,7 +200,7 @@ const Profile = () => {
                     </Collapse>
                     
                     <Collapse isOpen={bookingStates[index].showInputData}>
-                      <BiographyForm numOfParticipants={notif.participantCount - notif.participants.length} onSubmit={handleSubmitParticipants}/>
+                      <BiographyForm numOfParticipants={notif.participantCount - notif.participants.length} idUpdatedData={notif._id} onSubmit={handleSubmitParticipants}/>
                     </Collapse>
                   </div>
                   )
