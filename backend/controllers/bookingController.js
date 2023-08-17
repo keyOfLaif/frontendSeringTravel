@@ -179,7 +179,7 @@ export const payBooking = async (req, res) => {
           return res.status(500).json({ message: 'Error uploading paymentProof' });
         }
   
-        const { paymentProof } = req.file;
+        const { paymentProof } = req.file.fileName;
   
         // Menentukan objek bukti pembayaran sesuai dengan paymentType
         let paymentProofObject;
