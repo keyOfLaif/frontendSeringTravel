@@ -4,9 +4,11 @@ import { Form, FormGroup, Table, Label, Input } from 'reactstrap'
 import { BASE_URL } from '../../utils/config'
 import useFetch from '../../hooks/useFetch'
 import './details__booking.css'
+import ImagePrev from '../ImagePreviewComp/ImagePrev'
+
+// import image from '..'
 
 const Paymentmanagement = () => {
-
 
     // const [payments, setPayments] = useState([]);
     const [dpState, setDpState] = useState({});
@@ -69,12 +71,24 @@ const Paymentmanagement = () => {
         }
       };
 
+        const [showImage, setShowImage] = useState(false);
+        const [imageBeingPrev, setImageBeingPrev] = useState();
+
+
+        const handleImagePrev = (image) => {
+            if(imageBeingPrev === ''){
+                setImageBeingPrev(image);
+                setShowImage(!showImage);
+            }
+            setImageBeingPrev('');
+            setShowImage(!showImage);
+        };
+
   return (
-    <div className='p-3 bg-primary'>
+    <div className='p-3 booking__outer'>
         <div className='booking__frame'>
             <div className='booking__lists'>
                 <h4>Konfirmasi Pembayaran</h4>
-                {console.log(bookings)}
                 <Table
                 bordered
                 hover
@@ -83,7 +97,10 @@ const Paymentmanagement = () => {
                 <thead>
                     <tr>
                     <th>
-                        Booking Code
+                        Pemesan
+                    </th>
+                    <th>
+                        Bukti Pembayaran
                     </th>
                     <th>
                         Pembayaran
@@ -95,7 +112,20 @@ const Paymentmanagement = () => {
                     bookings.map((booking, index) =>
                     <tr key={booking._id}>
                     <th scope="row">
-                        {booking.noBooking} Bukti Pembayaran "{booking.paymentProofs.fullPayment}"
+                        {   
+                            (booking.participants.length !== 0) &&
+                            booking.participants[0].participantName} Bukti Pembayaran "{booking.paymentProofs.fullPayment
+                        }"
+                    </th>
+                    <th scope="row">
+                        {
+                            <div onClick={()=>handleImagePrev(booking.paymentProofs.dp)}>1. Dp</div>
+                        } 
+                        {
+                            <div onClick={()=>handleImagePrev(booking.paymentProofs.fullPayment)}>
+                                2. Pelunasan
+                            </div>
+                        } 
                     </th>
                     <td>
                     <Form>
@@ -137,10 +167,16 @@ const Paymentmanagement = () => {
                 </tbody>
                 </Table>
             </div>
-            <div className='booking__details'>
-                <h4>Detail</h4>
-            </div>
+            
         </div>
+        {
+            showImage && <div className='Coba-coba'>
+                <ImagePrev imageUrl={`/paymentProofs/${imageBeingPrev}`}
+                onClose={handleImagePrev}
+                />
+                <img src="/paymentProofs/1692319618267-13496870.jpg" alt="" />
+            </div>
+        }
     </div>
   )
 }

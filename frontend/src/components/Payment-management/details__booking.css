@@ -4,11 +4,23 @@
 }
 
 .booking__details{
-    background-color: white;
     height: 60vh;
-    width: 25%;
+    width: 50%;
 }
 
 .booking__lists{
     width: 75%;
+}
+
+.booking__outer{
+    position: relative;
+}
+
+.Coba-coba{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 595px;
+    background-color: rgba(0, 0, 0, 0.5);
 }

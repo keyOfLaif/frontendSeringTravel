@@ -43,7 +43,7 @@ const Payment = ({dataBookingProcessSent}) => {
     try {
       const confirmed = window.confirm("Apakah ini sudah benar?");
       if(confirmed){
-        const response = await fetch(`${BASE_URL}/bookings/${dataBookingProcessSent._id}`, {
+        const response = await fetch(`${BASE_URL}/bookings/payBooking/${dataBookingProcessSent._id}`, {
           method: 'PUT',
           body: formData
         });

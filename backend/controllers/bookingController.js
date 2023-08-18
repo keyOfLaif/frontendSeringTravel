@@ -180,8 +180,6 @@ export const deleteBooking = async(req,res) =>{
 //sending payment proof
 export const payBooking = async (req, res) => {
     const bookingId = req.params.idBooking;
-    console.log("paymentType", req.body)
-    console.log("bookingId", bookingId)
   
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
@@ -207,9 +205,7 @@ export const payBooking = async (req, res) => {
           return res.status(500).json({ message: 'Error uploading paymentProof' });
         }
   
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const fileExtension = req.file.originalname.split('.').pop();
-        const paymentProof = `${uniqueSuffix}.${fileExtension}`;
+        const paymentProof = req.file.filename;
   
         // Menentukan objek bukti pembayaran sesuai dengan paymentType
         const updateFields = {};

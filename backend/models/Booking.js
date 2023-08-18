@@ -57,7 +57,7 @@ const bookingSchema = new mongoose.Schema(
     },
 
     paymentProofs:{
-      dp : { type : String},
+      dp : { type : String, default : '0'},
       fullPayment : {type : String},
     },
 

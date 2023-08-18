@@ -177,7 +177,7 @@ const Profile = () => {
                       </div>
 
                       {
-                        notif.paymentStatus !== 'pending' &&
+                        notif.paymentStatus !== 'fullyPaid' &&
                         <div onClick={() => handleShowPayment(index)} className='btn__payBooking clicked'>
                         Bayar
                         <i className='ri-arrow-down-s-line'></i>
