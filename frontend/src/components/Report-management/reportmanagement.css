@@ -23,11 +23,8 @@
 .frame__chartCard{
     display: flex;
     flex-wrap: wrap;
-    padding: 1rem;
-    justify-content: center;
     gap: 1rem;
     width: 90%;
-    margin: 1rem auto;
 }
 
 .chartCard{
@@ -35,25 +32,6 @@
     padding: 1rem;
     border-radius: 10px;
     width: 350px;
-}
-
-.chart__main{
-    display: flex;
-}
-
-.chart {
-    width: 100%;
-}
-
-.bar__frame{
-    width: 100%;
-    background-color: #e4e4e6;
-    border-radius: 5px;
-}
-
-.bar {
-    height: 10px;
-    border-radius: 5px;
 }
 
 .btn__Trip{
@@ -82,7 +60,7 @@
     width: 80%;
     overflow: auto;
     height: 50vh;
-    margin: 1rem auto;
+    margin-top: 1rem;
 }
 
 .table__container{

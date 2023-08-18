@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import './chart.css'
 
 const getRandomColor = () => {
     const letters = '0123456789ABCDEF';

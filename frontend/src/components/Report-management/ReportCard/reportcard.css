@@ -2,8 +2,8 @@
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    border-top: 1px solid #35abfa;
-    border-left: 1px solid #35abfa;
+    border-top: 1px solid white;
+    border-left: 1px solid white;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -12,8 +12,8 @@
 }
 
 .reportCardIcon{
-    color: white;
-    background-color: #35abfa;
+    color: #35abfa;
+    background-color: white;
     border-radius: 50%;
     font-size: 2rem;
     width: 50px;
