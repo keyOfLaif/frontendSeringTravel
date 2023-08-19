@@ -61,8 +61,8 @@ const Home = () => {
         <Container>
           <Row>
             <Col lg='3'>
-              <h5 className='services__subtitle'>What we serve</h5>
-              <h2 className='services__title'>We offer our best services</h2>
+              <h5 className='services__subtitle'>Layanan dari Kami</h5>
+              <h2 className='services__title'>Siap memberi yang terbaik</h2>
             </Col>
             
           <ServiceList/>
@@ -76,7 +76,7 @@ const Home = () => {
           <Row>
             <Col lg="12" className='mb-5'>
               <Subtitle subtitle={"Explore"}/>
-              <h2 className="featured__trip-title">Our featured trips</h2>
+              <h2 className="featured__trip-title">Trip yang kami sediakan</h2>
             </Col>
             <FeaturedTripList/>
           </Row>
@@ -92,7 +92,7 @@ const Home = () => {
                 <Subtitle subtitle={"Experience"}/>
 
                 <h2>
-                  With our all experience <br/> we will serve you
+                  Dengan Segenap Hati <br/> kami akan melayanimu
                 </h2>
                 <p>
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.<br/> Doloremque voluptate doloribus voluptas perferendis neque.
@@ -101,15 +101,15 @@ const Home = () => {
               <div className="counter__wrapper d-flex align-items-center gap-5">
                 <div className="counter__box">
                   <span>12k+</span>
-                  <h6>Successfull Trip</h6>
+                  <h6>Trip Terselenggara</h6>
                 </div>
                 <div className="counter__box">
                   <span>2k+</span>
-                  <h6>Regular Clients</h6>
+                  <h6>Pelanggan</h6>
                 </div>
                 <div className="counter__box">
-                  <span>12</span>
-                  <h6>Years Experience</h6>
+                  <span>3</span>
+                  <h6>Lama Berdiri</h6>
                 </div>
               </div>
             </Col>
@@ -128,7 +128,7 @@ const Home = () => {
           <Row>
             <Col lg='12'>
               <Subtitle subtitle={'Gallery'}/>
-              <h2 className='gallery__title'>Visit Our Customers Trip Gallery</h2>
+              <h2 className='gallery__title'>Lihat Gallery Pelanggan Kami</h2>
             </Col>
             <Col lg='12'>
               <MasonryImagesGallery/>
