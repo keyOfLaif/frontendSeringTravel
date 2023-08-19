@@ -1,6 +1,6 @@
 import React from 'react'
 
-
+import './imageprev.css'
 
 const ImagePrev = (props) => {
   return (

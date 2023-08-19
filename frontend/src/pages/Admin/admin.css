@@ -3,23 +3,31 @@
     width: 100%;
     overflow: hidden;
     background-color: rgb(31, 28, 28);
+    padding: 0.5rem 0.5rem 0.5rem 0;
 }
 
 .leftNavbarContainer{
     width: 350px;
     height: 100vh;
-    padding: 0.5rem 0;
+    /* padding: 0.5rem 0; */
     color: white;
 }
 
 .rightMainContainer{
-    height: 100vh;
+    height: 100%;
     width: 100%;
-    padding: 0.5rem 0.5rem 0.5rem 0;
 }
 
-.adminSectionMainContent{
-    padding: 0 0 0 1rem;
+.mainContent{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100% - 1rem);
+    border-radius: 5px;
+    /* background-color: #f1f1f1; */
+    background-color: rgb(53, 53, 53);
+    overflow: hidden;
+    color: white;
 }
 
 .topBarMainContent{
@@ -32,16 +40,14 @@
     padding-left: 1rem;
 }
 
+.bottomMainContent{
+    flex: 1;
+    overflow-y: auto;
+    position: relative;
+}
 
-
-.mainContent{
-    width: 100%;
-    height: 100%;
-    border-radius: 5px;
-    /* background-color: #f1f1f1; */
-    background-color: rgb(53, 53, 53);
-    overflow-y: scroll;
-    color: white;
+.bottomMainContent::-webkit-scrollbar{
+    display: none;
 }
 
 .Content__title{
@@ -60,8 +66,6 @@
 .leftTopNav img{
     height: 95%;
 }
-
-
 
 .leftNavbar{
     width: 100%;
@@ -115,13 +119,6 @@
 .adminLists li.selected:hover {
     background-color: #35abfa;
 }
-
-
-
-.mainContent::-webkit-scrollbar{
-    display: none;
-}
-
 
 .other__lists{
     display: flex;

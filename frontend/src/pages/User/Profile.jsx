@@ -12,6 +12,7 @@ import { BASE_URL } from '../../utils/config';
 import Payment from '../../components/Payment-confirmation/Payment';
 import BiographyForm from '../../components/Biography-form/BiographyForm';
 import EditProfile from '../../components/Edit-profile/EditProfile';
+import FormatDate from '../../shared/FormatDate';
 
 const Profile = () => {
   const { user, dispatch } = useContext(AuthContext);
@@ -22,13 +23,6 @@ const Profile = () => {
   }));
   const [bookingStates, setBookingStates] = useState(initialBookingStates);
 
-  // useEffect(()=>{
-  //   const initialState = user.bookings.map(()=>({
-  //     showPayment: false,
-  //     showInputData: false,
-  //   }));
-  //   setBookingStates(initialState);
-  // }, [user.bookings])
 
   let profilePict = profilePictDefault;
 
@@ -40,11 +34,6 @@ const Profile = () => {
     console.error("Gambar tidak ditemukan:", error);
   }
 
-
-
-  // const [showPaymentComponent, setShowPaymentComponent] = useState(false);
-  // const [selectedBookingProcess, setSelectedBookingProcess] = useState([]);
-  // const [showInputDataComponent, setShowInputDataComponent] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
 
 
@@ -54,32 +43,21 @@ const Profile = () => {
   }
 
   const handleShowInputDataComponent = (index) => {
-    // const updatedBookingStates = [...bookingStates];
-    // updatedBookingStates[index].showInputData = !updatedBookingStates[index].showInputData;
-    // setBookingStates(updatedBookingStates);
     const updatedBookingStates = [...bookingStates];
     updatedBookingStates[index] = {
       ...updatedBookingStates[index],
       showInputData: !updatedBookingStates[index].showInputData,
     };
     setBookingStates(updatedBookingStates);
-    // setSelectedBookingProcess(user.bookings[index]);
-    // console.log(selectedBookingProcess);
-    // setShowInputDataComponent(!showInputDataComponent);
   }
   
   const handleShowPayment = (index) =>{
-    // const updatedBookingStates = [...bookingStates];
-    // updatedBookingStates[index].showPayment = !updatedBookingStates[index].showPayment;
-    // setBookingStates(updatedBookingStates);
     const updatedBookingStates = [...bookingStates];
     updatedBookingStates[index] = {
       ...updatedBookingStates[index],
       showPayment: !updatedBookingStates[index].showPayment,
     };
     setBookingStates(updatedBookingStates);
-    // setSelectedBookingProcess(user.bookings[index]);
-    // setShowPaymentComponent(!showPaymentComponent[index]);
   }
 
   const handleSubmitParticipants = async (arrayParticipants, idUpdatedData) =>{
@@ -147,8 +125,10 @@ const Profile = () => {
                 {
                   user.bookings.map((notif,index)=>
                   <div className='bookings__lists mb-2' key={index}>
-                    <div className='d-flex align-items-center justify-content-between'>
-                      Trip {notif.tripBooked.tripDate} {notif.participantCount}
+                    <div className='d-flex align-items-end justify-content-between'>
+                      <div>
+                        Trip <FormatDate dateString={notif.tripBooked.tripDate}/> Untuk : {notif.participantCount}
+                      </div>
 
                       <div>
                         Dp (

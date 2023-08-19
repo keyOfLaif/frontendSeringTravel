@@ -6,7 +6,6 @@ import useFetch from '../../hooks/useFetch'
 import './details__booking.css'
 import ImagePrev from '../ImagePreviewComp/ImagePrev'
 
-// import image from '..'
 
 const Paymentmanagement = () => {
 
@@ -35,11 +34,6 @@ const Paymentmanagement = () => {
                 ...prevDpState,
                 [payment._id]: checked,
             }));
-        //   setPayments((prevPayments) =>
-        //     prevPayments.map((p) =>
-        //       p._id === payment._id ? { ...p, dp: checked } : p
-        //     )
-        //   );
         } catch (error) {
           console.error('Error updating dp:', error);
         }
@@ -60,32 +54,33 @@ const Paymentmanagement = () => {
                 ...prevFullPaymentState,
                 [payment._id]: checked,
             }));
-            
-        //   setPayments((prevPayments) =>
-        //     prevPayments.map((p) =>
-        //       p._id === payment._id ? { ...p, fullPayment: checked } : p
-        //     )
-        //   );
         } catch (error) {
           console.error('Error updating fullPayment:', error);
         }
       };
 
         const [showImage, setShowImage] = useState(false);
-        const [imageBeingPrev, setImageBeingPrev] = useState();
+        const [imageBeingPrev, setImageBeingPrev] = useState(null);
 
 
         const handleImagePrev = (image) => {
-            if(imageBeingPrev === ''){
-                setImageBeingPrev(image);
-                setShowImage(!showImage);
-            }
-            setImageBeingPrev('');
-            setShowImage(!showImage);
+            setImageBeingPrev(image);
+            setShowImage(true);
         };
 
-  return (
-    <div className='p-3 booking__outer'>
+        const handleCloseImagePrev = () =>{
+            setImageBeingPrev(null);
+            setShowImage(false);
+        }
+
+  return (<>
+        {
+            showImage && 
+                <ImagePrev imageUrl={`/paymentProofs/${imageBeingPrev}`}
+                onClose={handleCloseImagePrev}
+                />
+        }
+    <div className='booking__outer'>
         <div className='booking__frame'>
             <div className='booking__lists'>
                 <h4>Konfirmasi Pembayaran</h4>
@@ -113,13 +108,16 @@ const Paymentmanagement = () => {
                     <tr key={booking._id}>
                     <th scope="row">
                         {   
-                            (booking.participants.length !== 0) &&
+                            booking.participants.length !== 0 &&
                             booking.participants[0].participantName} Bukti Pembayaran "{booking.paymentProofs.fullPayment
                         }"
                     </th>
                     <th scope="row">
                         {
-                            <div onClick={()=>handleImagePrev(booking.paymentProofs.dp)}>1. Dp</div>
+                            <div onClick={() => {
+                                console.log("Clicked on dp image, imageBeingPrev:", booking.paymentProofs.dp);
+                                handleImagePrev(booking.paymentProofs.dp);
+                            }}>1. Dp</div>
                         } 
                         {
                             <div onClick={()=>handleImagePrev(booking.paymentProofs.fullPayment)}>
@@ -169,16 +167,8 @@ const Paymentmanagement = () => {
             </div>
             
         </div>
-        {
-            showImage && <div className='Coba-coba'>
-                <ImagePrev imageUrl={`/paymentProofs/${imageBeingPrev}`}
-                onClose={handleImagePrev}
-                />
-                <img src="/paymentProofs/1692319618267-13496870.jpg" alt="" />
-            </div>
-        }
     </div>
-  )
+  </>)
 }
 
 export default Paymentmanagement

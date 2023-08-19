@@ -45,7 +45,6 @@ const Admin = () => {
   return (
     
       <div className='outerAdminContainer d-flex'>
-
         <div className='leftNavbarContainer'>
           
           <div className='leftNavbar d-flex flex-column'>
@@ -98,13 +97,13 @@ const Admin = () => {
 
         </div>
 
-        <div className='rightMainContainer'>
-          <div className='mainContent'>
-            <div className='topBarMainContent'>
-              <div className='Content__title'>
-                {navAdmin__links[selectedNavLinkAdmin].title}
-              </div>
+        <div className='mainContent'>
+          <div className='topBarMainContent bg-primary'>
+            <div className='Content__title'>
+              {navAdmin__links[selectedNavLinkAdmin].title}
             </div>
+          </div>
+          <div className='bottomMainContent'>
             {navAdmin__links[selectedNavLinkAdmin].content}
           </div>
         </div>
