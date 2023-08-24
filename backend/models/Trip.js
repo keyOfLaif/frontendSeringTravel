@@ -20,12 +20,10 @@ const tripSchema = new mongoose.Schema(
 
     photo: {
       type: String,
-      required: true,
     },
 
     desc: {
       type: String,
-      required: true,
     },
 
     schedules: [
