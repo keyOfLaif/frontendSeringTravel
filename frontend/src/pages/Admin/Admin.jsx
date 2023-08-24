@@ -8,6 +8,8 @@ import HomepageManagement from '../../components/Home-page-management/HomepageMa
 import Paymentmanagement from '../../components/Payment-management/Paymentmanagement'
 import Tripsmanagement from '../../components/Trips-management/Tripsmanagement'
 import Reportmanagement from '../../components/Report-management/Reportmanagement'
+import AdminManagement from '../../components/Admin-management/AdminManagement'
+import History from '../../components/History/History'
 
 const Admin = () => {
   //coba
@@ -27,8 +29,16 @@ const Admin = () => {
       content:<Paymentmanagement/>,
     },
     {
+      title:'Kelola Admin',
+      content:<AdminManagement/>,
+    },
+    {
       title:'Laporan',
       content:<Reportmanagement/>,
+    },
+    {
+      title:'Histori Transaksi',
+      content:<History/>,
     },
   ]
 
