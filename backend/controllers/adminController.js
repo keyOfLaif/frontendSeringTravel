@@ -1,10 +1,9 @@
-import User from "../models/User";
+import User from "../models/User.js";
 import bcrypt from "bcryptjs"
 
 export const createAdmin = async (req, res) => {
 
     try {
-
         const {username, email, password} = req.body;
 
         const existingUsername = await User.findOne({username})
@@ -57,7 +56,7 @@ export const getAllAdmin = async(req,res)=>{
 
     try {
 
-        const users = await User.find({role:'admin'})
+        const admins = await User.find({role:'admin'})
 
         res
         .status(200)

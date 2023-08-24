@@ -1,14 +1,36 @@
 import React, { useState } from 'react'
 import './adminmanagement.css'
 import { BASE_URL } from '../../utils/config'
+import useFetch from '../../hooks/useFetch'
+import { Collapse } from 'reactstrap'
 
 const AdminManagement = () => {
+
+    const {
+      data:admins, 
+      loading:loadingFetching, 
+      error:errorFetching
+    } = useFetch(`${BASE_URL}/admin/getAllAdmin`)
+
     const [newAdmin, setNewAdmin] = useState({
         username : '',
         email : '',
         password : '',
+        fullName : ''
     })
 
+    const [editBoxAdmin, setEditBoxAdmin] = useState(null)
+    const [addNewAdminBox, setAddNewAdminBox] = useState(false)
+
+    const toggleAddNewAdminBox = () => setAddNewAdminBox(!addNewAdminBox);
+
+    const toggleEditAdmin = (idAdmin) => {
+      setEditBoxAdmin(idAdmin === editBoxAdmin ? null : idAdmin)
+    }
+
+    const updateAdminData = async e =>{
+      e.preventDefault()
+    }
     const addNewAdmin = async e =>{
         e.preventDefault()
         try {
@@ -35,51 +57,83 @@ const AdminManagement = () => {
     }
   return (
     <div className='container pt-3'>
-        <h6>Daftar Admin</h6>
-        <table className="table">
-            <thead>
-                <tr>
-                <th scope="col">No</th>
-                <th scope="col">Nama</th>
-                <th scope="col">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>
-                    <i className="ri-delete-bin-2-line"></i><i className="ri-edit-box-line"></i>
-                </td>
-                </tr>
-                <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                </tr>
-                <tr>
-                <th scope="row">3</th>
-                <td colspan="2">Larry the Bird</td>
-                </tr>
-            </tbody>
-        </table>
-        <form onSubmit={addNewAdmin}>
-            <div class="mb-3">
-            <label for="username" class="form-label">username</label>
-            <input type="text" class="form-control" id="username" aria-describedby="emailHelp" onChange={(e) => setNewAdmin({ ...newAdmin, username: e.target.value })}/>
-            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div class="mb-3">
-            <label for="email" class="form-label">email</label>
-            <input type="email" class="form-control" id="email" onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}/>
-            </div>
-            <div class="mb-3">
-            <label for="password" class="form-label">password</label>
-            <input type="password" class="form-control" id="password" onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}/>
+      <h6>Daftar Admin</h6>
+      <div>
+        <div className='d-flex'>
+          <div>Id</div>
+          <div>Nama</div>
+          <div>Aksi</div>
+        </div>
+        {
+          admins?.map(admin => (
+            <div key={admin._id}>
+              <div className='d-flex'>
+                <div>{admin._id}</div>
+                <div>{admin.email}</div>
+                <div><i className="ri-delete-bin-2-line"></i><i className="ri-edit-box-line" onClick={()=>toggleEditAdmin(admin._id)}></i></div>
+              </div>
+              {
+                editBoxAdmin === admin._id && (
+                  <Collapse isOpen={true}>
+                    <h6>Edit Data Admin</h6>
+                    <form onSubmit={updateAdminData}>
+                      <div class="mb-3">
+                      <label for="username" class="form-label">username</label>
+                      <input type="text" class="form-control" id="username" aria-describedby="emailHelp" placeholder={admin.username} onChange={(e) => setNewAdmin({ ...newAdmin, username: e.target.value })}/>
+                      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                      </div>
+                      <div class="mb-3">
+                      <label for="email" class="form-label">email</label>
+                      <input type="email" class="form-control" id="email" placeholder={admin.email} onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}/>
+                      </div>
+                      <div class="mb-3">
+                      <label for="fullName" class="form-label">Nama Lengkap</label>
+                      <input type="text" class="form-control" placeholder={admin.fullName} id="fullName" onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}/>
+                      </div>
+                      
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                  </Collapse>
+                )
+              }
             </div>
             
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+          ))
+        }
+        
+
+      </div>
+      <div style={{width:'min-content', margin:'0 auto'}}>
+        <i className="ri-add-circle-fill" onClick={toggleAddNewAdminBox} style={{fontSize:'2rem', cursor:'pointer'}}></i>
+      </div>
+      <Collapse isOpen={addNewAdminBox}>
+        <div className='col col-lg-6'>
+          <form onSubmit={addNewAdmin}>
+              <div class="mb-3">
+                <label for="username" class="form-label">username</label>
+                <input type="text" class="form-control" id="username" aria-describedby="emailHelp" onChange={(e) => setNewAdmin({ ...newAdmin, username: e.target.value })}/>
+              </div>
+
+              <div class="mb-3">
+                <label for="username" class="form-label">Nama</label>
+                <input type="text" class="form-control" id="username" aria-describedby="emailHelp" onChange={(e) => setNewAdmin({ ...newAdmin, fullName: e.target.value })}/>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label">email</label>
+                <input type="email" class="form-control" id="email" onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}/>
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">password</label>
+                <input type="password" class="form-control" id="password" onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}/>
+              </div>
+              
+              <button type="submit" class="btn btn-primary">Tambah Admin</button>
+          </form>
+        </div>
+      </Collapse>
+
     </div>
   )
 }
