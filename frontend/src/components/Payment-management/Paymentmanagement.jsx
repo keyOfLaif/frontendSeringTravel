@@ -9,55 +9,82 @@ import ImagePrev from '../ImagePreviewComp/ImagePrev'
 
 const Paymentmanagement = () => {
 
-    // const [payments, setPayments] = useState([]);
-    const [dpState, setDpState] = useState({});
-    const [fullPaymentState, setFullPaymentState] = useState({});
-
     const {
         data:bookings, 
         loading, 
         error,
       } = useFetch(`${BASE_URL}/bookings`)
 
-    const handleDpCheckboxChange = async (e, payment) => {
+    const [checkboxState, setCheckboxState] = useState({});
+
+    useEffect(() => {
+        if (bookings) {
+            const newState = {};
+            bookings.forEach((booking) => {
+                newState[booking._id] = {
+                    dp: booking.dp,
+                    fullPayment: booking.fullPayment,
+                };
+            });
+            setCheckboxState(newState);
+        }
+    }, [bookings]);
+
+    const updateCheckboxState = (bookingId, type, checked) => {
+        setCheckboxState((prevState) => ({
+            ...prevState,
+            [bookingId]: {
+                ...prevState[bookingId],
+                [type]: checked,
+            },
+        }));
+    };
+
+    const handleCheckboxChange = async (e, bookingId, type) => {
         const { checked } = e.target;
         try {
-          await fetch(`${BASE_URL}/bookings/${payment._id}/dp`, { 
-            method: 'PUT',
-            headers:{
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({value: checked.toString()}) });
-
-            // Update the dpState for the clicked payment
-            setDpState((prevDpState) => ({
-                ...prevDpState,
-                [payment._id]: checked,
-            }));
+            await fetch(`${BASE_URL}/bookings/${bookingId}/${type}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({ value: checked }),
+            });
+            updateCheckboxState(bookingId, type, checked);
         } catch (error) {
-          console.error('Error updating dp:', error);
+            console.error(`Error updating ${type}:`, error);
         }
-      };
+    };
+
+    // const handleDpCheckboxChange = async (e, payment) => {
+    //     const { checked } = e.target;
+    //     try {
+    //       await fetch(`${BASE_URL}/bookings/${payment}/dp`, { 
+    //         method: 'PUT',
+    //         headers:{
+    //             'Content-type': 'application/json'
+    //         },
+    //         body: JSON.stringify({value: checked}) });
+
+    //     } catch (error) {
+    //       console.error('Error updating dp:', error);
+    //     }
+    //   };
     
-      const handleFullPaymentCheckboxChange = async (e, payment) => {
-        const { checked } = e.target;
-        try {
-          await fetch(`${BASE_URL}/bookings/${payment._id}/fullPayment`, { 
-            method: 'PUT',
-            headers:{
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({value: checked.toString()}) });
+    //   const handleFullPaymentCheckboxChange = async (e, payment) => {
+    //     const { checked } = e.target;
+    //     try {
+    //       await fetch(`${BASE_URL}/bookings/${payment._id}/fullPayment`, { 
+    //         method: 'PUT',
+    //         headers:{
+    //             'Content-type': 'application/json'
+    //         },
+    //         body: JSON.stringify({value: checked}) });
 
-            // Update the fullPaymentState for the clicked payment
-            setFullPaymentState((prevFullPaymentState) => ({
-                ...prevFullPaymentState,
-                [payment._id]: checked,
-            }));
-        } catch (error) {
-          console.error('Error updating fullPayment:', error);
-        }
-      };
+    //     } catch (error) {
+    //       console.error('Error updating fullPayment:', error);
+    //     }
+    //   };
 
         const [showImage, setShowImage] = useState(false);
         const [imageBeingPrev, setImageBeingPrev] = useState(null);
@@ -74,12 +101,12 @@ const Paymentmanagement = () => {
         }
 
   return (<>
-        {
-            showImage && 
-                <ImagePrev imageUrl={`/paymentProofs/${imageBeingPrev}`}
-                onClose={handleCloseImagePrev}
-                />
-        }
+    {
+        showImage && 
+            <ImagePrev imageUrl={`/paymentProofs/${imageBeingPrev}`}
+            onClose={handleCloseImagePrev}
+            />
+    }
     <div className='booking__outer'>
         <div className='booking__frame'>
             <div className='booking__lists'>
@@ -134,8 +161,8 @@ const Paymentmanagement = () => {
                         <Input 
                             type="checkbox" 
                             name="dp"
-                            checked={dpState[booking._id] || false}
-                            onChange={(e) => handleDpCheckboxChange(e, booking)}
+                            checked={checkboxState[booking._id]?.dp || false}
+                            onChange={(e) => handleCheckboxChange(e, booking._id, 'dp')}
                         />
                         <Label check>
                             DP
@@ -149,8 +176,8 @@ const Paymentmanagement = () => {
                         <Input 
                             type="checkbox"
                             name="fullPayment"
-                            checked={fullPaymentState[booking._id] || false}
-                            onChange={(e) => handleFullPaymentCheckboxChange(e, booking)}
+                            checked={checkboxState[booking._id]?.fullPayment || false}
+                            onChange={(e) => handleCheckboxChange(e, booking._id, 'fullPayment')}
                         />
                         <Label check>
                             Pelunasan

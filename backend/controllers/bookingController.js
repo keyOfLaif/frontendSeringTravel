@@ -2,6 +2,7 @@ import User from '../models/User.js'
 import Booking from '../models/Booking.js'
 import Trip from '../models/Trip.js'
 import Schedule from '../models/Schedule.js'
+import History from '../models/History.js'
 import multer from 'multer'
 
 
@@ -118,19 +119,20 @@ export const updateBookers = async (req, res) => {
 
 // updating booking status
 export const updateBookingStatus = async (req, res) =>{
-    const bookingId = req.params.idBooking;
+  const bookingId = req.params.idBooking;
   const { paymentStage } = req.params;
   const { value } = req.body;
+  const userID = await Booking.findById(bookingId);
 
   try {
     let updateObject = {};
 
     if (paymentStage === 'dp') {
       // Update dp paymentStage based on the value received from the client
-      updateObject.dp = value === 'true';
+      updateObject.dp = value;
     } else if (paymentStage === 'fullPayment') {
       // Update fullPayment paymentStage based on the value received from the client
-      updateObject.fullPayment = value === 'true';
+      updateObject.fullPayment = value;
     } else {
       return res.status(400).json({ success: false, message: 'Invalid field parameter' });
     }
@@ -142,6 +144,21 @@ export const updateBookingStatus = async (req, res) =>{
       { new: true }
     );
 
+    const userActor = await User.findById(userID.userBooking)
+
+    const createNewHistory = new History({
+      idUser : userID,
+      userFullName : userActor.fullName,
+      information : 'konfirmasi pembayaran'
+    })
+
+    await createNewHistory.save();
+
+    if(!createNewHistory){
+      console.log('histori : ',createNewHistory)
+      return res.status(400).json({succes: false, message: 'gagal menyimpan history'})
+    }
+    console.log('histori : ',createNewHistory)
     // Send the updated booking back to the client
     res.status(200).json({ success: true, data: updatedBooking });
   } catch (err) {

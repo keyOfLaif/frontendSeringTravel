@@ -45,26 +45,24 @@ const bookingSchema = new mongoose.Schema(
     ],
 
     dp: {
-      type: Number,
-      enum: [0,1,2],
-      default: 0,
+      type: Boolean,
+      default: false,
     },
     
     fullPayment: {
-      type: Number,
-      enum: [0,1,2],
-      default: 0,
+      type: Boolean,
+      default: false
     },
 
     paymentProofs:{
-      dp : { type : String, default : '0'},
+      dp : { type : String},
       fullPayment : {type : String},
     },
 
     paymentStatus: {
       type: String,
-      enum: ['pending', 'dpPaid', 'fullyPaid'],
-      default: 'pending',
+      enum: ['menunggu pembayaran', 'menunggu konfirmasi','dp terbayar', 'lunas'],
+      default: 'menunggu pembayaran',
     },
 
     bookingExpiration: {
