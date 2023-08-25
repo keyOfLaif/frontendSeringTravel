@@ -13,7 +13,7 @@ router.post("/", createTrip);
 router.put("/:id", updateTrip);
 
 // delete Trip
-router.delete("/:id", deleteTrip);
+router.delete("/deleteTrip/:id", deleteTrip);
 
 // get Single Trip
 router.get("/:id", getSingleTrip);

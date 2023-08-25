@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs"
 export const createAdmin = async (req, res) => {
 
     try {
-        const {username, email, password} = req.body;
+        const {username, email, password, fullName} = req.body;
 
         const existingUsername = await User.findOne({username})
         const existingEmail = await User.findOne({email})
@@ -33,6 +33,7 @@ export const createAdmin = async (req, res) => {
             username,
             email,
             password: hash,
+            fullName,
             role: 'admin',
             // photo: req.body.photo
         })
@@ -73,5 +74,21 @@ export const getAllAdmin = async(req,res)=>{
             success: false,
             message: "Not Found.",
         })   
+    }
+}
+
+export const deleteAdmin = async(req,res) =>{
+    const adminId = req.params.idAdmin;
+    
+    try {
+        const deletedAdmin = await User.findByIdAndDelete(adminId)
+
+        if(!deleteAdmin){
+            return res.status(400).json({success: false, message: "Gagal menghapus data admin"})
+        }
+
+        res.status(200).json({success: true, data: deletedAdmin})
+    } catch (error) {
+        res.status(500).json({success: false, message: 'Internal server error'})
     }
 }

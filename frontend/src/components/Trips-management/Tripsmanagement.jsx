@@ -131,6 +131,24 @@ const Tripsmanagement = () => {
         
       }
 
+      const deleteTrip = async (e) => {
+        try {
+          const confirmed = window.confirm("Apakah Anda yakin ingin menghapus admin ini ? ", e.username);
+          if(confirmed){
+            const response = await fetch(`${BASE_URL}/trips/deleteTrip/${e}`, {
+              method: 'DELETE',
+              headers: {
+                'content-type': 'application/json',
+              }
+            });
+            const dataReponse = await response.json();
+            return dataReponse;
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
     return (
       <div className='p-3'>
         <h4>Trips</h4>
@@ -155,9 +173,16 @@ const Tripsmanagement = () => {
                     <div onClick={()=>toggleEdit(trip._id)} className='btn__editTripData me-2'>
                       Ubah<i className="ri-edit-box-fill"></i>
                     </div>
-                    <div className='btn__addScheduleTrip' onClick={()=>toggleEditSchedule(trip._id)}>
+
+                    <div className='btn__addScheduleTrip me-2' onClick={()=>toggleEditSchedule(trip._id)}>
                       Tambah<i className="ri-add-line"></i>
                     </div>
+
+                    <div className='btn__deleteTrip' onClick={()=>deleteTrip(trip._id)}>
+                      Hapus<i className="ri-delete-bin-2-line"></i>
+                    </div>
+
+
                   </div>
                 </div>
 

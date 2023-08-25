@@ -18,3 +18,10 @@
     display: inline-flex;
     align-items: center;
 }
+
+.btn__deleteTrip{
+    cursor: pointer;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
