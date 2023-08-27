@@ -42,7 +42,6 @@ const TripDetails = () => {
   const submitHandler = async e => {
     e.preventDefault()
     const reviewText = reviewMsgRef.current.value;
-
     
     try {
       if(!user || user === "" || user === null){

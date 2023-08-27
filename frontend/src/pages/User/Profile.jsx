@@ -61,7 +61,6 @@ const Profile = () => {
   }
 
   const handleSubmitParticipants = async (arrayParticipants, idUpdatedData) =>{
-    console.log(arrayParticipants);
     try {
       const response = await fetch(`${BASE_URL}/bookings/updateBookers/${idUpdatedData}`, {
         method: 'PUT',

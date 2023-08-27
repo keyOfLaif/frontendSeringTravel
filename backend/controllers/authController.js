@@ -14,19 +14,17 @@ export const register = async (req, res) => {
         const existingEmail = await User.findOne({email})
 
         if(existingEmail) {
-            res.status(400).json({
+            return res.status(400).json({
                 success : false,
-                message: "Email already registered."
+                message: "Email sudah terdaftar, gunakan yang lain atau silahkan log in."
             })
-            return;
         }
 
         if(existingUsername){
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
-                message: "Username already exist, find another one."
+                message: "Username sudah ada, cari yang lain atau silahkan log in."
             })
-            return;
         }
 
         //hashing password
@@ -44,13 +42,13 @@ export const register = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "Successfully created",
+            message: "Berhasil membuat akun",
         })
         
     } catch (err) {
         res.status(500).json({
             success: false,
-            message: "Failed to create, Try Again",
+            message: "Gagal membuat akun, silahkan coba lagi",
         })
     }
 }
@@ -68,29 +66,29 @@ export const login = async (req, res) => {
             }
         }})
 
-        // if user doesn't exist
+        // jika user tidak ditemukan
         if(!user){
             return res.status(404).json({
                 success: false,
-                message: "User not Found",
+                message: "User tidak ada, email tidak terdaftar",
             })
         }
 
-        // if user is exist then check pass or compare the pass
+        // jika user ada maka check password
 
         const checkCorrectPassword = await bcrypt.compare(req.body.password, user.password)
 
-        // if password is incorrect
+        // jika password tidak benar/sesuai
         if(!checkCorrectPassword){
             return res.status(401).json({
                 success: false,
-                message: "Incorrect email or password"
+                message: "Password tidak sesuai"
             })
         }
 
         const {password, role, ... rest} = user._doc
 
-        // create jwt token
+        // membuat token jwt
         const token = jwt.sign({
             id: user._id,
             role: user.role
@@ -99,7 +97,7 @@ export const login = async (req, res) => {
             expiresIn: '1d'
         })
 
-        // set token in the browser cookies and send the response to the client
+        // tempatkan token pada browser cookies dan selanjutnya mengirimkan response ke client side
         res.cookie('accessToken', token, {
             httpOnly: true,
             expires:token.expiresIn
@@ -113,7 +111,7 @@ export const login = async (req, res) => {
 
         res.status(500).json({
             success: false,
-            message: "Failed to Login"
+            message: "Gagal melakukan login"
         })
         
     }

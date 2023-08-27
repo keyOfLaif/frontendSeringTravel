@@ -32,12 +32,13 @@ const tripSchema = new mongoose.Schema(
         ref: "Schedule",
       },
     ],
+    
     reviews: [
       {
         type: mongoose.Types.ObjectId,
         ref: "Review",
       },
-      ],
+    ],
 
     featured: {
       type: Boolean,

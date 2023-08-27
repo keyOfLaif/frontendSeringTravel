@@ -25,16 +25,28 @@
     border-radius: 3px 0 0 0;
 }
 
+.card__top{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 .card__top span i{
     color: var(--secondary-color);
 }
 
 .trip__rating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     font-size: 0.9rem;
     color: var(--text-color);
 }
 
 .trip__location {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     color: var(--heading-color);
     font-weight: 500;
     font-size: 0.9rem;
@@ -59,6 +71,13 @@
 
 .trip__title a:hover{
     color: var(--secondary-color);
+}
+
+.card__bottom{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
 }
 
 .card__bottom h5{

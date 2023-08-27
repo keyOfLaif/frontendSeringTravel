@@ -28,31 +28,19 @@ const [participantsCounts, setParticipantCounts] = useState(null);
       setParticipantCounts(event.target.value);
     };
 
-    
-
-    
-
-    const serviceFee = 10;
     const price = selectedSchedule ? selectedSchedule.price : null;
 
 
-    // send data to the 
+    // send data to the server side
 
-    const handleClick = async (e) => {
+    const handleClickBookTrip = async (e) => {
         e.preventDefault();
     
         if (!user) {
           return alert('Please sign in');
         }
 
-        const codeBooking = `Bromo${selectedSchedule.participants.length+1}`
-
-        if(!codeBooking){
-          return alert('Sistem bermasalah, gagal memesan')
-        }
-
         const booking = {
-            noBooking : codeBooking,
             participantCount : participantsCounts
         };
     
@@ -97,7 +85,7 @@ const [participantsCounts, setParticipantCounts] = useState(null);
     
           <div className='booking__form'>
             <h5>information</h5>
-            <Form className='booking__info-form' onSubmit={handleClick}>
+            <Form className='booking__info-form' onSubmit={handleClickBookTrip}>
               <FormGroup>
                 <Label for='selectSchedule'>Pilih Jadwal</Label>
                 <Input
@@ -136,17 +124,13 @@ const [participantsCounts, setParticipantCounts] = useState(null);
                   Rp. {price} <i className='ri-close-line'></i> {participantsCounts} Orang
                 </h5>
               </ListGroupItem>
-              <ListGroupItem className='border-0 px-0'>
-                <h5>Biaya layanan</h5>
-                <span>Rp {serviceFee}</span>
-              </ListGroupItem>
               <ListGroupItem className='border-0 px-0 total'>
                 <h5>Total</h5>
-                <span>Rp {(price * participantsCounts)+serviceFee}</span>
+                <span>Rp {price * participantsCounts}</span>
               </ListGroupItem>
             </ListGroup>
     
-            <Button className='btn primary__btn w-100 mt-4' onClick={handleClick}>Book Now</Button>
+            <Button className='btn primary__btn w-100 mt-4' onClick={handleClickBookTrip}>Book Now</Button>
           </div>
         </div>
       );

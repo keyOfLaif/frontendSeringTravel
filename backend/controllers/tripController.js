@@ -1,7 +1,6 @@
 import Trip from '../models/Trip.js'
 
 // create new Trip
-
 export const createTrip = async (req,res)=>{
     const newTrip = new Trip(req.body)
 
@@ -39,7 +38,7 @@ export const updateTrip = async(req,res)=>{
             .status(200)
             .json({
                 success: true,
-                message: "Successfully update",
+                message: "Berhasil mengubah data Trip",
                 data: updatedTrip,
             })
 
@@ -48,7 +47,7 @@ export const updateTrip = async(req,res)=>{
             .status(500)
             .json({
                 success: false,
-                message: "Failed to update, Try again.",
+                message: "Gagal mengubah data Trip, coba lagi",
             })
     }
 }
@@ -163,16 +162,14 @@ export const getTripBySearch = async(req,res)=>{
 //getFeatured Trip
 export const getFeaturedTrip = async(req,res)=>{
 
-
     try {
-
         const trips = await Trip.find({featured:true}).populate('reviews').populate('schedules').limit(8);
 
         res
         .status(200)
         .json({
             success: true,
-            message: "Successfully",
+            message: "Berhasil mengambil Trip featured",
             data: trips
         })
         
@@ -181,7 +178,7 @@ export const getFeaturedTrip = async(req,res)=>{
         .status(404)
         .json({
             success: false,
-            message: "Not Found.",
+            message: "Pencarian tidak ada.",
         })   
     }
 }

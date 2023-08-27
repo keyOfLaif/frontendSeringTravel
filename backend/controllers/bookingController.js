@@ -20,7 +20,7 @@ export const createBooking = async(req,res) =>{
 
     try {
 
-        const savedBooking = await (await newBooking.save()).populate('tripBooked')
+        const savedBooking =  await newBooking.save().populate('tripBooked')
 
         if(!savedBooking){
             return res.status(400).json({success:false, message:'Gagal Memesan Trip'})
@@ -36,12 +36,11 @@ export const createBooking = async(req,res) =>{
 
         res.status(200).json({
             success: true,
-            message: 'Your Trip is booked',
+            message: 'Berhasil booking jadwal Trip',
             data: savedBooking
         })
         
     } catch (err) {
-        console.error("Error create booking:", err)
         res.status(500).json({
             success: false,
             message: "internal server error"
@@ -106,14 +105,12 @@ export const updateBookers = async (req, res) => {
       { new: true } // Ini akan mengembalikan dokumen yang sudah diperbarui
     );
 
-    if (updatedBooking) {
-      res.status(200).json({ message: "Participants data updated successfully", updatedBooking });
-    } else {
-      res.status(404).json({ message: "Booking not found" });
+    if (!updatedBooking) {
+      return res.status(404).json({ message: "Data pesanan tidak ditemukan" });
     }
+    res.status(200).json({ message: "Data peserta berhasil diubah", updatedBooking });
   } catch (error) {
     res.status(500).json({ message: "An error occurred", error });
-    console.log("an error:",error)
   }
 };
 
@@ -126,18 +123,18 @@ export const updateBookingStatus = async (req, res) =>{
 
   try {
     let updateObject = {};
+    let information = '';
 
     if (paymentStage === 'dp') {
-      // Update dp paymentStage based on the value received from the client
       updateObject.dp = value;
+      information = 'konfirmasi dp'
     } else if (paymentStage === 'fullPayment') {
-      // Update fullPayment paymentStage based on the value received from the client
       updateObject.fullPayment = value;
+      information = 'konfirmasi pelunasan'
     } else {
-      return res.status(400).json({ success: false, message: 'Invalid field parameter' });
+      return res.status(400).json({ success: false, message: 'Eror, kesalahan parameter masukan' });
     }
 
-    // Perform the update based on the updateObject
     const updatedBooking = await Booking.findByIdAndUpdate(
       bookingId,
       updateObject,
@@ -149,20 +146,19 @@ export const updateBookingStatus = async (req, res) =>{
     const createNewHistory = new History({
       idUser : userID,
       userFullName : userActor.fullName,
-      information : 'konfirmasi pembayaran'
+      information,
     })
 
     await createNewHistory.save();
 
     if(!createNewHistory){
-      console.log('histori : ',createNewHistory)
+      
       return res.status(400).json({succes: false, message: 'gagal menyimpan history'})
     }
-    console.log('histori : ',createNewHistory)
-    // Send the updated booking back to the client
+    
     res.status(200).json({ success: true, data: updatedBooking });
   } catch (err) {
-    console.error('Error updating booking:', err);
+    
     res.status(500).json({ success: false, message: 'Internal server error' });
   }
 }
@@ -200,12 +196,10 @@ export const payBooking = async (req, res) => {
   
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
-        cb(null, '../frontend/public/paymentProofs'); // Ganti dengan direktori yang sesuai
+        cb(null, '../frontend/public/paymentProofs');
       },
       filename: (req, file, cb) => {
-        // const paymentType = req.body.paymentType;
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        // const paymentProofName = paymentType; // Gunakan paymentType sebagai nama file
         const fileExtension = file.originalname.split('.').pop();
         const fileName = `${uniqueSuffix}.${fileExtension}`;
         cb(null, fileName);
@@ -240,21 +234,18 @@ export const payBooking = async (req, res) => {
             { $set: updateFields },
             { new: true }
           );
-          console.log('updatedBooking :', updateFields)
 
           if (!updatedBooking) {
-            return res.status(404).json({ message: 'Booking not Found' });
+            return res.status(404).json({ message: 'Pesanan Tidak ditemukan' });
           }
+            return res.status(200).json({ message: 'Pesanan berhasil diperbarui' });
 
-    
-            return res.json({ message: 'Payment processed Successfully' });
           } catch (error) {
             console.error(error);
-            return res.status(500).json({ message: 'Error updating booking data' });
+            return res.status(500).json({ message: 'Gagal perbarui pesanan' });
           }
         });
       } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 };

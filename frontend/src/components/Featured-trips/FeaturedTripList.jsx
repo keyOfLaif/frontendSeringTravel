@@ -1,6 +1,5 @@
 import React from 'react';
 import TripCard from '../../shared/TripCard';
-// import tripData from '../../assets/data/trips';
 import {Col} from 'reactstrap';
 
 import useFetch from '../../hooks/useFetch';

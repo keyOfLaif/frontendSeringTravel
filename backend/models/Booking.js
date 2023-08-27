@@ -12,11 +12,6 @@ const bookingSchema = new mongoose.Schema(
       ref: 'Schedule',
     },
 
-    noBooking: {
-      type: String,
-      required: true,
-    },
-
     participantCount: {
       type: Number,
       required: true,
@@ -61,7 +56,7 @@ const bookingSchema = new mongoose.Schema(
 
     paymentStatus: {
       type: String,
-      enum: ['menunggu pembayaran', 'menunggu konfirmasi','dp terbayar', 'lunas'],
+      enum: ['menunggu pembayaran', 'menunggu konfirmasi dp','dp terbayar', 'menunggu konfirmasi pelunasan','lunas'],
       default: 'menunggu pembayaran',
     },
 

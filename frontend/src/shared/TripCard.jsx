@@ -21,11 +21,11 @@ const TripCard = ({trip}) => {
         </Card>
 
         <CardBody>
-            <div className="card__top d-flex align-items-center justify-content-between">
-                <span className='trip__location d-flex align-items-center gap-1'>
+            <div className="card__top">
+                <span className='trip__location'>
                     <i className='ri-map-pin-line'></i>{city}
                 </span>
-                <span className='trip__rating d-flex align-items-center gap-1'>
+                <span className='trip__rating'>
                     <i className='ri-star-fill'></i>{avgRating === 0 ? null : avgRating}
                     {totalRating === 0 ? (
                         'Not Rated'
@@ -38,14 +38,14 @@ const TripCard = ({trip}) => {
 
             <h5 className='trip__title'><Link to={`/trips/${_id}`}>{title}</Link></h5>
 
-            <div className="card__bottom d-flex align-items-center justify-content-between mt-3">
-                <h5>${price}
+            <div className="card__bottom">
+                <h5>Rp{price}
                 <span>
-                    /per person
+                    /per orang
                 </span>
                 </h5>
                 <button className="btn booking__btn">
-                    <Link to={`/trips/${_id}`}>Book Now</Link>
+                    <Link to={`/trips/${_id}`}>Pesan</Link>
                 </button>
             </div>
         </CardBody>
