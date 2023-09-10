@@ -13,14 +13,9 @@ import Owner from '../pages/Owner/Owner';
 import Profile from '../pages/User/Profile';
 import About from '../pages/About/About';
 import Gallery from '../pages/Gallery';
+import LogInAdmin from '../pages/LogInAdmin';
 
 const Routers = () => {
-
-  // <Switch>
-  // <Route path='/admin/*' element={<Layout2><Routes /></Layout2>} />
-  // {/* <Route path='/owner/*' element={<Layout3><Routes /></Layout3>} /> */}
-  // <Route path='/*' element={<Layout><Routes /></Layout>} />
-  // </Switch>
 
   return (
 
@@ -29,6 +24,7 @@ const Routers = () => {
         <Route path='/home' element={<Home/>} />
         <Route path='/about' element={<About/>} />
         <Route path='/admin' element={<Admin/>}/>
+        <Route path='/admin/signin' element={<LogInAdmin/>}/>
         <Route path='/owner' element={<Owner/>}/>
         <Route path='/trips' element={<Trips/>} />
         <Route path='/trips/:id' element={<TripDetails/>} />

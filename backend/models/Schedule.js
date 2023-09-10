@@ -19,24 +19,27 @@ const scheduleSchema = new mongoose.Schema(
       required: true
     },
     participants: [{
-      participantName : {
+      name : {
         type:String
       },
-      participantEmail : {
+      email : {
         type:String
       },
-      participantPhoneNumber : {
+      phone : {
         type:String
       },
-      participantCity : {
+      city : {
         type:String
       },
-      participantGender : {
+      gender : {
         type:String
       },
-      participantJob : {
+      job : {
         type:String
-      }
+      },
+      birthDay : {
+        type: String
+      },
     }
     ],
     

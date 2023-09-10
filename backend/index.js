@@ -12,6 +12,7 @@ import bookingRoute from './routes/bookings.js'
 import scheduleRoute from './routes/schedules.js'
 import galleryRoute from './routes/gallerys.js'
 import adminRoute from './routes/admin.js'
+import reportRoute from './routes/report.js'
 
 
 dotenv.config();
@@ -50,6 +51,7 @@ app.use('/api/v1/bookings', bookingRoute)
 app.use('/api/v1/schedules', scheduleRoute)
 app.use('/api/v1/gallerys', galleryRoute)
 app.use('/api/v1/admin', adminRoute)
+app.use('/api/v1/report', reportRoute)
 
 app.listen(port, ()=>{
     connect();

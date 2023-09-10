@@ -37,7 +37,7 @@ const [participantsCounts, setParticipantCounts] = useState(null);
         e.preventDefault();
     
         if (!user) {
-          return alert('Please sign in');
+          return alert('Anda perlu log in untuk dapat memesan.');
         }
 
         const booking = {

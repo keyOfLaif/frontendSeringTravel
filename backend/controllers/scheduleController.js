@@ -35,20 +35,14 @@ export const createSchedule = async (req,res)  => {
 
 export const getAllSchedules = async(req,res)=>{
 
-    //for pagination
-    const page = parseInt(req.query.page)
-
     try {
-        const trips = await Trip.find({})
-            .populate("reviews").populate("schedules")
-            .skip(page * 8)
-            .limit(8);
+        const schedules = await Schedule.find({})
 
         res.status(200).json({
             success: true,
-            count: trips.length,
+            count: schedules.length,
             message: "Successfully",
-            data: trips
+            data: schedules
         })
         
     } catch (err) {
@@ -64,7 +58,7 @@ export const getAllSchedules = async(req,res)=>{
 //update Schedule
 export const updateSchedule = async(req,res)=>{
 
-    const id = req.params.id
+    const id = req.params.idSchedule
 
     try {
         
@@ -86,6 +80,29 @@ export const updateSchedule = async(req,res)=>{
             .json({
                 success: false,
                 message: "Gagal mengubah data Schedule, coba lagi",
+            })
+    }
+}
+
+//delete Schedule
+export const deleteSchedule = async(req,res)=>{
+    const id = req.params.idSchedule;
+
+    try {
+        await Schedule.findByIdAndDelete(id)
+
+        res.status(200).json(
+            {
+                success: true,
+                message: "Trip berhasil dihapus.",
+            })
+        
+    } catch (err) {
+        res
+            .status(500)
+            .json({
+                success: false,
+                message: "Trip gagal dihapus.",
             })
     }
 }

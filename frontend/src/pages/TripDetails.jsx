@@ -45,7 +45,7 @@ const TripDetails = () => {
     
     try {
       if(!user || user === "" || user === null){
-        alert('Please sign in')
+        alert('Log in terlebih dahulu untuk dapat mereview')
       }
 
       const reviewObj = {

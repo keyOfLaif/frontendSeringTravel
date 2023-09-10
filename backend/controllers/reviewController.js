@@ -17,14 +17,14 @@ export const createReview = async (req,res)  => {
 
         res.status(200).json({
             success: true,
-            message: "Review submitted",
+            message: "Review berhasil dikirimkan",
             data: savedReview
         })
         
     } catch (err) {
         res.status(500).json({
             success: false,
-            message: "Review failed to be submitted"
+            message: "Review gagal untuk dikirimkan"
         })
     }
 };

@@ -108,9 +108,9 @@ export const updateBookers = async (req, res) => {
     if (!updatedBooking) {
       return res.status(404).json({ message: "Data pesanan tidak ditemukan" });
     }
-    res.status(200).json({ message: "Data peserta berhasil diubah", updatedBooking });
+    res.status(200).json({ message: "Data peserta berhasil diperbarui", updatedBooking });
   } catch (error) {
-    res.status(500).json({ message: "An error occurred", error });
+    res.status(500).json({ message: "Gagal memasukkan data, ada eror.", error });
   }
 };
 
@@ -152,11 +152,10 @@ export const updateBookingStatus = async (req, res) =>{
     await createNewHistory.save();
 
     if(!createNewHistory){
-      
       return res.status(400).json({succes: false, message: 'gagal menyimpan history'})
     }
     
-    res.status(200).json({ success: true, data: updatedBooking });
+    res.status(200).json({ success: true, message:`berhasil ${information}`, data: updatedBooking });
   } catch (err) {
     
     res.status(500).json({ success: false, message: 'Internal server error' });
@@ -208,44 +207,57 @@ export const payBooking = async (req, res) => {
   
     const upload = multer({ storage: storage });
   
-    try {
       // Handle upload di dalam fungsi payBooking
-      upload.single('paymentProof')(req, res, async (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ message: 'Error uploading paymentProof' });
+    upload.single('paymentProof')(req, res, async (err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Ada error saat mengupload gambar' });
+      }
+
+      const paymentProof = req.file.filename;
+
+      // Menentukan objek bukti pembayaran sesuai dengan paymentType
+      const updateFields = {};
+      let information = '';
+
+      if (req.body.paymentType === 'DP') {
+        updateFields.dp = 1;
+        updateFields['paymentProofs.dp'] = paymentProof;
+        informations = 'Kirim bukti DP';
+      } else if (req.body.paymentType === 'FullPayment') {
+        updateFields.fullPayment = 1;
+        updateFields['paymentProofs.fullPayment'] = paymentProof;
+        informations = 'Kirim bukti Pelunasan';
+      }
+
+      try {
+        const updatedBooking = await Booking.findByIdAndUpdate(
+          bookingId,
+          { $set: updateFields },
+          { new: true }
+        );
+
+        if (!updatedBooking) {
+          return res.status(404).json({ message: 'Pesanan Tidak ditemukan' });
         }
-  
-        const paymentProof = req.file.filename;
-  
-        // Menentukan objek bukti pembayaran sesuai dengan paymentType
-        const updateFields = {};
-        if (req.body.paymentType === 'DP') {
-          updateFields.dp = 1;
-          updateFields['paymentProofs.dp'] = paymentProof;
-        } else if (req.body.paymentType === 'FullPayment') {
-          updateFields.fullPayment = 1;
-          updateFields['paymentProofs.fullPayment'] = paymentProof;
+
+        const userActor = await User.findById(userID.userBooking)
+
+        const createNewHistory = new History({
+          idUser : userID,
+          userFullName : userActor.fullName,
+          information,
+        })
+
+        await createNewHistory.save();
+
+        if(!createNewHistory){
+          return res.status(400).json({succes: false, message: 'gagal menyimpan history'})
         }
 
-        try {
-          const updatedBooking = await Booking.findByIdAndUpdate(
-            bookingId,
-            { $set: updateFields },
-            { new: true }
-          );
+         res.status(200).json({ message: 'Pesanan berhasil diperbarui, berhasil mengirimkan bukti pembayaran' });
 
-          if (!updatedBooking) {
-            return res.status(404).json({ message: 'Pesanan Tidak ditemukan' });
-          }
-            return res.status(200).json({ message: 'Pesanan berhasil diperbarui' });
-
-          } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: 'Gagal perbarui pesanan' });
-          }
-        });
-      } catch (error) {
-        return res.status(500).json({ message: 'Internal Server Error' });
-    }
+        } catch (error) {
+          return res.status(500).json({ message: 'Gagal perbarui pesanan' });
+        }
+      });
 };

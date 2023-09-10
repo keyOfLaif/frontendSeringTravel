@@ -10,7 +10,7 @@ export const createTrip = async (req,res)=>{
         res.status(200).json(
             {
                 success: true,
-                message: "Successfully created",
+                message: "Berhasil membuat Trip baru.",
                 data: savedTrip,
             })
     } catch (err) {
@@ -18,7 +18,7 @@ export const createTrip = async (req,res)=>{
             .status(500)
             .json({
                 success: false,
-                message: "Failed to create, Try again."
+                message: "Gagal membuat Trip baru, silahkan coba lagi."
             })
     }
 };
@@ -38,7 +38,7 @@ export const updateTrip = async(req,res)=>{
             .status(200)
             .json({
                 success: true,
-                message: "Berhasil mengubah data Trip",
+                message: "Berhasil mengubah data Trip.",
                 data: updatedTrip,
             })
 
@@ -47,7 +47,7 @@ export const updateTrip = async(req,res)=>{
             .status(500)
             .json({
                 success: false,
-                message: "Gagal mengubah data Trip, coba lagi",
+                message: "Gagal mengubah data Trip, coba lagi.",
             })
     }
 }
@@ -62,7 +62,7 @@ export const deleteTrip = async(req,res)=>{
         res.status(200).json(
             {
                 success: true,
-                message: "Successfully deleted",
+                message: "Trip berhasil dihapus.",
             })
         
     } catch (err) {
@@ -70,7 +70,7 @@ export const deleteTrip = async(req,res)=>{
             .status(500)
             .json({
                 success: false,
-                message: "Failed to delete.",
+                message: "Trip gagal dihapus.",
             })
     }
 }
@@ -116,7 +116,7 @@ export const getAllTrip = async(req,res)=>{
         res.status(200).json({
             success: true,
             count: trips.length,
-            message: "Successfully",
+            message: "Berhasil memuat semua trip",
             data: trips
         })
         
@@ -125,7 +125,7 @@ export const getAllTrip = async(req,res)=>{
         .status(404)
         .json({
             success: false,
-            message: "Not Found.",
+            message: "Data tidak ditemukan.",
         })   
     }
 }

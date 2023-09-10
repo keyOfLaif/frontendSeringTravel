@@ -70,10 +70,9 @@ const Profile = () => {
         body: JSON.stringify(arrayParticipants),
       });
       const dataReponse = await response.json();
-      return dataReponse;
+      return alert(dataReponse.message);
     } catch (error) {
-      console.error("Error: ", error)
-          alert(error.message);
+      return  alert(error.message);
     }
   };
 

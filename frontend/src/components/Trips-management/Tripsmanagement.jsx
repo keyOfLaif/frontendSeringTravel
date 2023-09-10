@@ -64,8 +64,7 @@ const Tripsmanagement = () => {
           if (!res.ok) {
             return alert(result.message)
           }
-    
-          console.log("hasil : ", result)
+
           alert(result.message)
     
         } catch (err) {
@@ -133,7 +132,7 @@ const Tripsmanagement = () => {
 
       const deleteTrip = async (e) => {
         try {
-          const confirmed = window.confirm("Apakah Anda yakin ingin menghapus admin ini ? ", e.username);
+          const confirmed = window.confirm("Apakah Anda yakin ingin menghapus Trip ini ? ", e.username);
           if(confirmed){
             const response = await fetch(`${BASE_URL}/trips/deleteTrip/${e}`, {
               method: 'DELETE',
@@ -142,7 +141,7 @@ const Tripsmanagement = () => {
               }
             });
             const dataReponse = await response.json();
-            return dataReponse;
+            return alert(dataReponse.message);
           }
         } catch (error) {
           console.error(error);

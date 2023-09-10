@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react'
 
-import { Table } from 'reactstrap'
+import { Table,Row, Col, Card } from 'reactstrap'
 // import partisipantsData from '../../assets/data/partisipants.json'
 import jsonData from '../../assets/data/trip_schedules.json'
+import useFetch from '../../hooks/useFetch'
+import { BASE_URL } from '../../utils/config'
 
 import './reportmanagement.css'
 
@@ -15,8 +17,13 @@ const Reportmanagement = () => {
   const [tripDataPerSchedule, setTripDataPerSchedule] = useState([])
 
   const [selectedTripIndex, setSelectedTripIndex] = useState('all')
-  
 
+  const {
+    data:trips, 
+    loading, 
+    error
+  } = useFetch(`${BASE_URL}/trips`)
+  
   const handleShowReport = (index) => {
     setSelectedTripIndex(index);
   };
@@ -99,7 +106,7 @@ const Reportmanagement = () => {
 
   return (
     <div className='adminSectionMainContent'>
-      <div className='topNavReportManagement'>
+      <div className='topNavReportManagement p-3'>
         {/* pada bagian ini saya ingin menampilkan pilihan untuk setiap title yang ada pada data jsonData dan pilihan All (default) */}
       <select name="" id="" onChange={handleOptionChange}>
         <option value="all">All</option>
@@ -125,121 +132,121 @@ const Reportmanagement = () => {
 
       </div>
 
-        <div className='botNavReportManagement'>
-          {/* ini adalah yang ditampilkan ketika memilih select trip dari jsonData maka otomatis menampilkan tampilan all */}
-          {
-            selectedTripIndex === "all" && 
-            <div className='reportAll'>
-              <ReportCard/>
-              
-            </div>
-          }
-          {/* bagian ini adalah menampilkan data yang dipilih dari schedules yang ada pada setiap Trip */}
-          {selectedReport && (
-            <div className='frame__report'>
-              <h6>Jadwal : {selectedReport.tripDate}</h6>
-              <h6>Harga : {selectedReport.tripPrice}</h6>
-              <h6>Peserta : {selectedReport.maxParticipant}</h6>
-              
-              <div className='frame__chartCard'>
+      <div className='botNavReportManagement'>
+        {/* ini adalah yang ditampilkan ketika memilih select trip dari jsonData maka otomatis menampilkan tampilan all */}
+        {
+          selectedTripIndex === "all" && 
+          <div className='reportAll'>
+            <ReportCard/>
+            
+          </div>
+        }
+        {/* bagian ini adalah menampilkan data yang dipilih dari schedules yang ada pada setiap Trip */}
+        {selectedReport && (
+          <div className='frame__report'>
+            <h6>Jadwal : {selectedReport.tripDate}</h6>
+            <h6>Harga : {selectedReport.tripPrice}</h6>
+            <h6>Peserta : {selectedReport.maxParticipant}</h6>
+            
+            <div className='frame__chartCard'>
 
-                <div className='chartCard'>
-                  <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]} dataIndicator={["Female","Male"]}/>
-                </div>
-
-                <div className='chartCard'>
-                  <Chart 
-                    data={
-                      [
-                        selectedReport.jobPercentage.bekerja,
-                        selectedReport.jobPercentage.pelajar
-                      ]
-                    }
-                    dataIndicator={["Pekerja","Pelajar"]}
-                    
-                  />
-                </div>
-
-                <div className='chartCard'>
-                  <Chart 
-                    data={
-                      [
-                        selectedReport.cityPercentage.Jakarta,
-                        selectedReport.cityPercentage.Depok,
-                        selectedReport.cityPercentage.Tangerang,
-                        selectedReport.cityPercentage.Bekasi,
-                      ]
-                    }
-                    dataIndicator={["Jakarta","Depok","Tangerang","Bekasi"]}
-                  />
-                </div>
-
-                <div className='chartCard'>
-                </div>
+              <div className='chartCard'>
+                <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]} dataIndicator={["Female","Male"]}/>
               </div>
 
-              
-              
-              <div className='table__container bg-black'>
-              <h5>Data Peserta</h5>
-                <Table color='black'
-                  bordered
-                  hover
-                  responsive
-                  >
-                  <thead>
-                      <tr>
-                      <th>
-                          No
-                      </th>
-                      <th>
-                          Nama
-                      </th>
-                      <th>
-                          Tanggal Lahir
-                      </th>
-                      <th>
-                          Gender
-                      </th>
-                      <th>
-                          Pekerjaan
-                      </th>
-                      <th>
-                          City
-                      </th>
+              <div className='chartCard'>
+                <Chart 
+                  data={
+                    [
+                      selectedReport.jobPercentage.bekerja,
+                      selectedReport.jobPercentage.pelajar
+                    ]
+                  }
+                  dataIndicator={["Pekerja","Pelajar"]}
+                  
+                />
+              </div>
+
+              <div className='chartCard'>
+                <Chart 
+                  data={
+                    [
+                      selectedReport.cityPercentage.Jakarta,
+                      selectedReport.cityPercentage.Depok,
+                      selectedReport.cityPercentage.Tangerang,
+                      selectedReport.cityPercentage.Bekasi,
+                    ]
+                  }
+                  dataIndicator={["Jakarta","Depok","Tangerang","Bekasi"]}
+                />
+              </div>
+
+              <div className='chartCard'>
+              </div>
+            </div>
+
+            
+            
+            <div className='table__container bg-black'>
+            <h5>Data Peserta</h5>
+              <Table color='black'
+                bordered
+                hover
+                responsive
+                >
+                <thead>
+                    <tr>
+                    <th>
+                        No
+                    </th>
+                    <th>
+                        Nama
+                    </th>
+                    <th>
+                        Tanggal Lahir
+                    </th>
+                    <th>
+                        Gender
+                    </th>
+                    <th>
+                        Pekerjaan
+                    </th>
+                    <th>
+                        City
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {selectedReport.participants.map((participant, pIndex) => (
+                      
+                      <tr key={pIndex}>
+                        <th scope="row">
+                          {pIndex+1}
+                        </th>
+                        <td>
+                          {participant.name}
+                        </td>
+                        <td>
+                          {participant.birthDay}
+                        </td>
+                        <td>
+                          {participant.gender}
+                        </td>
+                        <td>
+                          {participant.job}
+                        </td>
+                        <td>
+                          {participant.city}
+                        </td>
                       </tr>
-                  </thead>
-                  <tbody>
-                    {selectedReport.participants.map((participant, pIndex) => (
-                        
-                        <tr key={pIndex}>
-                          <th scope="row">
-                            {pIndex+1}
-                          </th>
-                          <td>
-                            {participant.name}
-                          </td>
-                          <td>
-                            {participant.birthDay}
-                          </td>
-                          <td>
-                            {participant.gender}
-                          </td>
-                          <td>
-                            {participant.job}
-                          </td>
-                          <td>
-                            {participant.city}
-                          </td>
-                        </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
+                  ))}
+                </tbody>
+              </Table>
             </div>
-          )}
+          </div>
+        )}
 
-        </div>
+      </div>
     </div>
 
   )

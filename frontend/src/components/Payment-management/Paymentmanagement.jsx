@@ -43,7 +43,7 @@ const Paymentmanagement = () => {
     const handleCheckboxChange = async (e, bookingId, type) => {
         const { checked } = e.target;
         try {
-            await fetch(`${BASE_URL}/bookings/${bookingId}/${type}`, {
+            const response = await fetch(`${BASE_URL}/bookings/${bookingId}/${type}`, {
                 method: 'PUT',
                 headers: {
                     'Content-type': 'application/json',
@@ -51,6 +51,7 @@ const Paymentmanagement = () => {
                 body: JSON.stringify({ value: checked }),
             });
             updateCheckboxState(bookingId, type, checked);
+            return alert(response.message)
         } catch (error) {
             console.error(`Error updating ${type}:`, error);
         }
