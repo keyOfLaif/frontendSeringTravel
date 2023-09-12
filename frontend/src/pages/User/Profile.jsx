@@ -125,7 +125,7 @@ const Profile = () => {
                   <div className='bookings__lists mb-2' key={index}>
                     <div className='d-flex align-items-end justify-content-between'>
                       <div>
-                        Trip <FormatDate dateString={notif.tripBooked.tripDate}/> Untuk : {notif.participantCount}
+                        Trip <FormatDate dateString={notif.tripBooked.tripDate}/> Untuk : {notif.participantCount} Status Pesanan : {notif.paymentStatus}
                       </div>
 
                       <div>
@@ -155,7 +155,7 @@ const Profile = () => {
                       </div>
 
                       {
-                        notif.paymentStatus !== 'fullyPaid' &&
+                        notif.paymentStatus !== 'lunas' &&
                         <div onClick={() => handleShowPayment(index)} className='btn__payBooking clicked'>
                         Bayar
                         <i className='ri-arrow-down-s-line'></i>

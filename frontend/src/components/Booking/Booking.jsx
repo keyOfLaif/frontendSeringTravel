@@ -4,6 +4,7 @@ import { Form, FormGroup, ListGroup, ListGroupItem, Button, Label, Input } from 
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import { BASE_URL } from '../../utils/config';
+import FormatDate from '../../shared/FormatDate';
 
 const Booking = ({ trip, avgRating }) => {
 const { schedules, reviews, title } = trip;
@@ -60,7 +61,6 @@ const [participantsCounts, setParticipantCounts] = useState(null);
             return alert(result.message);
           }
 
-          console.log(result.data)
           const bookingsDataUpdated = {
             ...user,
             bookings:[...user.bookings, result.data]
@@ -98,7 +98,7 @@ const [participantsCounts, setParticipantCounts] = useState(null);
                   <option value={null}>Pilih</option>
                   {schedules?.map((schedule, index) => (
                     <option value={schedule._id} key={schedule._id}>
-                      Trip ke-{index + 1}
+                      <FormatDate dateString={schedule.tripDate}/>
                     </option>
                   ))}
                 </Input>

@@ -40,18 +40,18 @@ const bookingSchema = new mongoose.Schema(
     ],
 
     dp: {
-      type: Boolean,
-      default: false,
+      type: Number,
+      default: 0
     },
     
     fullPayment: {
-      type: Boolean,
-      default: false
+      type: Number,
+      default: 0
     },
 
     paymentProofs:{
-      dp : { type : String},
-      fullPayment : {type : String},
+      dp : { type : String, default: ''},
+      fullPayment : {type : String, default:''},
     },
 
     paymentStatus: {

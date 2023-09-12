@@ -120,7 +120,7 @@ const Paymentmanagement = () => {
                 <thead>
                     <tr>
                     <th>
-                        Pemesan
+                        Id
                     </th>
                     <th>
                         Bukti Pembayaran
@@ -135,10 +135,13 @@ const Paymentmanagement = () => {
                     bookings.map((booking, index) =>
                     <tr key={booking._id}>
                     <th scope="row">
-                        {   
+                        {/* {   
                             booking.participants.length !== 0 &&
                             booking.participants[0].participantName} Bukti Pembayaran "{booking.paymentProofs.fullPayment
-                        }"
+                        }" */}
+                        {
+                            booking._id
+                        }
                     </th>
                     <th scope="row">
                         {

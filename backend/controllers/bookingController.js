@@ -19,8 +19,7 @@ export const createBooking = async(req,res) =>{
     });
 
     try {
-
-        const savedBooking =  await newBooking.save().populate('tripBooked')
+        const savedBooking =  await (await newBooking.save()).populate('tripBooked')
 
         if(!savedBooking){
             return res.status(400).json({success:false, message:'Gagal Memesan Trip'})
@@ -41,6 +40,7 @@ export const createBooking = async(req,res) =>{
         })
         
     } catch (err) {
+      console.log("errornya : ",err)
         res.status(500).json({
             success: false,
             message: "internal server error"
@@ -167,10 +167,18 @@ export const deleteBooking = async(req,res) =>{
     const bookingId = req.params.idBooking;
     
     try {
-        const deleteBooking = await Booking.findByIdAndDelete(bookingId)
+        const deleteBooking = await Booking.findById(bookingId)
 
         if(!deleteBooking){
-            return res.status(400).json({success: false, message: "Failed to delete booking"})
+            return res.status(400).json({success: false, message: "data pesanan tidak ditemukan"})
+        }
+
+        const deletedBookingOnUser = await User.findByIdAndUpdate(deleteBooking.userBooking._id,{
+          $pull : {bookings: bookingId}
+        })
+
+        if(!deletedBookingOnUser){
+          return res.status(400).json({success: false, message: "data pesanan belum terhapus"})
         }
 
         const tripBooked = deleteBooking.tripBooked._id
@@ -182,7 +190,9 @@ export const deleteBooking = async(req,res) =>{
             )
         }
 
-        res.status(200).json({success: true, data: deleteBooking})
+        const deletedBooking = await deleteBooking.deleteOne()
+
+        res.status(200).json({success: true, data: deletedBooking})
     } catch (error) {
         console.err("Error:", error)
         res.status(500).json({success: false, message: 'Internal server error'})
@@ -191,42 +201,44 @@ export const deleteBooking = async(req,res) =>{
 
 //sending payment proof
 export const payBooking = async (req, res) => {
-    const bookingId = req.params.idBooking;
-  
-    const storage = multer.diskStorage({
-      destination: (req, file, cb) => {
-        cb(null, '../frontend/public/paymentProofs');
-      },
-      filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const fileExtension = file.originalname.split('.').pop();
-        const fileName = `${uniqueSuffix}.${fileExtension}`;
-        cb(null, fileName);
-      },
-    });
-  
-    const upload = multer({ storage: storage });
-  
-      // Handle upload di dalam fungsi payBooking
+  const bookingId = req.params.idBooking;
+
+  const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, '../frontend/public/paymentProofs'); // Ganti dengan direktori yang sesuai
+    },
+    filename: (req, file, cb) => {
+      // const paymentType = req.body.paymentType;
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      // const paymentProofName = paymentType; // Gunakan paymentType sebagai nama file
+      const fileExtension = file.originalname.split('.').pop();
+      const fileName = `${uniqueSuffix}.${fileExtension}`;
+      cb(null, fileName);
+    },
+  });
+
+  const upload = multer({ storage: storage });
+
+  try {
+    // Handle upload di dalam fungsi payBooking
     upload.single('paymentProof')(req, res, async (err) => {
       if (err) {
-        return res.status(500).json({ message: 'Ada error saat mengupload gambar' });
+        console.error(err);
+        return res.status(500).json({ message: 'Error uploading paymentProof' });
       }
 
       const paymentProof = req.file.filename;
 
-      // Menentukan objek bukti pembayaran sesuai dengan paymentType
-      const updateFields = {};
-      let information = '';
-
+      // Menentukan objek bukti pembayaran sesuai dengan paymentTypes
+      let updateFields = {};
       if (req.body.paymentType === 'DP') {
         updateFields.dp = 1;
         updateFields['paymentProofs.dp'] = paymentProof;
-        informations = 'Kirim bukti DP';
+        updateFields.paymentStatus = 'menunggu konfirmasi dp'
       } else if (req.body.paymentType === 'FullPayment') {
         updateFields.fullPayment = 1;
         updateFields['paymentProofs.fullPayment'] = paymentProof;
-        informations = 'Kirim bukti Pelunasan';
+        updateFields.paymentStatus = 'menunggu konfirmasi pelunasan'
       }
 
       try {
@@ -235,29 +247,18 @@ export const payBooking = async (req, res) => {
           { $set: updateFields },
           { new: true }
         );
+        console.log('updatedBooking :', updateFields)
 
         if (!updatedBooking) {
-          return res.status(404).json({ message: 'Pesanan Tidak ditemukan' });
+          return res.status(404).json({ message: 'Booking not Found' });
         }
-
-        const userActor = await User.findById(userID.userBooking)
-
-        const createNewHistory = new History({
-          idUser : userID,
-          userFullName : userActor.fullName,
-          information,
-        })
-
-        await createNewHistory.save();
-
-        if(!createNewHistory){
-          return res.status(400).json({succes: false, message: 'gagal menyimpan history'})
-        }
-
-         res.status(200).json({ message: 'Pesanan berhasil diperbarui, berhasil mengirimkan bukti pembayaran' });
-
-        } catch (error) {
-          return res.status(500).json({ message: 'Gagal perbarui pesanan' });
+          return res.json({success: true, message: 'Payment processed Successfully' });
+        } catch (err) {
+          return res.status(500).json({ message: 'Error updating booking data' });
         }
       });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ message: 'Internal Server Error' });
+  }
 };
