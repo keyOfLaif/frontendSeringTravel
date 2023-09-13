@@ -261,3 +261,29 @@ export const payBooking = async (req, res) => {
       return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
+
+export const completeBooking = async(req, res) => {
+  const idBooking = req.params.idBooking;
+  const statusBooking = req.body.statusBooking;
+  const scheduleBooked = await Booking.findById(idBooking)
+
+  try {
+    const updatedStatusBooking = await Booking.findByIdAndUpdate(idBooking,{
+      $set : {
+        paymentStatus : "lunas"
+      }
+    })
+
+    if(!updatedStatusBooking){
+      return res.status(400).json({success:false, message:"Gagal mengupdate status pesanan"})
+    }
+    const updateSchedule = await Schedule.findByIdAndUpdate(scheduleBooked.tripBooked._id,{
+      $push : {
+        participants : scheduleBooked.participants
+      }
+    },{new:true})
+
+  } catch (error) {
+    
+  }
+}
