@@ -79,7 +79,7 @@ const Profile = () => {
 
   const deleteBooking = async (e) => {
     try {
-      const confirmed = window.confirm("Apakah Anda yakin ingin menghapus pesanan ini?");
+      const confirmed = window.confirm("Apakah anda yakin ingin menghapus pesanan ini?");
       if(confirmed){
         const response = await fetch(`${BASE_URL}/bookings/${e}`, {
           method: 'DELETE',
