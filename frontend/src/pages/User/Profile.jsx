@@ -62,6 +62,7 @@ const Profile = () => {
 
   const handleSubmitParticipants = async (arrayParticipants, idUpdatedData) =>{
     try {
+      console.log("data peserta : ", arrayParticipants)
       const response = await fetch(`${BASE_URL}/bookings/updateBookers/${idUpdatedData}`, {
         method: 'PUT',
         headers: {
@@ -72,7 +73,7 @@ const Profile = () => {
       const dataReponse = await response.json();
       return alert(dataReponse.message);
     } catch (error) {
-      return  alert(error.message);
+      return alert(error.message);
     }
   };
 
@@ -87,7 +88,14 @@ const Profile = () => {
           }
         });
         const dataReponse = await response.json();
-        return dataReponse;
+        const updatedBookings = user.bookings.filter(booking => booking._id !== e);
+        const userDataUpdated = {
+          ...user,
+          bookings:updatedBookings
+        }
+
+        dispatch({type:'UPDATE_USER_DATA', payload: userDataUpdated})
+        return alert(dataReponse.message);
       }
     } catch (error) {
       console.error(error);

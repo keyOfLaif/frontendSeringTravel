@@ -91,10 +91,9 @@ export const getAllBooking = async(req,res)=>{
 export const updateBookers = async (req, res) => {
   const bookingId = req.params.idBooking;
   const participants = req.body; // Assumption: req.body.participants is an array of participant objects
-  console.log("dataParticipants :",participants)
+  console.log("data peserta : ", participants)
 
   try {
-    
     const updatedBooking = await Booking.findByIdAndUpdate(
       bookingId,
       {
@@ -106,11 +105,11 @@ export const updateBookers = async (req, res) => {
     );
 
     if (!updatedBooking) {
-      return res.status(404).json({ message: "Data pesanan tidak ditemukan" });
+      return res.status(404).json({success:false, message: "Data pesanan tidak ditemukan" });
     }
-    res.status(200).json({ message: "Data peserta berhasil diperbarui", updatedBooking });
+    res.status(200).json({success:true, message: "Data peserta berhasil diperbarui", updatedBooking });
   } catch (error) {
-    res.status(500).json({ message: "Gagal memasukkan data, ada eror.", error });
+    res.status(500).json({success:false, message: "Gagal memasukkan data, ada eror."});
   }
 };
 
@@ -192,7 +191,7 @@ export const deleteBooking = async(req,res) =>{
 
         const deletedBooking = await deleteBooking.deleteOne()
 
-        res.status(200).json({success: true, data: deletedBooking})
+        res.status(200).json({success: true, data: deletedBooking, message: "Berhasil dihapus"})
     } catch (error) {
         console.err("Error:", error)
         res.status(500).json({success: false, message: 'Internal server error'})

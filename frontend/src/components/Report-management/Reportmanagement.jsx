@@ -138,7 +138,6 @@ const Reportmanagement = () => {
           selectedTripIndex === "all" && 
           <div className='reportAll'>
             <ReportCard/>
-            
           </div>
         }
         {/* bagian ini adalah menampilkan data yang dipilih dari schedules yang ada pada setiap Trip */}
@@ -184,8 +183,6 @@ const Reportmanagement = () => {
               <div className='chartCard'>
               </div>
             </div>
-
-            
             
             <div className='table__container bg-black'>
             <h5>Data Peserta</h5>
