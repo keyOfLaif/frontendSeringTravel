@@ -11,6 +11,7 @@ import './biographyForm.css'
       participantCity: 'Jakarta',
       participantGender: 'Laki-laki',
       participantJob: 'Pekerja',
+      participantBirthDay: '',
     };
   
     const [formData, setFormData] = useState(Array.from({ length: numOfParticipants }, () => ({ ...initialFormData })));
@@ -69,6 +70,17 @@ import './biographyForm.css'
                 onChange={(event) => handleInputChange(index, 'participantPhoneNumber', event.target.value)}
                 placeholder="Nomor Hp"
                 type="string"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label for={`participantBirthDay${index}`}>Tanggal Lahir</Label>
+              <Input
+                id={`participantBirthDay${index}`}
+                name={`participantBirthDay${index}`}
+                value={data.participantBirthDay}
+                onChange={(event) => handleInputChange(index, 'participantBirthDay', event.target.value)}
+                type="date"
               />
             </FormGroup>
 

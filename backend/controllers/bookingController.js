@@ -90,14 +90,25 @@ export const getAllBooking = async(req,res)=>{
 //updateParticipantDataBooking
 export const updateBookers = async (req, res) => {
   const bookingId = req.params.idBooking;
-  const participants = req.body; // Assumption: req.body.participants is an array of participant objects
-  console.log("data peserta : ", participants)
+  // const participant = req.body; // Assumption: req.body.participants is an array of participant objects
+  const participants = req.body.map((participant) => ({
+    name: participant.participantName,
+    email: participant.participantEmail,
+    phone: participant.participantPhoneNumber,
+    city: participant.participantCity,
+    gender: participant.participantGender,
+    job: participant.participantJob,
+    birthDay: participant.participantBirthDay,
+  }));
+
+  console.log("peserta : ",participants)
+  
 
   try {
     const updatedBooking = await Booking.findByIdAndUpdate(
       bookingId,
       {
-        $push: {
+        $set: {
           participants: participants
         }
       },
@@ -277,9 +288,20 @@ export const completeBooking = async(req, res) => {
     if(!updatedStatusBooking){
       return res.status(400).json({success:false, message:"Gagal mengupdate status pesanan"})
     }
+
+    const updatedParticipants = scheduleBooked.participants.map((participant) => ({
+      name: participant.name,
+      email: participant.email,
+      phone: participant.phone,
+      city: participant.city,
+      gender: participant.gender,
+      job: participant.job,
+      birthDay: participant.birthDay,
+    }));
+
     const updateSchedule = await Schedule.findByIdAndUpdate(scheduleBooked.tripBooked._id,{
-      $push : {
-        participants : scheduleBooked.participants
+      $set : {
+        participants : updatedParticipants
       }
     },{new:true})
 
