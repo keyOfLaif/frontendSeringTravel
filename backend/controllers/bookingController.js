@@ -283,7 +283,10 @@ export const completeBooking = async(req, res) => {
       }
     },{new:true})
 
+    return res.status(200).json({success:true, message:"Berhasil", updateSchedule})
+
   } catch (error) {
-    
+    console.log("errornya :", error)
+    return res.status(500).json({success:false, message:"Gagal"})
   }
 }

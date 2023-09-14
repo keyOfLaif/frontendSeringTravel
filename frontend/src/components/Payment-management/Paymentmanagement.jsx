@@ -57,6 +57,23 @@ const Paymentmanagement = () => {
         }
     };
 
+    const handleCompleteBooking = async (bookingId) => {
+        console.log("nomor booking :", bookingId)
+        try {
+            const response = await fetch(`${BASE_URL}/bookings/completeBooking/${bookingId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-type': 'application/json',
+                }
+            });
+            const hasil = await response.json()
+            return alert(hasil.message)
+        } catch (error) {
+            console.error(`Error updating :`, error);
+            return alert(error.message)
+        }
+    };
+
     // const handleDpCheckboxChange = async (e, payment) => {
     //     const { checked } = e.target;
     //     try {
@@ -128,6 +145,9 @@ const Paymentmanagement = () => {
                     <th>
                         Pembayaran
                     </th>
+                    <th>
+                        Aksi
+                    </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -143,7 +163,7 @@ const Paymentmanagement = () => {
                             booking._id
                         }
                     </th>
-                    <th scope="row">
+                    <td scope="row">
                         {
                             <div onClick={() => {
                                 console.log("Clicked on dp image, imageBeingPrev:", booking.paymentProofs.dp);
@@ -155,7 +175,7 @@ const Paymentmanagement = () => {
                                 2. Pelunasan
                             </div>
                         } 
-                    </th>
+                    </td>
                     <td>
                     <Form>
                         <FormGroup
@@ -188,6 +208,11 @@ const Paymentmanagement = () => {
                         </Label>
                         </FormGroup>
                     </Form>
+                    </td>
+                    <td>
+                        <button onClick={()=>handleCompleteBooking(booking._id)}>
+                            Selesai
+                        </button>
                     </td>
                     </tr>
                     )
