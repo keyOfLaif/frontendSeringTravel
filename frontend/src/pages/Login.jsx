@@ -44,7 +44,11 @@ const handleClick = async e => {
     if(!res.ok) alert(result.message)
 
     dispatch({type:'LOGIN_SUCCESS', payload: result.data})
-    navigate('/')
+    if(result.role === 'user'){
+      navigate('/')
+    }else if(result.data.role === 'admin' || 'owner'){
+      navigate('/admin')
+    }
 
   } catch (err) {
     dispatch({type:'LOGIN_FAILURE', payload: err.message})

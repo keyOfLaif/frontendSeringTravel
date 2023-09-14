@@ -86,12 +86,12 @@ export const login = async (req, res) => {
             })
         }
 
-        const {password, role, ... rest} = user._doc
+        const {password, ... rest} = user._doc
 
         // membuat token jwt
         const token = jwt.sign({
             id: user._id,
-            role: user.role
+            role: user._doc.role
         }, process.env.JWT_SECRET_KEY,
         {
             expiresIn: '1d'
@@ -103,8 +103,8 @@ export const login = async (req, res) => {
             expires:token.expiresIn
         }).status(200).json({
             token,
-            data: { ... rest},
-            role,
+            data: {... rest},
+            role: user._doc.role
         })
         
     } catch (err) {

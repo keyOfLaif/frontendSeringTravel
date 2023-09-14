@@ -39,7 +39,7 @@ const {user, dispatch} = useContext(AuthContext)
 
 const logout = ()=>{
   dispatch({type: 'LOGOUT'})
-  navigate('/')
+  navigate('/login')
 }
 
 const stickyHeaderFunc = ()=>{
@@ -110,7 +110,7 @@ if(location.pathname === "/admin" || location.pathname === "/owner"){
                     </Button>
                     <Button className='btn primary__btn' onClick={logout}>
                       Logout
-                    </Button>
+                    </Button> 
                   </>
                 ) : (
                   <>
