@@ -300,8 +300,8 @@ export const completeBooking = async(req, res) => {
     }));
 
     const updateSchedule = await Schedule.findByIdAndUpdate(scheduleBooked.tripBooked._id,{
-      $set : {
-        participants : updatedParticipants
+      $push : {
+        participants : {$each : updatedParticipants}
       }
     },{new:true})
 
