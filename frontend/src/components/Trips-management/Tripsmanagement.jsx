@@ -23,6 +23,9 @@ const Tripsmanagement = () => {
         title: '',
         city: '',
         address: '',
+        desc:'',
+        featured:false,
+        photo:null
       });
 
       //setting up for updating the Trip
@@ -30,6 +33,9 @@ const Tripsmanagement = () => {
         title: '',
         city: '',
         address: '',
+        desc:'',
+        featured:false,
+        photo:null
       });
     
       const [updateTitle, setUpdateTitle] = useState(null);
@@ -48,16 +54,21 @@ const Tripsmanagement = () => {
           setEditBox(content === editBox ? null : content);
       };
 
-      const createNewTrip = async e => {
-        e.preventDefault()
+      const createNewTrip = async () => {
+        
         try {
+          const formData = new FormData();
+          formData.append("title", newTrip.title);
+          formData.append("city", newTrip.city);
+          formData.append("address", newTrip.address);
+          formData.append("desc", newTrip.desc);
+          formData.append("featured", newTrip.featured);
+          formData.append("photo", newTrip.photo);
           const res = await fetch(`${BASE_URL}/trips/`, {
             method: 'POST',
             headers: {
-              'content-type':'application/json'
+              'content-type':'multipart/form-data'
             },
-            credentials:'include',
-            body: JSON.stringify(newTrip)
           })
     
           const result = await res.json()
@@ -277,6 +288,15 @@ const Tripsmanagement = () => {
                         <label for="alamatTrip" class="form-label">Alamat Tujuan Trip</label>
                         <input type="text" class="form-control" id="address" placeholder="Alamat Tujuan Trip" onChange={(e) => setNewTrip({ ...newTrip, address: e.target.value })}/>
                       </div>
+                      <div class="mb-3">
+                        <label for="deskripsiTrip" class="form-label">Deskripsi</label>
+                        <input type="text" class="form-control" id="desc" placeholder="Deskripsi tentang Tripnya" onChange={(e) => setNewTrip({ ...newTrip, desc: e.target.value })}/>
+                      </div>
+                      <div class="mb-3">
+                        <label for="gambarTrip" class="form-label">Gambar</label>
+                        <input type="file" accept="image/*" onChange={(e) => setNewTrip({ ...newTrip, photo: e.target.files[0] })} />
+                      </div>
+                      
                       <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
               </div>
