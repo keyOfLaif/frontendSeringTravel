@@ -9,7 +9,7 @@ import './biographyForm.css'
       participantEmail: '',
       participantPhoneNumber: '',
       participantCity: 'Jakarta',
-      participantGender: 'Laki-laki',
+      participantGender: 'laki-laki',
       participantJob: 'Pekerja',
       participantBirthDay: '',
     };
@@ -17,7 +17,7 @@ import './biographyForm.css'
     const [formData, setFormData] = useState(Array.from({ length: numOfParticipants }, () => ({ ...initialFormData })));
   
     const cities = ['Jakarta', 'Bogor', 'Depok', 'Tangerang', 'Bekasi'];
-    const genders = ['Laki-laki', 'Perempuan'];
+    const genders = ['laki-laki', 'perempuan'];
     const jobs = ['Pekerja', 'Pelajar', 'Lainnya'];
   
     const handleInputChange = (index, field, value) => {

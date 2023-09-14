@@ -26,7 +26,13 @@ const Chart = ({data, dataIndicator}) => {
         {
         barStyles.map((style, index) => (
           <div key={index}>
-            <div>{dataIndicator[index]} {data[index].toFixed(2)}%</div>
+            {Number.isInteger(data[index]) ? (
+              <div>{dataIndicator[index]} {data[index]}%</div>
+            ) : (
+              <div>{dataIndicator[index]} {Math.round(data[index])}%</div>
+            ) }
+            
+
             <div className='bar__frame'>
               <div className="bar" style={style}></div>
             </div>

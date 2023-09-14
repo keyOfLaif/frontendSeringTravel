@@ -22,7 +22,7 @@
 
 .frame__chartCard{
     display: flex;
-    flex-wrap: wrap;
+    /* flex-direction: column; */
     gap: 1rem;
     width: 90%;
 }
@@ -31,7 +31,7 @@
     background-color: black;
     padding: 1rem;
     border-radius: 10px;
-    width: 350px;
+    width: 300px;
 }
 
 .btn__Trip{
@@ -57,7 +57,7 @@
 }
 
 .table__container{
-    width: 80%;
+    width: 90%;
     overflow: auto;
     height: 50vh;
     margin-top: 1rem;

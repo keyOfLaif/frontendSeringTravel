@@ -10,6 +10,7 @@ import './reportmanagement.css'
 
 import Chart from './Chart'
 import ReportCard from './ReportCard/ReportCard'
+import FormatDate from '../../shared/FormatDate'
 
 const Reportmanagement = () => {
 
@@ -29,7 +30,6 @@ const Reportmanagement = () => {
   };
 
   useEffect(() => {
-
     const calculatePercentagesPerTrip = (b) => {
       const totalParticipants = b.length;
       let maleCount = 0;
@@ -70,7 +70,7 @@ const Reportmanagement = () => {
       };
     };
 
-    const selectedTripData = jsonData.find(trip=>trip.title === selectedOption)
+    const selectedTripData = trips.find(trip=>trip.title === selectedOption)
 
     if(selectedTripData) {
       const tripInformation = selectedTripData.schedules.map(( schedule, index ) => {
@@ -82,8 +82,8 @@ const Reportmanagement = () => {
     
         return {
           tripDate: schedule.tripDate,
-          tripPrice: schedule.tripPrice,
-          maxParticipant: schedule.maxParticipant,
+          price: schedule.price,
+          maxParticipant: schedule.maxParticipants,
           participants: schedule.participants,
           ...percentages,
         };
@@ -110,7 +110,7 @@ const Reportmanagement = () => {
         {/* pada bagian ini saya ingin menampilkan pilihan untuk setiap title yang ada pada data jsonData dan pilihan All (default) */}
       <select name="" id="" onChange={handleOptionChange}>
         <option value="all">All</option>
-        {jsonData.map((trips, index) => (
+        {trips.map((trips, index) => (
           <option value={trips.title} key={index}>
             {trips.title}
           </option>
@@ -143,14 +143,14 @@ const Reportmanagement = () => {
         {/* bagian ini adalah menampilkan data yang dipilih dari schedules yang ada pada setiap Trip */}
         {selectedReport && (
           <div className='frame__report'>
-            <h6>Jadwal : {selectedReport.tripDate}</h6>
-            <h6>Harga : {selectedReport.tripPrice}</h6>
+            <h6>Jadwal : <FormatDate dateString={selectedReport.tripDate}/> </h6>
+            <h6>Harga : {selectedReport.price}</h6>
             <h6>Peserta : {selectedReport.maxParticipant}</h6>
             
             <div className='frame__chartCard'>
 
               <div className='chartCard'>
-                <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]} dataIndicator={["Female","Male"]}/>
+                <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]} dataIndicator={["Perempuan","Laki-laki"]}/>
               </div>
 
               <div className='chartCard'>
@@ -180,8 +180,8 @@ const Reportmanagement = () => {
                 />
               </div>
 
-              <div className='chartCard'>
-              </div>
+              {/* <div className='chartCard'>
+              </div> */}
             </div>
             
             <div className='table__container bg-black'>
