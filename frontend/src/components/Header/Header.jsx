@@ -91,32 +91,32 @@ if(location.pathname === "/admin" || location.pathname === "/owner"){
 
 
           <div className="nav__right d-flex align-items-center gap-4">
-
             <div className="nav__btns d-flex align-items-center gap-4">
               {
-                user ? (
-                  <>
-                    <Button className='btn secondary__btn'>
-                      <div className='position-relative' data-bs-toggle="tooltip" data-bs-placement="bottom" title={`${user.bookings.length} pesanan`}>
-                        <Link to={`/${user.username}`}>
-                          {user.username}
-                          {user.bookings && user.bookings.length > 0 && (
-                            <Badge pill color='danger' className="position-absolute p-1">
-                              <span className='visually-hidden'></span>
-                            </Badge>
-                          )}  
-                        </Link>
-                      </div>
-                    </Button>
-                    <Button className='btn primary__btn' onClick={logout}>
-                      Logout
-                    </Button> 
-                  </>
+                !user || (user.role !== 'user') ? ( <>
+                  <Button className='btn secondary__btn'><Link to='/login'>Login</Link></Button>
+                  <Button className='btn primary__btn'><Link to='/register'>Register</Link></Button>
+                </>
                 ) : (
                   <>
-                    <Button className='btn secondary__btn'><Link to='/login'>Login</Link></Button>
-                    <Button className='btn primary__btn'><Link to='/register'>Register</Link></Button>
-                  </>
+                  {
+                    user.bookings && user.bookings.length > 0 && (
+                      <Button className='btn secondary__btn'>
+                        <div className='position-relative' data-bs-toggle="tooltip" data-bs-placement="bottom" title={`${user.bookings.length} pesanan`}>
+                          <Link to={`/${user.username}`}>                        
+                                {user.username}
+                                <Badge pill color='danger' className="position-absolute p-1">
+                                  <span className='visually-hidden'></span>
+                                </Badge>
+                          </Link>
+                        </div>
+                      </Button>
+                  )
+                  }
+                  <Button className='btn primary__btn' onClick={logout}>
+                    Logout
+                  </Button> 
+                </>                 
                 )
               }
             </div>

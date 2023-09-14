@@ -21,10 +21,8 @@ const Admin = () => {
 
   useEffect(() => {
     // Lakukan pemeriksaan peran saat komponen dimuat
-    if (!dataUser) {
+    if (!dataUser || dataUser.role === 'user') {
       navigate('/login')
-    } else if (dataUser.role==='user'){
-      navigate('/')
     }
   }, [dataUser, navigate]);
 
@@ -89,13 +87,13 @@ const Admin = () => {
     setSelectedNavLink(index);
   }
 
-  const logout = ()=>{
+  const logout = () =>{
     dispatch({type: 'LOGOUT'})
     navigate('/login')
   }
 
   return (
-    
+    <>{dataUser && (
       <div className='outerAdminContainer d-flex'>
         {console.log("user :",dataUser)}
         <div className='leftNavbarContainer'>
@@ -111,10 +109,8 @@ const Admin = () => {
             <div className='leftNavbarMainContent'>
               <h6 className='menu__title'>Menu</h6>
               <ul className="adminLists">
-                {
-                  <>
                   {
-                    dataUser === 'admin' && (navAdmin__links.map((item,index)=>
+                    dataUser.role === 'admin' && (navAdmin__links.map((item,index)=>
                     <li 
                       key={index}
                       className={`navAdmin__item ${index === selectedNavLink ? 'selected' : ''}`}
@@ -128,7 +124,7 @@ const Admin = () => {
                     ))
                   }
                   {
-                    dataUser === 'owner' && (navOwner__links.map((item,index)=>
+                    dataUser.role === 'owner' && (navOwner__links.map((item,index)=>
                     <li 
                       key={index}
                       className={`navAdmin__item ${index === selectedNavLink ? 'selected' : ''}`}
@@ -141,20 +137,20 @@ const Admin = () => {
                     </li>
                     ))
                   }
-                </>
-                }
-                
-                
               </ul>
             </div>
 
             <div className='pt-2 mt-auto'>
-              <h6 className='menu__title'>{dataUser.role}</h6>
+                { dataUser &&               
+                  <h6 className='menu__title'>
+                    {dataUser.role}
+                  </h6>
+                }
               <ul className='other__lists'>
                 <li>
                   <i className="ri-account-circle-line align-bottom me-1"></i>
                   <span>
-                    Admin
+                    Profile
                   </span>
                 </li>
                 <li onClick={logout}>
@@ -172,25 +168,23 @@ const Admin = () => {
 
         <div className='mainContent'>
           <div className='topBarMainContent bg-primary'>
-            <div className='Content__title'>
               { 
-                dataUser === 'admin' && navAdmin__links[selectedNavLink].title
+                dataUser.role === 'admin' && (<div className='Content__title'>{navAdmin__links[selectedNavLink].title}</div>)
               }
               { 
-                dataUser === 'owner' && navOwner__links[selectedNavLink].title
+                dataUser.role === 'owner' && (<div className='Content__title'>{navOwner__links[selectedNavLink].title}</div>)
               }
-            </div>
           </div>
-          <div className='bottomMainContent'>
             {
-              dataUser === 'admin' && navAdmin__links[selectedNavLink].content
+              dataUser.role === 'admin' && (<div className='bottomMainContent'>{navAdmin__links[selectedNavLink].content}</div>)
             }
             {
-              dataUser === 'owner' && navOwner__links[selectedNavLink].content
+              dataUser.role === 'owner' && (<div className='bottomMainContent'>{navOwner__links[selectedNavLink].content}</div>)
             }
-          </div>
         </div>
       </div>
+    )}
+    </>
     
     
   )
