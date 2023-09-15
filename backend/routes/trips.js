@@ -10,7 +10,7 @@ const router = express.Router();
 router.post("/", upload.single('tripImage'), createTrip);
 
 // update Trip
-router.put("/:id", updateTrip);
+router.put("/:id", upload.single('tripImage') ,updateTrip);
 
 // delete Trip
 router.delete("/deleteTrip/:id", deleteTrip);

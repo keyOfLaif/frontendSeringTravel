@@ -35,8 +35,8 @@ const Tripsmanagement = () => {
         city: '',
         address: '',
         desc:'',
-        featured:false,
-        tripImage:null
+        tripImage:null,
+        directory: '../frontend/public/tripImages'
       });
     
       const [updateTitle, setUpdateTitle] = useState(null);
@@ -90,13 +90,17 @@ const Tripsmanagement = () => {
       const submitUpdate = async e => {
         e.preventDefault()
         try {
+          const formData = new FormData();
+          formData.append("title", tripDataUpdated.title);
+          formData.append("city", tripDataUpdated.city);
+          formData.append("address", tripDataUpdated.address);
+          formData.append("desc", tripDataUpdated.desc);
+          formData.append("tripDirectory", tripDataUpdated.directory);
+          formData.append("tripImage", tripDataUpdated.tripImage);
+
           const res = await fetch(`${BASE_URL}/trips/${editBox}`, {
             method: 'put',
-            headers: {
-              'content-type':'application/json'
-            },
-            credentials:'include',
-            body: JSON.stringify(tripDataUpdated)
+            body: formData
           })
     
           const result = await res.json()
@@ -202,23 +206,37 @@ const Tripsmanagement = () => {
               
                 {/*form for showing the current data and inputting the new updated data*/}
                 {
-                    editBox === trip._id && (<form onSubmit={submitUpdate}>
+                    editBox === trip._id && (
+                    <form onSubmit={submitUpdate}>
                       <div className="mb-3">
-                        <label for="judulTrip" className="form-label">Judul Trip</label>
-                        <input type="text" className="form-control" id="title" placeholder={trip.title} aria-describedby="emailHelp" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, title: e.target.value })}/>
+                        <label htmlFor="judulTrip" className="form-label">Judul Trip</label>
+                        <input type="text" className="form-control" id="title" placeholder={trip.title} aria-describedby="emailHelp" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, title: e.target.id === 'title' && e.target.value === "" ? (trip.title) : (e.target.value) })}/>
                         <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                       </div>
+
                       <div className="mb-3">
-                        <label for="daerahTrip" className="form-label">Daerah Tujuan Trip</label>
-                        <input type="text" className="form-control" placeholder={trip.city} id="city" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, city: e.target.value })}/>
+                        <label htmlFor="daerahTrip" className="form-label">Daerah Tujuan Trip</label>
+                        <input type="text" className="form-control" placeholder={trip.city} id="city" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, city: e.target.id === 'city' && e.target.value === "" ? (trip.city) : (e.target.value) })}/>
                       </div>
+
                       <div className="mb-3">
-                        <label for="alamatTrip" className="form-label">Alamat Tujuan Trip</label>
-                        <input type="text" className="form-control" id="address" placeholder={trip.address} onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, address: e.target.value })}/>
+                        <label htmlFor="alamatTrip" className="form-label">Alamat Tujuan Trip</label>
+                        <input type="text" className="form-control" id="address" placeholder={trip.address} onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, address: e.target.id === 'address' && e.target.value === "" ? (trip.address) : (e.target.value) })}/>
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="deskripsiTrip" className="form-label">Deskripsi Trip</label>
+                        <input type="text" className="form-control" id="desc" placeholder={trip.desc} onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, desc: e.target.id === 'desc' && e.target.value === "" ? (trip.desc) : (e.target.value) })}/>
+                      </div>
+
+                      <div className="mb-3">
+                        <label htmlFor="gambarTrip" className="form-label">Gambar</label>
+                        <input type="file" accept="image/*" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, tripImage: e.target.files[0] })}/>
                       </div>
                       
                       <button type="submit" className="btn btn-primary">Submit</button>
-                    </form>)
+                    </form>
+                    )
                 }
                 {
                     editSchedule === trip._id && (

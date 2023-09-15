@@ -42,13 +42,51 @@ export const createTrip = async (req,res)=>{
 //update Trip
 export const updateTrip = async(req,res)=>{
 
-    const id = req.params.id
-
     try {
+        const id = req.params.id
+        const { title, city, address, desc, ...restOf } = req.body;
+        const dataForUpdate = {};
+        if(title !== ""){
+            dataForUpdate.title = title
+        }
+        if(city !== ""){
+            dataForUpdate.city = city
+        }
+        if(address !== ""){
+            dataForUpdate.address = address
+        }
+        if(desc !== ""){
+            dataForUpdate.desc = desc
+        }
+
+        const oldTripData = await Trip.findById(id);
+        console.log("datanya : ", req.body)
+
+        //Jika user tidak merubah gambar trip
+        if (!req.file) {
+            const updatedTrip = await Trip.findByIdAndUpdate(id, {
+                $set : dataForUpdate,
+            })
+
+            //jika gagal mengupdate data trip
+            if(!updatedTrip){
+                return res.status(400).json({success:false, message:"Gagal merubah Trip"})
+            }
+
+            return res.status(200).json({success:true, message:"Berhasil merubah trip tanpa merubah gambar"})
+        }
         
+
+        dataForUpdate.photo = `/tripImages/${req.file.filename}`;
+
         const updatedTrip = await Trip.findByIdAndUpdate(id,{
-            $set: req.body
+            $set: dataForUpdate
         }, {new:true})
+
+        if(oldTripData.photo) {
+            const oldTripImagePath = `../frontend/public${oldTripData.photo}`
+            fs.unlinkSync(oldTripImagePath)
+        }
 
         res
             .status(200)
