@@ -64,9 +64,9 @@ const Tripsmanagement = () => {
           formData.append("city", newTrip.city);
           formData.append("address", newTrip.address);
           formData.append("desc", newTrip.desc);
+          formData.append("tripDirectory", newTrip.directory);
           formData.append("featured", newTrip.featured);
           formData.append("tripImage", newTrip.tripImage);
-          formData.append("tripDirectory", newTrip.directory);
 
           const res = await fetch(`${BASE_URL}/trips`, {
             method: 'POST',

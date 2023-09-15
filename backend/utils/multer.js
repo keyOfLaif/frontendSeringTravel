@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
       // Mengirim respons kesalahan jika direktori tidak dideklarasikan
       return cb(new Error("Direktori penyimpanan belum dideklarasi"), null);
     }
-    cb(null, req.body.tripDirectory); 
+    cb(null, req.body.tripDirectory);
   },
   filename: (req, file, cb) => {
     // Nama file akan menjadi timestamp + nama asli file
