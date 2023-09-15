@@ -215,7 +215,7 @@ export const payBooking = async (req, res) => {
 
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, '../frontend/public/paymentProofs'); // Ganti dengan direktori yang sesuai
+      cb(null, '../frontend/src/assets/images/paymentProofs'); // Ganti dengan direktori yang sesuai
     },
     filename: (req, file, cb) => {
       // const paymentType = req.body.paymentType;

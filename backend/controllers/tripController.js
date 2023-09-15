@@ -1,20 +1,36 @@
 import Trip from '../models/Trip.js'
 
+
 // create new Trip
 export const createTrip = async (req,res)=>{
-    const newTrip = new Trip(req.body)
 
     try {
+        const { title, city, address, desc, featured } = req.body;
+
+        if (!req.file) {
+            return res.status(400).json({ error: "File gambar gagal diunggah" });
+        }
+
+        const photo = req.file.filename;
+        const newTrip = new Trip({
+            title,
+            city,
+            address,
+            desc,
+            featured,
+            photo, // Simpan nama file gambar ke dalam model Trip
+          });
         const savedTrip = await newTrip.save();
 
-        res.status(200).json(
+        return res.status(200).json(
             {
                 success: true,
                 message: "Berhasil membuat Trip baru.",
                 data: savedTrip,
             })
     } catch (err) {
-        res
+        console.log("error : ",err)
+        return res
             .status(500)
             .json({
                 success: false,

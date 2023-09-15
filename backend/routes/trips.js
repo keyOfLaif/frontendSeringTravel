@@ -3,11 +3,11 @@ import { createTrip, deleteTrip, getAllTrip, getFeaturedTrip, getSingleTrip, get
 
 
 import { verifyAdmin } from '../utils/verifyToken.js';
+import { upload } from '../utils/multer.js';
 
 const router = express.Router();
-
 // create new Trip
-router.post("/", createTrip);
+router.post("/", upload.single('tripImage'), createTrip);
 
 // update Trip
 router.put("/:id", updateTrip);

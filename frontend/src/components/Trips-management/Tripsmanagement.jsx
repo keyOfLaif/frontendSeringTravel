@@ -25,7 +25,7 @@ const Tripsmanagement = () => {
         address: '',
         desc:'',
         featured:false,
-        photo:null
+        tripImage:null
       });
 
       //setting up for updating the Trip
@@ -45,6 +45,7 @@ const Tripsmanagement = () => {
     
       const [editBox, setEditBox] = useState(null);
       const [editSchedule, setEditSchedule] = useState(null);
+      const [errorUploadImageTrip, setErrorFetching] = useState('')
       
       const toggleEditSchedule = (content) =>  {
           setEditSchedule(content === editSchedule ? null : content);
@@ -54,8 +55,8 @@ const Tripsmanagement = () => {
           setEditBox(content === editBox ? null : content);
       };
 
-      const createNewTrip = async () => {
-        
+      const createNewTrip = async e => {
+        e.preventDefault()
         try {
           const formData = new FormData();
           formData.append("title", newTrip.title);
@@ -63,12 +64,11 @@ const Tripsmanagement = () => {
           formData.append("address", newTrip.address);
           formData.append("desc", newTrip.desc);
           formData.append("featured", newTrip.featured);
-          formData.append("photo", newTrip.photo);
-          const res = await fetch(`${BASE_URL}/trips/`, {
+          formData.append("tripImage", newTrip.tripImage);
+
+          const res = await fetch(`${BASE_URL}/trips`, {
             method: 'POST',
-            headers: {
-              'content-type':'multipart/form-data'
-            },
+            body : formData,
           })
     
           const result = await res.json()
@@ -79,7 +79,8 @@ const Tripsmanagement = () => {
           alert(result.message)
     
         } catch (err) {
-          alert(err.message)
+          setErrorFetching(err.message);
+          alert(err.message);
         }
         setEditBox(null);
       }
@@ -200,21 +201,21 @@ const Tripsmanagement = () => {
                 {/*form for showing the current data and inputting the new updated data*/}
                 {
                     editBox === trip._id && (<form onSubmit={submitUpdate}>
-                      <div class="mb-3">
-                        <label for="judulTrip" class="form-label">Judul Trip</label>
-                        <input type="text" class="form-control" id="title" placeholder={trip.title} aria-describedby="emailHelp" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, title: e.target.value })}/>
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                      <div className="mb-3">
+                        <label for="judulTrip" className="form-label">Judul Trip</label>
+                        <input type="text" className="form-control" id="title" placeholder={trip.title} aria-describedby="emailHelp" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, title: e.target.value })}/>
+                        <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                       </div>
-                      <div class="mb-3">
-                        <label for="daerahTrip" class="form-label">Daerah Tujuan Trip</label>
-                        <input type="text" class="form-control" placeholder={trip.city} id="city" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, city: e.target.value })}/>
+                      <div className="mb-3">
+                        <label for="daerahTrip" className="form-label">Daerah Tujuan Trip</label>
+                        <input type="text" className="form-control" placeholder={trip.city} id="city" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, city: e.target.value })}/>
                       </div>
-                      <div class="mb-3">
-                        <label for="alamatTrip" class="form-label">Alamat Tujuan Trip</label>
-                        <input type="text" class="form-control" id="address" placeholder={trip.address} onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, address: e.target.value })}/>
+                      <div className="mb-3">
+                        <label for="alamatTrip" className="form-label">Alamat Tujuan Trip</label>
+                        <input type="text" className="form-control" id="address" placeholder={trip.address} onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, address: e.target.value })}/>
                       </div>
                       
-                      <button type="submit" class="btn btn-primary">Submit</button>
+                      <button type="submit" className="btn btn-primary">Submit</button>
                     </form>)
                 }
                 {
@@ -273,32 +274,33 @@ const Tripsmanagement = () => {
             </div>
             <Collapse isOpen={isOpen}>
               <div className='bg-black w-50 p-4' style={{margin:'0 auto'}}>
+                {errorFetching && <p className="error-message">{errorFetching}</p>}
                 <div className='mb-3 mt-2'>Tambah Trip Baru</div>
-                <form onSubmit={createNewTrip}>
-                      <div class="mb-3">
-                        <label for="judulTrip" class="form-label">Judul Trip</label>
-                        <input type="text" class="form-control" id="title" placeholder="Nama Trip" aria-describedby="emailHelp" onChange={(e) => setNewTrip({ ...newTrip, title: e.target.value })}/>
-                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                  <form onSubmit={createNewTrip}>
+                      <div className="mb-3">
+                        <label htmlFor="judulTrip" className="form-label">Judul Trip</label>
+                        <input type="text" className="form-control" id="title" placeholder="Nama Trip" aria-describedby="emailHelp" onChange={(e) => setNewTrip({ ...newTrip, title: e.target.value })} required/>
+                        <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                       </div>
-                      <div class="mb-3">
-                        <label for="daerahTrip" class="form-label">Daerah Tujuan Trip</label>
-                        <input type="text" class="form-control" placeholder="Kota Tujuan Trip" id="city" onChange={(e) => setNewTrip({ ...newTrip, city: e.target.value })}/>
+                      <div className="mb-3">
+                        <label htmlFor="daerahTrip" className="form-label">Daerah Tujuan Trip</label>
+                        <input type="text" className="form-control" placeholder="Kota Tujuan Trip" id="city" onChange={(e) => setNewTrip({ ...newTrip, city: e.target.value })} required/>
                       </div>
-                      <div class="mb-3">
-                        <label for="alamatTrip" class="form-label">Alamat Tujuan Trip</label>
-                        <input type="text" class="form-control" id="address" placeholder="Alamat Tujuan Trip" onChange={(e) => setNewTrip({ ...newTrip, address: e.target.value })}/>
+                      <div className="mb-3">
+                        <label htmlFor="alamatTrip" className="form-label">Alamat Tujuan Trip</label>
+                        <input type="text" className="form-control" id="address" placeholder="Alamat Tujuan Trip" onChange={(e) => setNewTrip({ ...newTrip, address: e.target.value })} required/>
                       </div>
-                      <div class="mb-3">
-                        <label for="deskripsiTrip" class="form-label">Deskripsi</label>
-                        <input type="text" class="form-control" id="desc" placeholder="Deskripsi tentang Tripnya" onChange={(e) => setNewTrip({ ...newTrip, desc: e.target.value })}/>
+                      <div className="mb-3">
+                        <label htmlFor="deskripsiTrip" className="form-label">Deskripsi</label>
+                        <input type="text" className="form-control" id="desc" placeholder="Deskripsi tentang Tripnya" onChange={(e) => setNewTrip({ ...newTrip, desc: e.target.value })} required/>
                       </div>
-                      <div class="mb-3">
-                        <label for="gambarTrip" class="form-label">Gambar</label>
-                        <input type="file" accept="image/*" onChange={(e) => setNewTrip({ ...newTrip, photo: e.target.files[0] })} />
+                      <div className="mb-3">
+                        <label htmlFor="gambarTrip" className="form-label">Gambar</label>
+                        <input type="file" accept="image/*" onChange={(e) => setNewTrip({ ...newTrip, tripImage: e.target.files[0] })} required/>
                       </div>
                       
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+                      <button type="submit" className="btn btn-primary">Submit</button>
+                  </form>
               </div>
             </Collapse>
       </div>
