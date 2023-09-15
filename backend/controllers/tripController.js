@@ -1,5 +1,5 @@
 import Trip from '../models/Trip.js'
-
+import fs from 'fs';
 
 // create new Trip
 export const createTrip = async (req,res)=>{
@@ -73,7 +73,20 @@ export const deleteTrip = async(req,res)=>{
     const id = req.params.id;
 
     try {
-        await Trip.findByIdAndDelete(id)
+        const tripDeleted = await Trip.findByIdAndDelete(id)
+
+        if(!tripDeleted){
+            return res.status(404).json(
+                {
+                    success: false,
+                    message: "Trip tidak ditemukan.",
+                })
+        }
+
+        if(tripDeleted.photo) {
+            const tripImagePath = `../frontend/public${tripDeleted.photo}`
+            fs.unlinkSync(tripImagePath)
+        }
 
         res.status(200).json(
             {
@@ -82,6 +95,7 @@ export const deleteTrip = async(req,res)=>{
             })
         
     } catch (err) {
+        console.log("errornya : ",err)
         res
             .status(500)
             .json({

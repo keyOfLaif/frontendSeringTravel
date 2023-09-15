@@ -25,7 +25,8 @@ const Tripsmanagement = () => {
         address: '',
         desc:'',
         featured:false,
-        tripImage:null
+        tripImage:null,
+        directory: '../frontend/public/tripImages'
       });
 
       //setting up for updating the Trip
@@ -35,7 +36,7 @@ const Tripsmanagement = () => {
         address: '',
         desc:'',
         featured:false,
-        photo:null
+        tripImage:null
       });
     
       const [updateTitle, setUpdateTitle] = useState(null);
@@ -65,6 +66,7 @@ const Tripsmanagement = () => {
           formData.append("desc", newTrip.desc);
           formData.append("featured", newTrip.featured);
           formData.append("tripImage", newTrip.tripImage);
+          formData.append("tripDirectory", newTrip.directory);
 
           const res = await fetch(`${BASE_URL}/trips`, {
             method: 'POST',
@@ -76,7 +78,7 @@ const Tripsmanagement = () => {
             return alert(result.message)
           }
 
-          alert(result.message)
+          return alert(result.message)
     
         } catch (err) {
           setErrorFetching(err.message);
