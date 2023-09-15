@@ -3,7 +3,7 @@ import multer from "multer";
 // Konfigurasi penyimpanan untuk file gambar
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../frontend/src/assets/images/tripImages"); 
+    cb(null, "../frontend/public/tripImages"); 
   },
   filename: (req, file, cb) => {
     // Nama file akan menjadi timestamp + nama asli file

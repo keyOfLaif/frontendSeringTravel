@@ -11,7 +11,7 @@ export const createTrip = async (req,res)=>{
             return res.status(400).json({ error: "File gambar gagal diunggah" });
         }
 
-        const photo = req.file.filename;
+        const photo = `/tripImages/${req.file.filename}`;
         const newTrip = new Trip({
             title,
             city,

@@ -29,10 +29,10 @@ const Admin = () => {
   const [selectedNavLink, setSelectedNavLink] = useState(0);
   
   const navAdmin__links=[
-    {
-      title:'Beranda',
-      content:<HomepageManagement/>,
-    },
+    // {
+    //   title:'Beranda',
+    //   content:<HomepageManagement/>,
+    // },
     {
       title:'Kelola Trip',
       content:<Tripsmanagement/>
@@ -56,10 +56,10 @@ const Admin = () => {
   ]
 
   const navOwner__links=[
-    {
-      title:'Beranda',
-      content:<HomepageManagement/>,
-    },
+    // {
+    //   title:'Beranda',
+    //   content:<HomepageManagement/>,
+    // },
     {
       title:'Kelola Trip',
       content:<Tripsmanagement/>
