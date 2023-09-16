@@ -10,6 +10,8 @@ import Tripsmanagement from '../../components/Trips-management/Tripsmanagement'
 import Reportmanagement from '../../components/Report-management/Reportmanagement'
 import AdminManagement from '../../components/Admin-management/AdminManagement'
 import History from '../../components/History/History'
+import AdminProfile from '../../components/Admin-profile/AdminProfile'
+
 import { AuthContext } from './../../context/AuthContext'
 import { BASE_URL } from '../../utils/config'
 import { useNavigate } from 'react-router-dom'
@@ -27,12 +29,9 @@ const Admin = () => {
   }, [dataUser, navigate]);
 
   const [selectedNavLink, setSelectedNavLink] = useState(0);
+  const [profile, setProfile] = useState(false);
   
   const navAdmin__links=[
-    // {
-    //   title:'Beranda',
-    //   content:<HomepageManagement/>,
-    // },
     {
       title:'Kelola Trip',
       content:<Tripsmanagement/>
@@ -41,18 +40,6 @@ const Admin = () => {
       title:'Pembayaran',
       content:<Paymentmanagement/>,
     },
-    // {
-    //   title:'Kelola Admin',
-    //   content:<AdminManagement/>,
-    // },
-    // {
-    //   title:'Laporan',
-    //   content:<Reportmanagement/>,
-    // },
-    // {
-    //   title:'Histori Transaksi',
-    //   content:<History/>,
-    // },
   ]
 
   const navOwner__links=[
@@ -85,6 +72,12 @@ const Admin = () => {
 
   const handleNavLinkSelected = (index) =>{
     setSelectedNavLink(index);
+    setProfile(false);
+  }
+
+  const handleShowProfile = () =>{
+    setProfile(true);
+    setSelectedNavLink(99);
   }
 
   const logout = () =>{
@@ -107,7 +100,7 @@ const Admin = () => {
             </div>
 
             <div className='leftNavbarMainContent'>
-              <h6 className='menu__title'>Menu</h6>
+              <h6 className='menu__title'>menu</h6>
               <ul className="adminLists">
                   {
                     dataUser.role === 'admin' && (navAdmin__links.map((item,index)=>
@@ -147,12 +140,14 @@ const Admin = () => {
                   </h6>
                 }
               <ul className='other__lists'>
-                <li>
-                  <i className="ri-account-circle-line align-bottom me-1"></i>
+                
+                <li onClick={handleShowProfile}>
+                <i className="ri-account-circle-line align-bottom me-1"></i>
                   <span>
                     Profile
                   </span>
                 </li>
+
                 <li onClick={logout}>
                   <i className="ri-shut-down-line align-bottom me-1"></i>
                   <span>
@@ -168,19 +163,33 @@ const Admin = () => {
 
         <div className='mainContent'>
           <div className='topBarMainContent bg-primary'>
-              { 
-                dataUser.role === 'admin' && (<div className='Content__title'>{navAdmin__links[selectedNavLink].title}</div>)
-              }
-              { 
-                dataUser.role === 'owner' && (<div className='Content__title'>{navOwner__links[selectedNavLink].title}</div>)
+              {
+                profile && selectedNavLink === 99 ? (<div className='Content__title'>Profile</div>) : (
+                  <>
+                    { 
+                      dataUser.role === 'admin' && (<div className='Content__title'>{navAdmin__links[selectedNavLink].title}</div>)
+                    }
+      
+                    { 
+                      dataUser.role === 'owner' && (<div className='Content__title'>{navOwner__links[selectedNavLink].title}</div>)
+                    }
+                  </>
+                )
               }
           </div>
             {
-              dataUser.role === 'admin' && (<div className='bottomMainContent'>{navAdmin__links[selectedNavLink].content}</div>)
+              profile && selectedNavLink === 99 ? (<div className='bottomMainContent'><AdminProfile/></div>) : (
+                <>
+                  {
+                    dataUser.role === 'admin' && (<div className='bottomMainContent'>{navAdmin__links[selectedNavLink].content}</div>)
+                  }
+                  {
+                    dataUser.role === 'owner' && (<div className='bottomMainContent'>{navOwner__links[selectedNavLink].content}</div>)
+                  }
+                </>
+              )
             }
-            {
-              dataUser.role === 'owner' && (<div className='bottomMainContent'>{navOwner__links[selectedNavLink].content}</div>)
-            }
+            
         </div>
       </div>
     )}

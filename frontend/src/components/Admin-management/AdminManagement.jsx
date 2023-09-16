@@ -78,7 +78,7 @@ const AdminManagement = () => {
   return (
     <div className='container pt-3'>
       <h6>Daftar Admin</h6>
-      <table class="table">
+      <table className="table">
         <thead>
           <tr>
             <th scope="col">Id</th>
