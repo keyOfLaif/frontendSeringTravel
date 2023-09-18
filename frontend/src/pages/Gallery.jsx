@@ -21,7 +21,7 @@ const Gallery = () => {
                 <div className='py-3'>
                     <MasonryImagesGallery/>
                     <div className='d-flex align-items-center justify-content-center p-5'>
-                        <div>View More</div>
+                        <div>Lihat</div>
                     </div>
                 </div>
             </div>
