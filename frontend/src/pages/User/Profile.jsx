@@ -13,6 +13,7 @@ import Payment from '../../components/Payment-confirmation/Payment';
 import BiographyForm from '../../components/Biography-form/BiographyForm';
 import EditProfile from '../../components/Edit-profile/EditProfile';
 import FormatDate from '../../shared/FormatDate';
+import PesananTrip from '../../components/Pesanan-trip/PesananTrip';
 
 const Profile = () => {
   const { user, dispatch } = useContext(AuthContext);
@@ -125,7 +126,11 @@ const Profile = () => {
 
             
             <div className='ps-0 p-4'>
-              <h5>Trip Pesanan</h5>
+              <div className='d-flex g-2'>
+                <h5>Pesanan</h5>
+                <h5>Riwayat</h5>
+              </div>
+                
               {console.log(user)}
               <div>
                 {
@@ -191,6 +196,10 @@ const Profile = () => {
                   </div>
                   )
                 }
+              </div>
+
+              <div>
+                <PesananTrip tripPesanan={user.bookings}/>
               </div>
               
             </div>

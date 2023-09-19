@@ -4,7 +4,7 @@ import Schedule from "../models/Schedule.js";
 export const createSchedule = async (req,res)  => {
     
     const tripId = req.params.tripId;
-    const newSchedule = new Schedule({...req.body})
+    const newSchedule = new Schedule({productIdofTrip : tripId, ...req.body})
 
     try {
 

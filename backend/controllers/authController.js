@@ -60,11 +60,16 @@ export const login = async (req, res) => {
 
     try {
 
-        const user = await User.findOne({email}).populate({path:'bookings', populate : {
-            path:'tripBooked', populate : {
-                path:'productIdofTrip'
-            }
-        }})
+        const user = await User.findOne({email}).populate(
+            {
+                path:'bookings', 
+                populate : 
+                {
+                    path:'tripBooked',
+                    populate : {
+                        path:'productIdofTrip'
+                    }
+        }}).exec()
 
         // jika user tidak ditemukan
         if(!user){

@@ -100,18 +100,18 @@ if(location.pathname === "/admin" || location.pathname === "/owner"){
                 ) : (
                   <>
                   {
-                    user.bookings && user.bookings.length > 0 && (
-                      <Button className='btn secondary__btn'>
+                    <Button className='btn secondary__btn'>
                         <div className='position-relative' data-bs-toggle="tooltip" data-bs-placement="bottom" title={`${user.bookings.length} pesanan`}>
                           <Link to={`/${user.username}`}>                        
                                 {user.username}
+                        {user.bookings && user.bookings.length > 0 && (
                                 <Badge pill color='danger' className="position-absolute p-1">
                                   <span className='visually-hidden'></span>
                                 </Badge>
+                        )}
                           </Link>
                         </div>
                       </Button>
-                  )
                   }
                   <Button className='btn primary__btn' onClick={logout}>
                     Logout
