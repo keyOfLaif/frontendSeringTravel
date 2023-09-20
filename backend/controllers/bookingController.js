@@ -19,7 +19,12 @@ export const createBooking = async(req,res) =>{
     });
 
     try {
-        const savedBooking =  await (await newBooking.save()).populate('tripBooked')
+        const savedBooking =  await (await newBooking.save()).populate({
+          path: 'tripBooked',
+          populate : {
+            path: 'productIdofTrip'
+          }
+        })
 
         if(!savedBooking){
             return res.status(400).json({success:false, message:'Gagal Memesan Trip'})

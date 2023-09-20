@@ -1,15 +1,23 @@
 import React from 'react'
+import FormatDate from '../../shared/FormatDate'
+import { BASE_URL } from '../../utils/config'
 
 const PesananTrip = ({tripPesanan}) => {
   return (
     <div>
-        <h6>Bromo</h6>
-        <p>20 Januari 2012</p>
-        <p>Status</p>
         {
             tripPesanan.map((trip, index)=>
-            <div>
-                {trip.tripBooked.tripDate}
+            <div className='d-flex'>
+              <div className='me-2'>
+                <img src={trip.tripBooked.productIdofTrip.photo} style={{width:'80px',height:'100px',objectFit:'cover'}} />
+              </div>
+              <div>
+                <h6>{trip.tripBooked.productIdofTrip.title}</h6>
+                <FormatDate dateString={trip.tripBooked.tripDate}/>
+                <div>
+                  
+                </div>
+              </div>
             </div>
             )
         }

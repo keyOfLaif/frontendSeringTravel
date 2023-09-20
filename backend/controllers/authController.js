@@ -69,7 +69,7 @@ export const login = async (req, res) => {
                     populate : {
                         path:'productIdofTrip'
                     }
-        }}).exec()
+        }})
 
         // jika user tidak ditemukan
         if(!user){

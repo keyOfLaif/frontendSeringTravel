@@ -131,7 +131,6 @@ const Profile = () => {
                 <h5>Riwayat</h5>
               </div>
                 
-              {console.log(user)}
               <div>
                 {
                   user.bookings.map((notif,index)=>
