@@ -14,16 +14,21 @@ import BiographyForm from '../../components/Biography-form/BiographyForm';
 import EditProfile from '../../components/Edit-profile/EditProfile';
 import FormatDate from '../../shared/FormatDate';
 import PesananTrip from '../../components/Pesanan-trip/PesananTrip';
+import RiwayatPesananTrip from '../../components/Riwayat-PesananTrip/RiwayatPesananTrip';
 
 const Profile = () => {
   const { user, dispatch } = useContext(AuthContext);
-
-  const initialBookingStates = user.bookings.map(() => ({
-    showPayment: false,
-    showInputData: false,
-  }));
-  const [bookingStates, setBookingStates] = useState(initialBookingStates);
-
+  const [selectedContent, setSelectedContent] = useState(0);
+  const profileContent = [
+    {
+      title : 'Pesanan',
+      content : <PesananTrip user={user} dispatch={dispatch}/>,
+    },
+    {
+      title : 'Riwayat',
+      content : <RiwayatPesananTrip/>
+    }
+  ]
 
   let profilePict = profilePictDefault;
 
@@ -43,65 +48,6 @@ const Profile = () => {
     setShowEditProfile(!showEditProfile);
   }
 
-  const handleShowInputDataComponent = (index) => {
-    const updatedBookingStates = [...bookingStates];
-    updatedBookingStates[index] = {
-      ...updatedBookingStates[index],
-      showInputData: !updatedBookingStates[index].showInputData,
-    };
-    setBookingStates(updatedBookingStates);
-  }
-  
-  const handleShowPayment = (index) =>{
-    const updatedBookingStates = [...bookingStates];
-    updatedBookingStates[index] = {
-      ...updatedBookingStates[index],
-      showPayment: !updatedBookingStates[index].showPayment,
-    };
-    setBookingStates(updatedBookingStates);
-  }
-
-  const handleSubmitParticipants = async (arrayParticipants, idUpdatedData) =>{
-    try {
-      console.log("data peserta : ", arrayParticipants)
-      const response = await fetch(`${BASE_URL}/bookings/updateBookers/${idUpdatedData}`, {
-        method: 'PUT',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify(arrayParticipants),
-      });
-      const dataReponse = await response.json();
-      return alert(dataReponse.message);
-    } catch (error) {
-      return alert(error.message);
-    }
-  };
-
-  const deleteBooking = async (e) => {
-    try {
-      const confirmed = window.confirm("Apakah anda yakin ingin menghapus pesanan ini?");
-      if(confirmed){
-        const response = await fetch(`${BASE_URL}/bookings/${e}`, {
-          method: 'DELETE',
-          headers: {
-            'content-type': 'application/json',
-          }
-        });
-        const dataReponse = await response.json();
-        const updatedBookings = user.bookings.filter(booking => booking._id !== e);
-        const userDataUpdated = {
-          ...user,
-          bookings:updatedBookings
-        }
-
-        dispatch({type:'UPDATE_USER_DATA', payload: userDataUpdated})
-        return alert(dataReponse.message);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   return (
     <div className='outerContainer'>
@@ -127,78 +73,21 @@ const Profile = () => {
             
             <div className='ps-0 p-4'>
               <div className='d-flex g-2'>
-                <h5>Pesanan</h5>
-                <h5>Riwayat</h5>
+                {
+                  profileContent.map((item, index)=>
+                  <>
+                  <h5 onClick={()=>setSelectedContent(index)}>{item.title}</h5>
+                  </>
+                )}
               </div>
                 
+            
+
               <div>
                 {
-                  user.bookings.map((notif,index)=>
-                  <div className='bookings__lists mb-2' key={index}>
-                    <div className='d-flex align-items-end justify-content-between'>
-                      <div>
-                        Trip <FormatDate dateString={notif.tripBooked.tripDate}/> Untuk : {notif.participantCount} Status Pesanan : {notif.paymentStatus}
-                      </div>
-
-                      <div>
-                        Dp (
-                        {
-                          notif.dp === 0 && <i className='ri-close-line'></i>
-                        }
-                        {
-                          notif.dp === 1 && <i className="ri-loader-2-line"></i>
-                        }
-                        {
-                          notif.dp === 2 && <i className="ri-loader-2-line"></i>
-                        } )
-                      </div>
-
-                      <div>
-                        Lunas (
-                        {
-                          notif.fullPayment === 0 && <i className='ri-close-line'></i>
-                        }
-                        {
-                          notif.fullPayment === 1 && <i className="ri-loader-2-line"></i>
-                        }
-                        {
-                          notif.fullPayment === 2 && <i className="ri-loader-2-line"></i>
-                        } )
-                      </div>
-
-                      {
-                        notif.paymentStatus !== 'lunas' &&
-                        <div onClick={() => handleShowPayment(index)} className='btn__payBooking clicked'>
-                        Bayar
-                        <i className='ri-arrow-down-s-line'></i>
-                        </div>
-                      }
-
-                        {notif.participants.length === 0 ? (
-                          <div onClick={() => handleShowInputDataComponent(index)} className='btn__inputData'>
-                            Isi Data Pemesan
-                            <i className='ri-arrow-down-s-line'></i>
-                          </div>
-                        ) : (
-                          <div>Kamus sudah mengisi data peserta, Mau mengisi lagi?</div>
-                        )}
-                        <i onClick={()=>deleteBooking(notif._id)} className="ri-close-line btn__deleteBooking"></i>
-                    </div>
-
-                    <Collapse isOpen={bookingStates[index].showPayment}>
-                      <Payment dataBookingProcessSent={notif}/>
-                    </Collapse>
-                    
-                    <Collapse isOpen={bookingStates[index].showInputData}>
-                      <BiographyForm numOfParticipants={notif.participantCount - notif.participants.length} idUpdatedData={notif._id} onSubmit={handleSubmitParticipants}/>
-                    </Collapse>
-                  </div>
-                  )
+                  profileContent[selectedContent].content
                 }
-              </div>
-
-              <div>
-                <PesananTrip user={user} dispatch={dispatch}/>
+                           
               </div>
               
             </div>
@@ -207,14 +96,7 @@ const Profile = () => {
               
 
 
-              <Collapse isOpen={showEditProfile}>
-                  <div className='edit__profile'>
-                    <EditProfile user={user} dispatch={dispatch} />
-                    <div className='btn__closeEditProfile' onClick={handleShowEditProfile}>
-                      <i className="ri-close-line"></i>
-                    </div>
-                  </div>
-              </Collapse>
+              
             </div>
             
 
@@ -259,6 +141,16 @@ const Profile = () => {
               <div className='btn__editProfile'>
                Ubah Akun <i className='ri-arrow-right-s-line'></i>
               </div> 
+            </div>
+            <div>
+            <Collapse isOpen={showEditProfile}>
+                  <div className='edit__profile'>
+                    <EditProfile user={user} dispatch={dispatch} />
+                    <div className='btn__closeEditProfile' onClick={handleShowEditProfile}>
+                      <i className="ri-close-line"></i>
+                    </div>
+                  </div>
+              </Collapse>
             </div>
           </Col>
         </Row>

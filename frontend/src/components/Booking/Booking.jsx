@@ -10,6 +10,7 @@ const Booking = ({ trip, avgRating }) => {
 const { schedules, reviews, title } = trip;
 const navigate = useNavigate();
 const { user, dispatch } = useContext(AuthContext);
+const today = new Date()
 
 const [selectedSchedule, setSelectedSchedule] = useState(null);
 const [participantsCounts, setParticipantCounts] = useState(null);
@@ -96,8 +97,9 @@ const [participantsCounts, setParticipantCounts] = useState(null);
                   onChange={handleChangeSchedule}
                 >
                   <option value={null}>Pilih</option>
-                  {schedules?.map((schedule, index) => (
+                  {schedules?.filter(schedule => new Date(schedule.tripDate) > today).map((schedule, index) => (
                     <option value={schedule._id} key={schedule._id}>
+                      
                       <FormatDate dateString={schedule.tripDate}/>
                     </option>
                   ))}

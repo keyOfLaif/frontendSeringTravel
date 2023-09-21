@@ -88,7 +88,6 @@ const Admin = () => {
   return (
     <>{dataUser && (
       <div className='outerAdminContainer d-flex'>
-        {console.log("user :",dataUser)}
         <div className='leftNavbarContainer'>
           
           <div className='leftNavbar d-flex flex-column'>
