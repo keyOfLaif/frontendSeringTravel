@@ -198,7 +198,7 @@ const Profile = () => {
               </div>
 
               <div>
-                <PesananTrip tripPesanan={user.bookings}/>
+                <PesananTrip user={user} dispatch={dispatch}/>
               </div>
               
             </div>
