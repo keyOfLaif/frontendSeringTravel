@@ -11,6 +11,8 @@ import './reportmanagement.css'
 import Chart from './Chart'
 import ReportCard from './ReportCard/ReportCard'
 import FormatDate from '../../shared/FormatDate'
+import ReportPerTrip from './ReportPerTrip/ReportPerTrip'
+import ReportPerSchedule from './ReportPerSchedule/ReportPerSchedule'
 
 const Reportmanagement = () => {
 
@@ -70,7 +72,7 @@ const Reportmanagement = () => {
       };
     };
 
-    const selectedTripData = trips.find(trip=>trip.title === selectedOption)
+    const selectedTripData = trips.find(trip=>trip._id === selectedOption)
 
     if(selectedTripData) {
       const tripInformation = selectedTripData.schedules.map(( schedule, index ) => {
@@ -89,7 +91,7 @@ const Reportmanagement = () => {
         };
       });
   
-      setTripDataPerSchedule(tripInformation);
+      setTripDataPerSchedule(selectedTripData, tripInformation);
     } else {
       setTripDataPerSchedule([])
     }
@@ -98,11 +100,12 @@ const Reportmanagement = () => {
   }, [selectedOption]);
 
   const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
-    setSelectedTripIndex('all'); // Mengubah state ketika opsi select berubah
+    setSelectedOption(event.target.value); // Mengubah state ketika opsi select berubah
   };
 
-  const selectedReport = tripDataPerSchedule.find((selectedTripReport) => selectedTripReport.tripDate === selectedTripIndex);
+  const selectedTripData = trips.find(trip=>trip._id === selectedOption)
+
+  // const selectedReport = tripDataPerSchedule.find((selectedTripReport) => selectedTripReport._id === selectedTripIndex);
 
   return (
     <div className='adminSectionMainContent'>
@@ -111,137 +114,155 @@ const Reportmanagement = () => {
       <select name="" id="" onChange={handleOptionChange}>
         <option value="all">All</option>
         {trips.map((trips, index) => (
-          <option value={trips.title} key={index}>
+          <option value={trips._id} key={index}>
             {trips.title}
           </option>
         ))}
       </select>
       {/* pada bagian ini adalah menampilkan schedules/jadwal yang ada pada data yang terpilih sebelumnya pada select tag */}
-      {selectedOption !== 'all' &&(
-        <div className='listsTripCount'>
-          <div className={`btn__Trip ${selectedTripIndex === 'all' ? 'selectedButton' : ''}`} key={'all'} onClick={()=>handleShowReport('all')}>
-            All
-          </div>
-          {tripDataPerSchedule.map((tripData, index) => (
-            <div className={`btn__Trip ${selectedTripIndex === tripData.tripDate ? 'selectedButton' : ''}`} key={tripData.tripDate} onClick={()=>handleShowReport(tripData.tripDate)}>Trip ke-{index+1}</div>
-          ))
-          }
-      </div>
-      )}
+      {
+        selectedOption === 'all' ? '' : (<div className='listsTripCount'>
+        <div className={`btn__Trip ${selectedTripIndex === 'all' ? 'selectedButton' : ''}`} key={'all'} onClick={()=>handleShowReport('all')}>
+          All
+        </div>
+        {selectedTripData.schedules.map((loopingSelectedTripData, index) => (
+          <div className={`btn__Trip ${selectedTripIndex === loopingSelectedTripData._id ? 'selectedButton' : ''}`} key={loopingSelectedTripData._id} onClick={()=>handleShowReport(loopingSelectedTripData._id)}>Trip ke-{index+1}</div>
+        ))
+        }
+    </div>)
+      }
         
-
       </div>
+      {console.log("Dipilih ID Trip: ", selectedOption)}
+      {console.log("Dipilih tripDataPerSchedule", selectedTripIndex)}
+
+      
 
       <div className='botNavReportManagement'>
         {/* ini adalah yang ditampilkan ketika memilih select trip dari jsonData maka otomatis menampilkan tampilan all */}
         {
-          selectedTripIndex === "all" && 
-          <div className='reportAll'>
-            <ReportCard/>
-          </div>
+          // selectedTripIndex === "all" && 
+          // <div className='reportAll'>
+          //   <ReportCard/>
+          // </div>
         }
+
         {/* bagian ini adalah menampilkan data yang dipilih dari schedules yang ada pada setiap Trip */}
-        {selectedReport && (
-          <div className='frame__report'>
-            <h6>Jadwal : <FormatDate dateString={selectedReport.tripDate}/> </h6>
-            <h6>Harga : {selectedReport.price}</h6>
-            <h6>Peserta : {selectedReport.maxParticipant}</h6>
+        {
+        // selectedReport && (
+        //   <div className='frame__report'>
+        //     <h6>Jadwal : <FormatDate dateString={selectedReport.tripDate}/> </h6>
+        //     <h6>Harga : {selectedReport.price}</h6>
+        //     <h6>Peserta : {selectedReport.maxParticipant}</h6>
             
-            <div className='frame__chartCard'>
+        //     <div className='frame__chartCard'>
 
-              <div className='chartCard'>
-                <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]} dataIndicator={["Perempuan","Laki-laki"]}/>
-              </div>
+        //       <div className='chartCard'>
+        //         <Chart data={[selectedReport.genderPercentage.female,selectedReport.genderPercentage.male]} dataIndicator={["Perempuan","Laki-laki"]}/>
+        //       </div>
 
-              <div className='chartCard'>
-                <Chart 
-                  data={
-                    [
-                      selectedReport.jobPercentage.bekerja,
-                      selectedReport.jobPercentage.pelajar
-                    ]
-                  }
-                  dataIndicator={["Pekerja","Pelajar"]}
+        //       <div className='chartCard'>
+        //         <Chart 
+        //           data={
+        //             [
+        //               selectedReport.jobPercentage.bekerja,
+        //               selectedReport.jobPercentage.pelajar
+        //             ]
+        //           }
+        //           dataIndicator={["Pekerja","Pelajar"]}
                   
-                />
-              </div>
+        //         />
+        //       </div>
 
-              <div className='chartCard'>
-                <Chart 
-                  data={
-                    [
-                      selectedReport.cityPercentage.Jakarta,
-                      selectedReport.cityPercentage.Depok,
-                      selectedReport.cityPercentage.Tangerang,
-                      selectedReport.cityPercentage.Bekasi,
-                    ]
-                  }
-                  dataIndicator={["Jakarta","Depok","Tangerang","Bekasi"]}
-                />
-              </div>
+        //       <div className='chartCard'>
+        //         <Chart 
+        //           data={
+        //             [
+        //               selectedReport.cityPercentage.Jakarta,
+        //               selectedReport.cityPercentage.Depok,
+        //               selectedReport.cityPercentage.Tangerang,
+        //               selectedReport.cityPercentage.Bekasi,
+        //             ]
+        //           }
+        //           dataIndicator={["Jakarta","Depok","Tangerang","Bekasi"]}
+        //         />
+        //       </div>
 
-              {/* <div className='chartCard'>
-              </div> */}
-            </div>
+        //       {/* <div className='chartCard'>
+        //       </div> */}
+        //     </div>
             
-            <div className='table__container bg-black'>
-            <h5>Data Peserta</h5>
-              <Table color='black'
-                bordered
-                hover
-                responsive
-                >
-                <thead>
-                    <tr>
-                    <th>
-                        No
-                    </th>
-                    <th>
-                        Nama
-                    </th>
-                    <th>
-                        Tanggal Lahir
-                    </th>
-                    <th>
-                        Gender
-                    </th>
-                    <th>
-                        Pekerjaan
-                    </th>
-                    <th>
-                        City
-                    </th>
-                    </tr>
-                </thead>
-                <tbody>
-                  {selectedReport.participants.map((participant, pIndex) => (
+        //     <div className='table__container bg-black'>
+        //     <h5>Data Peserta</h5>
+        //       <Table color='black'
+        //         bordered
+        //         hover
+        //         responsive
+        //         >
+        //         <thead>
+        //             <tr>
+        //             <th>
+        //                 No
+        //             </th>
+        //             <th>
+        //                 Nama
+        //             </th>
+        //             <th>
+        //                 Tanggal Lahir
+        //             </th>
+        //             <th>
+        //                 Gender
+        //             </th>
+        //             <th>
+        //                 Pekerjaan
+        //             </th>
+        //             <th>
+        //                 City
+        //             </th>
+        //             </tr>
+        //         </thead>
+        //         <tbody>
+        //           {selectedReport.participants.map((participant, pIndex) => (
                       
-                      <tr key={pIndex}>
-                        <th scope="row">
-                          {pIndex+1}
-                        </th>
-                        <td>
-                          {participant.name}
-                        </td>
-                        <td>
-                          {participant.birthDay}
-                        </td>
-                        <td>
-                          {participant.gender}
-                        </td>
-                        <td>
-                          {participant.job}
-                        </td>
-                        <td>
-                          {participant.city}
-                        </td>
-                      </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        )}
+        //               <tr key={pIndex}>
+        //                 <th scope="row">
+        //                   {pIndex+1}
+        //                 </th>
+        //                 <td>
+        //                   {participant.name}
+        //                 </td>
+        //                 <td>
+        //                   {participant.birthDay}
+        //                 </td>
+        //                 <td>
+        //                   {participant.gender}
+        //                 </td>
+        //                 <td>
+        //                   {participant.job}
+        //                 </td>
+        //                 <td>
+        //                   {participant.city}
+        //                 </td>
+        //               </tr>
+        //           ))}
+        //         </tbody>
+        //       </Table>
+        //     </div>
+        //   </div>
+        // )
+        }
+
+      {
+        selectedOption === 'all' && <ReportCard/>
+      }
+
+      {
+        selectedOption !== 'all' && selectedTripIndex === 'all' && (<ReportPerTrip idTrip = {selectedOption}/>)
+      }
+
+      {
+        selectedOption !== 'all' && selectedTripIndex !== 'all' && (<ReportPerSchedule idTrip = {selectedOption} idSchedule={selectedTripIndex}/>)
+      }
 
       </div>
     </div>
