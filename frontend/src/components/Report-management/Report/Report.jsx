@@ -57,7 +57,7 @@ const Report = () => {
                 <h5>
                     {fullReport.totalParticipants}
                 </h5>
-                <i class="ri-team-fill iconCard"></i>
+                <i className="ri-team-fill iconCard"></i>
             </div>
 
             <div className='totalReport__Card'>
@@ -67,7 +67,7 @@ const Report = () => {
                 <h5>
                     {fullReport.totalMaleParticipants}
                 </h5>
-                <i class="ri-men-fill iconCard"></i>
+                <i className="ri-men-fill iconCard"></i>
             </div>
 
             <div className='totalReport__Card'>
@@ -77,7 +77,7 @@ const Report = () => {
                 <h5>
                     {fullReport.totalFemaleParticipants}
                 </h5>
-                <i class="ri-women-fill iconCard"></i>
+                <i className="ri-women-fill iconCard"></i>
             </div>
 
             <div className='totalReport__Card'>
@@ -97,7 +97,7 @@ const Report = () => {
                 <h5 style={{fontSize:'2rem'}}>
                     {fullReport.totalProfit}
                 </h5>
-                <i class="ri-wallet-2-fill iconCard"></i>
+                <i className="ri-wallet-2-fill iconCard"></i>
             </div>
         </div>
         

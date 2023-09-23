@@ -161,6 +161,7 @@ export const getReportPerSchedule = async(req,res)=>{
         const income = scheduleTrip.price * scheduleTrip.participants.length
         let participantsSet = new Set();
         let genderCounts = { male: 0, female: 0 };
+        let cityCounts = {};
 
         scheduleTrip.participants.forEach((participant) => {
         // Gunakan email peserta sebagai identifier untuk memeriksa duplikasi
@@ -176,18 +177,24 @@ export const getReportPerSchedule = async(req,res)=>{
             genderCounts.female += 1; // Perempuan
             }
         }
+        cityCounts[participant.city] = (cityCounts[participant.city] || 0)+1;
         });
         const totalMaleParticipants = genderCounts.male;
         const totalFemaleParticipants = genderCounts.female;
         const totalParticipants = totalMaleParticipants+totalFemaleParticipants;
+        const totalCity = Object.keys(cityCounts).length;
 
       res.status(200).json({
           success: true,
           message: "Berhasil memuat semua trip",
-          income,
-          totalMaleParticipants,
-          totalFemaleParticipants,
-          totalParticipants
+          data : {
+            income,
+            totalMaleParticipants,
+            totalFemaleParticipants,
+            totalParticipants,
+            totalCity,
+            cityCounts
+          }
       })
       
   } catch (err) {
