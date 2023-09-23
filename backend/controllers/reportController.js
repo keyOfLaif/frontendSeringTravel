@@ -52,19 +52,22 @@ export const getFullReport = async(req,res)=>{
         const totalMaleParticipants = genderCounts.male;
         const totalFemaleParticipants = genderCounts.female;
         const totalParticipants = totalMaleParticipants+totalFemaleParticipants;
+        const totalTrip = trips.length;
 
       res.status(200).json({
           success: true,
           message: "Berhasil memuat semua trip",
-          totalTrip: trips.length,
-          totalSchedule,
-          totalProfit,
-          totalReview,
-          totalCompletedSchedules,
-          totalUpcomingSchedules,
-          totalMaleParticipants,
-          totalFemaleParticipants,
-          totalParticipants
+          data : {
+            totalTrip,
+            totalSchedule,
+            totalProfit,
+            totalReview,
+            totalCompletedSchedules,
+            totalUpcomingSchedules,
+            totalMaleParticipants,
+            totalFemaleParticipants,
+            totalParticipants
+          }
       })
       
   } catch (err) {

@@ -13,6 +13,7 @@ import ReportCard from './ReportCard/ReportCard'
 import FormatDate from '../../shared/FormatDate'
 import ReportPerTrip from './ReportPerTrip/ReportPerTrip'
 import ReportPerSchedule from './ReportPerSchedule/ReportPerSchedule'
+import Report from './Report/Report'
 
 const Reportmanagement = () => {
 
@@ -133,8 +134,8 @@ const Reportmanagement = () => {
       }
         
       </div>
-      {console.log("Dipilih ID Trip: ", selectedOption)}
-      {console.log("Dipilih tripDataPerSchedule", selectedTripIndex)}
+      {/* {console.log("Dipilih ID Trip: ", selectedOption)}
+      {console.log("Dipilih tripDataPerSchedule", selectedTripIndex)} */}
 
       
 
@@ -253,7 +254,7 @@ const Reportmanagement = () => {
         }
 
       {
-        selectedOption === 'all' && <ReportCard/>
+        selectedOption === 'all' && <Report/>
       }
 
       {
