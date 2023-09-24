@@ -58,7 +58,6 @@ const Paymentmanagement = () => {
     };
 
     const handleCompleteBooking = async (bookingId) => {
-        console.log("nomor booking :", bookingId)
         try {
             const response = await fetch(`${BASE_URL}/bookings/completeBooking/${bookingId}`, {
                 method: 'PUT',
@@ -121,7 +120,7 @@ const Paymentmanagement = () => {
   return (<>
     {
         showImage && 
-            <ImagePrev imageUrl={`/paymentProofs/${imageBeingPrev}`}
+            <ImagePrev imageUrl={imageBeingPrev}
             onClose={handleCloseImagePrev}
             />
     }
@@ -166,12 +165,11 @@ const Paymentmanagement = () => {
                     <td scope="row">
                         {
                             <div onClick={() => {
-                                console.log("Clicked on dp image, imageBeingPrev:", booking.paymentProofs.dp);
-                                handleImagePrev(booking.paymentProofs.dp);
+                                handleImagePrev(booking.dpProofs);
                             }}>1. Dp</div>
                         } 
                         {
-                            <div onClick={()=>handleImagePrev(booking.paymentProofs.fullPayment)}>
+                            <div onClick={()=>handleImagePrev(booking.fullPaymentProofs)}>
                                 2. Pelunasan
                             </div>
                         } 

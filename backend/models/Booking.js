@@ -55,6 +55,11 @@ const bookingSchema = new mongoose.Schema(
     bookingExpiration: {
       type: Date,
     },
+
+    bookingComplete:{
+      type: Boolean,
+      default: false
+    }
   },
   { timestamps: true }
 );
