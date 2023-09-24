@@ -90,7 +90,12 @@ const PesananTrip = ({user, dispatch}) => {
                   <h6>{trip.tripBooked.productIdofTrip.title}</h6>
                   <FormatDate dateString={trip.tripBooked.tripDate}/>
                   <div className='aksi d-flex mt-auto'>
-                    <div onClick={() => handleShowPayment(index)} className='btn__payBooking'>Bayar<i className='ri-arrow-down-s-line'></i></div>
+                    {
+                      trip.paymentProofs.fullPayment === '' ? (<div onClick={() => handleShowPayment(index)} className='btn__payBooking'>Bayar<i className='ri-arrow-down-s-line'></i></div>) : (
+                        <div className='me-3'>Menunggu Dikonfirmasi</div>
+                      )
+                    }
+                    
                     <div onClick={() => handleShowInputDataComponent(index)} className='btn__inputData'>Isi Data Pemesan<i className='ri-arrow-down-s-line'></i></div>
                     <div className='ms-auto'>
                     <i onClick={()=>deleteBooking(trip._id)} className="ri-close-line btn__deleteBooking"></i>

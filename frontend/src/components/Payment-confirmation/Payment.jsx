@@ -1,20 +1,23 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 
 import './payment.css'
 
 import ImagePreview from '../InputImagePreview/ImagePreview'
 import { BASE_URL } from '../../utils/config';
+import { AuthContext } from '../../context/AuthContext';
 
 const Payment = ({dataBookingProcessSent}) => {
+  const {user, dispatch} = useContext(AuthContext)
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [paymentType, setPaymentType] = useState('')
+  const [paymentType, setPaymentType] = useState('DP')
 
 
   const handlePaymentTypeChange = (event) => {
     const selectedPaymentType = event.target.value;
     setPaymentType(selectedPaymentType);
   };
+
   const handleImageInputted = (event) =>{
     const file = event.target.files[0];
     const allowedTypes = ['image/jpeg', 'image/png'];
@@ -45,12 +48,24 @@ const Payment = ({dataBookingProcessSent}) => {
   
         const responseData = await response.json();
 
-        // const bookingsDataUpdated = {
-        //   ...user,
-        //   bookings:[...user.bookings, responseData.data]
-        // }
+        const updatedBookings = user.bookings.map((booking) => {
+          if (booking._id === dataBookingProcessSent._id) {
+            // Jika ID cocok, gunakan data update
+            return {
+              ...booking,
+              ...responseData.data,
+            };
+          }
+          // Jika ID tidak cocok, kembalikan objek booking tanpa perubahan
+          return booking;
+        });
 
-        // dispatch({type:'UPDATE_USER_DATA', payload: bookingsDataUpdated})
+        console.log("Data updatedbookings : ", updatedBookings)
+        
+        // Simpan data yang telah diperbarui ke Redux store atau tempat penyimpanan data yang sesuai
+        dispatch({ type: 'UPDATE_USER_DATA', payload: {...user, updatedBookings} });
+
+
         return alert(responseData.message);
       }
     } 
@@ -67,11 +82,14 @@ const Payment = ({dataBookingProcessSent}) => {
           <form>
             <div>
 
-              <select required onChange={handlePaymentTypeChange}>
+              <select required onChange={handlePaymentTypeChange} value={paymentType}>
                 {
-                  dataBookingProcessSent.dp === 0 && <option value="DP">Bayar DP Rp.{dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price/2)}</option>
+                  dataBookingProcessSent.paymentProofs.dp === '' ? (<option value="DP">Bayar DP Rp.{dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price/2)}</option>) : null
                 }
-                <option value="FullPayment">Bayar Pelunasan {dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price)}</option>
+                {
+                  dataBookingProcessSent.paymentProofs.fullPayment === '' ? (<option value="FullPayment">Bayar Pelunasan {dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price)}</option>) : null
+                }
+                
               </select>
             </div>
 

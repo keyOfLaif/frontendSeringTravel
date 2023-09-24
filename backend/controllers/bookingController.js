@@ -284,7 +284,7 @@ export const payBooking = async (req, res) => {
         if (!updatedBooking) {
           return res.status(404).json({ message: 'Booking not Found' });
         }
-          return res.json({success: true, message: 'Payment processed Successfully' });
+          return res.status(200).json({success: true, message: 'Payment processed Successfully', data: updateFields});
         } catch (err) {
           return res.status(500).json({ message: 'Error updating booking data' });
         }

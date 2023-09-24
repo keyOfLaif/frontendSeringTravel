@@ -3,7 +3,6 @@ import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap'
 
 import './biographyForm.css'
 import { AuthContext } from '../../context/AuthContext'
-import FormatDate from '../../shared/FormatDate'
 
 const BiographyForm = ({numOfParticipants, idUpdatedData, onSubmit, participantData}) => {
   function formatDate(dateString) {
