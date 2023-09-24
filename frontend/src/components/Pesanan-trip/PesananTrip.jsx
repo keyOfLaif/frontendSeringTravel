@@ -91,7 +91,7 @@ const PesananTrip = ({user, dispatch}) => {
                   <FormatDate dateString={trip.tripBooked.tripDate}/>
                   <div className='aksi d-flex mt-auto'>
                     {
-                      trip.paymentProofs.fullPayment === '' ? (<div onClick={() => handleShowPayment(index)} className='btn__payBooking'>Bayar<i className='ri-arrow-down-s-line'></i></div>) : (
+                      trip.fullPaymentProofs === '' ? (<div onClick={() => handleShowPayment(index)} className='btn__payBooking'>Bayar<i className='ri-arrow-down-s-line'></i></div>) : (
                         <div className='me-3'>Menunggu Dikonfirmasi</div>
                       )
                     }
@@ -104,7 +104,7 @@ const PesananTrip = ({user, dispatch}) => {
                 </div>
                 <div>
                   <Collapse isOpen={bookingStates[index].showPayment}>
-                    <Payment dataBookingProcessSent={trip}/>
+                    <Payment dataBookingProcessSent={trip} onPaymentComplete={() => handleShowPayment(index)}/>
                   </Collapse>
                   <Collapse isOpen={bookingStates[index].showInputData}>
                     <BiographyForm numOfParticipants={trip.participantCount} idUpdatedData={trip._id} onSubmit={handleSubmitParticipants} participantData={trip.participants}/>

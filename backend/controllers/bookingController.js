@@ -25,7 +25,7 @@ export const createBooking = async(req,res) =>{
       });
     }
 
-    console.log("Jumlah peserta : ", participantCount)
+    
     // Create a new booking instance and set the userBooking and tripBooked fields
     const newBooking = new Booking({
         ...req.body,
@@ -264,13 +264,9 @@ export const payBooking = async (req, res) => {
       // Menentukan objek bukti pembayaran sesuai dengan paymentTypes
       let updateFields = {};
       if (req.body.paymentType === 'DP') {
-        updateFields.dp = 1;
-        updateFields['paymentProofs.dp'] = paymentProof;
-        updateFields.paymentStatus = 'menunggu konfirmasi dp'
+        updateFields.dpProofs = paymentProof;
       } else if (req.body.paymentType === 'FullPayment') {
-        updateFields.fullPayment = 1;
-        updateFields['paymentProofs.fullPayment'] = paymentProof;
-        updateFields.paymentStatus = 'menunggu konfirmasi pelunasan'
+        updateFields.fullPaymentProofs = paymentProof;
       }
 
       try {
@@ -279,7 +275,8 @@ export const payBooking = async (req, res) => {
           { $set: updateFields },
           { new: true }
         );
-        console.log('updatedBooking :', updateFields)
+
+        console.log("Data yang dirubah ", updateFields)
 
         if (!updatedBooking) {
           return res.status(404).json({ message: 'Booking not Found' });

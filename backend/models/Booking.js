@@ -42,25 +42,14 @@ const bookingSchema = new mongoose.Schema(
     }
     ],
 
-    dp: {
-      type: Number,
-      default: 0
-    },
-    
-    fullPayment: {
-      type: Number,
-      default: 0
+    dpProofs:{
+      type:String,
+      default:'',
     },
 
-    paymentProofs:{
-      dp : { type : String, default: ''},
-      fullPayment : {type : String, default:''},
-    },
-
-    paymentStatus: {
-      type: String,
-      enum: ['menunggu pembayaran', 'menunggu konfirmasi dp','dp terbayar', 'menunggu konfirmasi pelunasan','lunas'],
-      default: 'menunggu pembayaran',
+    fullPaymentProofs:{
+      type:String,
+      default:'',
     },
 
     bookingExpiration: {

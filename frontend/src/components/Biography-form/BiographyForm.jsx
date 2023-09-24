@@ -37,8 +37,7 @@ const BiographyForm = ({numOfParticipants, idUpdatedData, onSubmit, participantD
 
   const handleSave = () => {
     // Prepare data in the format expected by onSubmit
-    const dataToSubmit = newParticipantData.map((participant) => ({
-      id: participant.id, // Add an ID property if you have it
+    const dataToSubmit = newParticipantData.map((participant) => ({// Add an ID property if you have it
       name: participant.name,
       email: participant.email,
       phone: participant.phone,

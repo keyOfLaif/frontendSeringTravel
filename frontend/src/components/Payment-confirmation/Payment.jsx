@@ -6,11 +6,11 @@ import ImagePreview from '../InputImagePreview/ImagePreview'
 import { BASE_URL } from '../../utils/config';
 import { AuthContext } from '../../context/AuthContext';
 
-const Payment = ({dataBookingProcessSent}) => {
+const Payment = ({dataBookingProcessSent, onPaymentComplete}) => {
   const {user, dispatch} = useContext(AuthContext)
   const [selectedImage, setSelectedImage] = useState(null);
   const [errorMessage, setErrorMessage] = useState('');
-  const [paymentType, setPaymentType] = useState('DP')
+  const [paymentType, setPaymentType] = useState('pilih')
 
 
   const handlePaymentTypeChange = (event) => {
@@ -47,25 +47,32 @@ const Payment = ({dataBookingProcessSent}) => {
         });
   
         const responseData = await response.json();
+        const updatedBooking = responseData.data;
 
-        const updatedBookings = user.bookings.map((booking) => {
-          if (booking._id === dataBookingProcessSent._id) {
-            // Jika ID cocok, gunakan data update
-            return {
-              ...booking,
-              ...responseData.data,
-            };
-          }
-          // Jika ID tidak cocok, kembalikan objek booking tanpa perubahan
-          return booking;
-        });
-
-        console.log("Data updatedbookings : ", updatedBookings)
+        const bookingIndexToUpdate = user.bookings.findIndex(booking => booking._id === dataBookingProcessSent._id);
         
         // Simpan data yang telah diperbarui ke Redux store atau tempat penyimpanan data yang sesuai
-        dispatch({ type: 'UPDATE_USER_DATA', payload: {...user, updatedBookings} });
+        if(paymentType === 'DP'){
+          if (bookingIndexToUpdate !== -1) {
+            // Buat salinan user dan perbarui objek "bookings" yang sesuai
+            const updatedUser = { ...user };
+            updatedUser.bookings[bookingIndexToUpdate].dpProofs = updatedBooking.dpProofs;
+          
+            // Dispatch action untuk memperbarui state Redux
+            dispatch({ type: 'UPDATE_USER_DATA', payload: updatedUser });
+          }
+        } else if(paymentType === 'FullPayment'){
+          if (bookingIndexToUpdate !== -1) {
+            // Buat salinan user dan perbarui objek "bookings" yang sesuai
+            const updatedUser = { ...user };
+            updatedUser.bookings[bookingIndexToUpdate].fullPaymentProofs = updatedBooking.fullPaymentProofs;
+          
+            // Dispatch action untuk memperbarui state Redux
+            dispatch({ type: 'UPDATE_USER_DATA', payload: updatedUser });
+          }
+        }
 
-
+        onPaymentComplete();
         return alert(responseData.message);
       }
     } 
@@ -83,11 +90,12 @@ const Payment = ({dataBookingProcessSent}) => {
             <div>
 
               <select required onChange={handlePaymentTypeChange} value={paymentType}>
+                <option value="pilih">Pilih</option>
                 {
-                  dataBookingProcessSent.paymentProofs.dp === '' ? (<option value="DP">Bayar DP Rp.{dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price/2)}</option>) : null
+                  dataBookingProcessSent.dpProofs === '' ? (<option value="DP">Bayar DP Rp.{dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price/2)}</option>) : null
                 }
                 {
-                  dataBookingProcessSent.paymentProofs.fullPayment === '' ? (<option value="FullPayment">Bayar Pelunasan {dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price)}</option>) : null
+                  dataBookingProcessSent.fullPaymentProofs === '' ? (<option value="FullPayment">Bayar Pelunasan {dataBookingProcessSent.participantCount * (dataBookingProcessSent.tripBooked.price)}</option>) : null
                 }
                 
               </select>
