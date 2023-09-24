@@ -82,7 +82,7 @@ const PesananTrip = ({user, dispatch}) => {
     <div>
         {
             user.bookings.map((trip, index)=>
-            <div className='d-flex w-100'>
+            (<div key={index} className='d-flex w-100'>
               <img src={trip.tripBooked.productIdofTrip.photo} alt='tripImage' style={{width:'80px',height:'100px',objectFit:'cover', marginRight:'0.75rem'}} />
               
               <div className='d-flex flex-column w-100'>
@@ -106,7 +106,7 @@ const PesananTrip = ({user, dispatch}) => {
                   </Collapse>
                 </div>
               </div>
-            </div>
+            </div>)
             )
         }
     </div>

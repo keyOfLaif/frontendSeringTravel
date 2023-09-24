@@ -1,156 +1,129 @@
 import React, {useContext, useState, useEffect} from 'react'
-import { Form, FormGroup, Label, Input, Button } from 'reactstrap'
+import { Form, FormGroup, Label, Input, Button, Alert } from 'reactstrap'
 
 import './biographyForm.css'
 import { AuthContext } from '../../context/AuthContext'
+import FormatDate from '../../shared/FormatDate'
 
-  const BiographyForm = ({numOfParticipants, idUpdatedData, onSubmit, participantData}) => {
-
-    const {user, dispatch} = useContext(AuthContext)
-    // console.log("Data participants : ",participantData)
-
-    const [newParticipantData, setNewParticipantData] = useState([...participantData]);
-
-    const [areParticipantDataChanged, setAreParticipantDataChanged] = useState(false);
-
-    const handleParticipantDataChange = (index, field, value) => {
-      const updatedParticipantData = [...newParticipantData];
-      updatedParticipantData[index][field] = value;
-      setNewParticipantData(updatedParticipantData);
-      setAreParticipantDataChanged(true);
-    };
-
-    const handleSave = () => {
-      // Simpan perubahan ke server (Anda perlu mengimplementasikan logika ini)
+const BiographyForm = ({numOfParticipants, idUpdatedData, onSubmit, participantData}) => {
+  function formatDate(dateString) {
+    if (!dateString) return ''; // Mengembalikan string kosong jika tanggal kosong
   
-      // Setelah berhasil disimpan, perbarui state user dan reset status perubahan
-      dispatch({
-        type: 'UPDATE_USER_DATA',
-        payload: {
-          ...user,
-          participants: [...newParticipantData],
-        },
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}`;
+  }
+
+  const {user, dispatch} = useContext(AuthContext)
+
+  const [newParticipantData, setNewParticipantData] = useState([]);
+  const [areParticipantDataChanged, setAreParticipantDataChanged] = useState(false);
+  const [isSaveSuccess, setIsSaveSuccess] = useState(false);
+
+  useEffect(() => {
+    setNewParticipantData([...participantData]);
+    setAreParticipantDataChanged(false); // At initialization, data is not changed
+    setIsSaveSuccess(false); // Reset the save success message
+  }, [participantData]);
+
+  const handleParticipantDataChange = (index, field, value) => {
+    const updatedParticipantData = [...newParticipantData];
+    updatedParticipantData[index][field] = value;
+    setNewParticipantData(updatedParticipantData);
+    setAreParticipantDataChanged(true);
+  };
+
+  const handleSave = () => {
+    // Prepare data in the format expected by onSubmit
+    const dataToSubmit = newParticipantData.map((participant) => ({
+      id: participant.id, // Add an ID property if you have it
+      name: participant.name,
+      email: participant.email,
+      phone: participant.phone,
+      birthDay: participant.birthDay,
+      city: participant.city,
+      gender: participant.gender,
+      job: participant.job,
+    }));
+
+    // Simpan perubahan ke server (Anda perlu mengimplementasikan logika ini)
+    onSubmit(dataToSubmit, idUpdatedData)
+      .then(() => {
+        // Setelah berhasil disimpan, perbarui state user dan reset status perubahan
+        dispatch({
+          type: 'UPDATE_USER_DATA',
+          payload: {
+            ...user,
+            participants: dataToSubmit,
+          },
+        });
+        setAreParticipantDataChanged(false);
+        setIsSaveSuccess(true);
+      })
+      .catch((error) => {
+        console.error('Gagal menyimpan data:', error);
+        // Handle error here, e.g., display an error message to the user
       });
-      setAreParticipantDataChanged(false);
-    };
+  };
 
-    useEffect(() => {
-      setAreParticipantDataChanged(!arrayEquals(newParticipantData, participantData));
-    }, [newParticipantData, participantData]);
-
-    const arrayEquals = (array1, array2) => {
-      if (array1.length !== array2.length) return false;
-      for (let i = 0; i < array1.length; i++) {
-        if (array1[i].name !== array2[i].name || array1[i].email !== array2[i].email) {
-          return false;
-        }
-      }
-      return true;
-    };
-
-    const initialFormData = {
-      participantName: '',
-      participantEmail: '',
-      participantPhoneNumber: '',
-      participantCity: 'Jakarta',
-      participantGender: 'laki-laki',
-      participantJob: 'Pekerja',
-      participantBirthDay: '',
-    };
-  
-    const [formData, setFormData] = useState(Array.from({ length: numOfParticipants }, () => ({ ...initialFormData })));
   
     const cities = ['Jakarta', 'Bogor', 'Depok', 'Tangerang', 'Bekasi'];
     const genders = ['laki-laki', 'perempuan'];
     const jobs = ['Pekerja', 'Pelajar', 'Lainnya'];
   
-    const handleInputChange = (index, field, value) => {
-      const newFormData = [...formData];
-      newFormData[index][field] = value;
-      setFormData(newFormData);
-    };
-  
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      onSubmit(formData, idUpdatedData);
-    };
-
+    
   return (
     <div className='frame__biographyForm'>
-      {console.log("participants : ",participantData)}
-      <Form onSubmit={handleSubmit}>
+      <Form >
         {
           newParticipantData.map((newParticipant, index)=>(
-            <div>
+            <div key={index}>
+              <h6>Peserta {index+1}</h6>
             <FormGroup>
-              <Label for="name">Nama</Label>
+              <Label>Nama</Label>
               <Input
                 value={newParticipant.name}
-                onChange={(e) => handleParticipantDataChange(index, 'namateman', e.target.value)}
-                type="string"
-              />
-            </FormGroup>
-            </div>
-          ))
-        }
-        {formData.map((data, index) => (
-          <div key={index}>
-            <h4>Data Peserta {index+1}</h4>
-            <FormGroup>
-              <Label for={`participantName${index}`}>Nama</Label>
-              <Input
-                id={`participantName${index}`}
-                name={`participantName${index}`}
-                value={data.participantName}
-                onChange={(event) => handleInputChange(index, 'participantName', event.target.value)}
-                placeholder="Kimi No Nawa"
+                onChange={(e) => handleParticipantDataChange(index, 'name', e.target.value)}
                 type="string"
               />
             </FormGroup>
 
             <FormGroup>
-              <Label for={`participantEmail${index}`}>Email</Label>
+              <Label>Email</Label>
               <Input
-                id={`participantEmail${index}`}
-                name={`participantEmail${index}`}
-                value={data.participantEmail}
-                onChange={(event) => handleInputChange(index, 'participantEmail', event.target.value)}
-                placeholder="Email"
+                value={newParticipant.email}
+                onChange={(e) => handleParticipantDataChange(index, 'email', e.target.value)}
                 type="email"
               />
             </FormGroup>
 
             <FormGroup>
-              <Label for={`participantPhoneNumber${index}`}>No Hp</Label>
+              <Label>No Hp</Label>
               <Input
-                id={`participantPhoneNumber${index}`}
-                name={`participantPhoneNumber${index}`}
-                value={data.participantPhoneNumber}
-                onChange={(event) => handleInputChange(index, 'participantPhoneNumber', event.target.value)}
-                placeholder="Nomor Hp"
+                value={newParticipant.phone}
+                onChange={(e) => handleParticipantDataChange(index, 'phone', e.target.value)}
                 type="string"
               />
             </FormGroup>
 
             <FormGroup>
-              <Label for={`participantBirthDay${index}`}>Tanggal Lahir</Label>
+              <Label>Tanggal Lahir</Label>
               <Input
-                id={`participantBirthDay${index}`}
-                name={`participantBirthDay${index}`}
-                value={data.participantBirthDay}
-                onChange={(event) => handleInputChange(index, 'participantBirthDay', event.target.value)}
+                value={formatDate(newParticipant.birthDay)}
+                onChange={(e) => handleParticipantDataChange(index, 'birthDay', e.target.value)}
                 type="date"
               />
             </FormGroup>
 
             <FormGroup>
-              <Label for={`participantCity${index}`}>Asal Kota</Label>
+              <Label>Asal Kota</Label>
               <Input
-                id={`participantCity${index}`}
-                name={`participantCity${index}`}
                 type="select"
-                value={data.participantCity}
-                onChange={(event) => handleInputChange(index, 'participantCity', event.target.value)}
+                value={newParticipant.city}
+                onChange={(e) => handleParticipantDataChange(index, 'city', e.target.value)}
               >
                 {cities.map((city) => (
                   <option key={city} value={city}>
@@ -161,13 +134,11 @@ import { AuthContext } from '../../context/AuthContext'
             </FormGroup>
 
             <FormGroup>
-              <Label for={`participantGender${index}`}>Jenis Kelamin</Label>
+              <Label>Jenis Kelamin</Label>
               <Input
-                id={`participantGender${index}`}
-                name={`participantGender${index}`}
                 type="select"
-                value={data.participantGender}
-                onChange={(event) => handleInputChange(index, 'participantGender', event.target.value)}
+                value={newParticipant.gender}
+                onChange={(e) => handleParticipantDataChange(index, 'gender', e.target.value)}
               >
                 {genders.map((gender) => (
                   <option key={gender} value={gender}>
@@ -178,13 +149,11 @@ import { AuthContext } from '../../context/AuthContext'
             </FormGroup>
 
             <FormGroup>
-              <Label for={`participantJob${index}`}>Select</Label>
+              <Label>Profesi</Label>
               <Input
-                id={`participantJob${index}`}
-                name={`participantJob${index}`}
                 type="select"
-                value={data.participantJob}
-                onChange={(event) => handleInputChange(index, 'participantJob', event.target.value)}
+                value={newParticipant.job}
+                onChange={(e) => handleParticipantDataChange(index, 'job', e.target.value)}
               >
                 {jobs.map((job) => (
                   <option key={job} value={job}>
@@ -193,9 +162,18 @@ import { AuthContext } from '../../context/AuthContext'
                 ))}
               </Input>
             </FormGroup>
-          </div>
-        ))}
-        <Button type="submit">Submit</Button>
+            </div>
+          ))
+        }
+        
+        <Button onClick={handleSave} disabled={!areParticipantDataChanged}>
+          Simpan
+        </Button>
+      {isSaveSuccess && (
+          <Alert color="success" className="mt-3">
+            Data berhasil disimpan.
+          </Alert>
+        )}
       </Form>
     </div>
   )

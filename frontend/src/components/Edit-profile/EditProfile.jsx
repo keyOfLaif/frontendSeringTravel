@@ -6,6 +6,17 @@ import './editProfile.css'
 
 const EditProfile = ({user, dispatch}) => {
 
+  function formatDate(dateString) {
+    if (!dateString) return ''; // Mengembalikan string kosong jika tanggal kosong
+  
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    return `${year}-${month}-${day}`;
+  }
+
   //inisiasi variabel untuk data baru dan perubahannya
   const [newUsername, setNewUsername] = useState(user.username)
   const [newEmail, setNewEmail] = useState(user.email)
@@ -114,6 +125,7 @@ const EditProfile = ({user, dispatch}) => {
         birthDate: newBirthDate,
         gender: newGender,
       }
+      console.log("data yg berubah :", newUserData)
       const res = await fetch(`${BASE_URL}/users/${user._id}`, {
         method: 'PUT',
         headers: {
@@ -193,7 +205,7 @@ const EditProfile = ({user, dispatch}) => {
         </Input>
 
         <Label>Tanggal Lahir:</Label>
-        <Input name='birthDate' type='date' value={newBirthDate} onChange={handleBirthDateChange} />
+        <Input name='birthDate' type='date' value={formatDate(newBirthDate)} onChange={handleBirthDateChange} />
 
         <Label>Jenis Kelamin:</Label>
         <Input name='gender' type='select' value={newGender} onChange={handleGenderChange}>

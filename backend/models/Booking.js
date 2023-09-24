@@ -20,31 +20,24 @@ const bookingSchema = new mongoose.Schema(
     participants:[{
       name : {
         type:String,
-        default:'',
       },
       email : {
         type:String,
-        default:'',
       },
       phone : {
         type:String,
-        default:''
       },
       city : {
         type:String,
-        default:''
       },
       gender : {
         type:String,
-        default:''
       },
       job : {
         type:String,
-        default:''
       },
       birthDay : {
         type:Date,
-        default:null
       },
     }
     ],

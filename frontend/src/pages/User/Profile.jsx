@@ -77,7 +77,7 @@ const Profile = () => {
                 {
                   profileContent.map((item, index)=>
                   <div key={index}>
-                  <h5 onClick={()=>setSelectedContent(index)}>{item.title}</h5>
+                    <h5 onClick={()=>setSelectedContent(index)}>{item.title}</h5>
                   </div>
                 )}
               </div>

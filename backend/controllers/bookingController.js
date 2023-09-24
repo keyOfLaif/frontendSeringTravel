@@ -18,7 +18,10 @@ export const createBooking = async(req,res) =>{
         name: '',
         email: '',
         phone: '',
-        // ... (field lainnya)
+        city:'',
+        gender:'',
+        job:'',
+        birthDay:'',
       });
     }
 
@@ -108,18 +111,19 @@ export const getAllBooking = async(req,res)=>{
 //updateParticipantDataBooking
 export const updateBookers = async (req, res) => {
   const bookingId = req.params.idBooking;
+  
   // const participant = req.body; // Assumption: req.body.participants is an array of participant objects
-  const participants = req.body.map((participant) => ({
-    name: participant.participantName,
-    email: participant.participantEmail,
-    phone: participant.participantPhoneNumber,
-    city: participant.participantCity,
-    gender: participant.participantGender,
-    job: participant.participantJob,
-    birthDay: participant.participantBirthDay,
-  }));
+  // const participants = req.body.map((participant) => ({
+  //   name: participant.participantName,
+  //   email: participant.participantEmail,
+  //   phone: participant.participantPhoneNumber,
+  //   city: participant.participantCity,
+  //   gender: participant.participantGender,
+  //   job: participant.participantJob,
+  //   birthDay: participant.participantBirthDay,
+  // }));
 
-  console.log("peserta : ",participants)
+  console.log("peserta : ",req.body)
   
 
   try {
@@ -127,7 +131,7 @@ export const updateBookers = async (req, res) => {
       bookingId,
       {
         $set: {
-          participants: participants
+          participants: req.body
         }
       },
       { new: true } // Ini akan mengembalikan dokumen yang sudah diperbarui
