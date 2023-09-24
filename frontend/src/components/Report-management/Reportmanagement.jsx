@@ -102,6 +102,7 @@ const Reportmanagement = () => {
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value); // Mengubah state ketika opsi select berubah
+    setSelectedTripIndex('all');
   };
 
   const selectedTripData = trips.find(trip=>trip._id === selectedOption)
