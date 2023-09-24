@@ -11,11 +11,24 @@ export const createBooking = async(req,res) =>{
 
     const userID = req.params.userID
     const scheduleID = req.params.scheduleID
+    const participantCount = req.body.participantCount
+    const participants = [];
+    for (let i = 0; i < participantCount; i++) {
+      participants.push({
+        name: '',
+        email: '',
+        phone: '',
+        // ... (field lainnya)
+      });
+    }
+
+    console.log("Jumlah peserta : ", participantCount)
     // Create a new booking instance and set the userBooking and tripBooked fields
     const newBooking = new Booking({
         ...req.body,
         userBooking: userID,
         tripBooked: scheduleID,
+        participants: participants,
     });
 
     try {

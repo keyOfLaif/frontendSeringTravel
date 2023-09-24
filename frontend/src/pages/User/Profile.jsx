@@ -56,6 +56,7 @@ const Profile = () => {
         <Row>
           <Col lg='9'>
             <div>
+              {console.log("Data user : ", user)}
               <div className='profile__information'>
                 <div className='profile__picture'>
                   <img src={profilePict} alt="" />
@@ -75,9 +76,9 @@ const Profile = () => {
               <div className='d-flex g-2'>
                 {
                   profileContent.map((item, index)=>
-                  <>
+                  <div key={index}>
                   <h5 onClick={()=>setSelectedContent(index)}>{item.title}</h5>
-                  </>
+                  </div>
                 )}
               </div>
                 
@@ -93,9 +94,6 @@ const Profile = () => {
             </div>
 
             <div>
-              
-
-
               
             </div>
             

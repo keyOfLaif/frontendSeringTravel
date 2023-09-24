@@ -102,7 +102,7 @@ const PesananTrip = ({user, dispatch}) => {
                     <Payment dataBookingProcessSent={trip}/>
                   </Collapse>
                   <Collapse isOpen={bookingStates[index].showInputData}>
-                    <BiographyForm numOfParticipants={trip.participantCount - trip.participants.length} idUpdatedData={trip._id} onSubmit={handleSubmitParticipants}/>
+                    <BiographyForm numOfParticipants={trip.participantCount} idUpdatedData={trip._id} onSubmit={handleSubmitParticipants} participantData={trip.participants}/>
                   </Collapse>
                 </div>
               </div>

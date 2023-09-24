@@ -1,9 +1,53 @@
-import React, {useState} from 'react'
+import React, {useContext, useState, useEffect} from 'react'
 import { Form, FormGroup, Label, Input, Button } from 'reactstrap'
 
 import './biographyForm.css'
+import { AuthContext } from '../../context/AuthContext'
 
-  const BiographyForm = ({numOfParticipants, idUpdatedData, onSubmit}) => {
+  const BiographyForm = ({numOfParticipants, idUpdatedData, onSubmit, participantData}) => {
+
+    const {user, dispatch} = useContext(AuthContext)
+    // console.log("Data participants : ",participantData)
+
+    const [newParticipantData, setNewParticipantData] = useState([...participantData]);
+
+    const [areParticipantDataChanged, setAreParticipantDataChanged] = useState(false);
+
+    const handleParticipantDataChange = (index, field, value) => {
+      const updatedParticipantData = [...newParticipantData];
+      updatedParticipantData[index][field] = value;
+      setNewParticipantData(updatedParticipantData);
+      setAreParticipantDataChanged(true);
+    };
+
+    const handleSave = () => {
+      // Simpan perubahan ke server (Anda perlu mengimplementasikan logika ini)
+  
+      // Setelah berhasil disimpan, perbarui state user dan reset status perubahan
+      dispatch({
+        type: 'UPDATE_USER_DATA',
+        payload: {
+          ...user,
+          participants: [...newParticipantData],
+        },
+      });
+      setAreParticipantDataChanged(false);
+    };
+
+    useEffect(() => {
+      setAreParticipantDataChanged(!arrayEquals(newParticipantData, participantData));
+    }, [newParticipantData, participantData]);
+
+    const arrayEquals = (array1, array2) => {
+      if (array1.length !== array2.length) return false;
+      for (let i = 0; i < array1.length; i++) {
+        if (array1[i].name !== array2[i].name || array1[i].email !== array2[i].email) {
+          return false;
+        }
+      }
+      return true;
+    };
+
     const initialFormData = {
       participantName: '',
       participantEmail: '',
@@ -33,7 +77,22 @@ import './biographyForm.css'
 
   return (
     <div className='frame__biographyForm'>
+      {console.log("participants : ",participantData)}
       <Form onSubmit={handleSubmit}>
+        {
+          newParticipantData.map((newParticipant, index)=>(
+            <div>
+            <FormGroup>
+              <Label for="name">Nama</Label>
+              <Input
+                value={newParticipant.name}
+                onChange={(e) => handleParticipantDataChange(index, 'namateman', e.target.value)}
+                type="string"
+              />
+            </FormGroup>
+            </div>
+          ))
+        }
         {formData.map((data, index) => (
           <div key={index}>
             <h4>Data Peserta {index+1}</h4>
