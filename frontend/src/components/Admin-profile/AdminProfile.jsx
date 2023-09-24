@@ -4,9 +4,13 @@ import { AuthContext } from '../../context/AuthContext'
 
 const AdminProfile = () => {
   const { user, dispatch } = useContext(AuthContext);
+
+  //inisiasi variabel untuk data baru dan perubahannya
   const [newUsername, setNewUsername] = useState(user.username)
   const [newEmail, setNewEmail] = useState(user.email)
   const [newFullName, setNewFullName] = useState(user.fullName)
+
+  //inisiasi variabel untuk cek perubahan data
   const [isUsernameChanged, setIsUsernameChanged] = useState(false)
   const [isEmailChanged, setIsEmailChanged] = useState(false)
   const [isFullNameChanged, setIsFullNameChanged] = useState(false)

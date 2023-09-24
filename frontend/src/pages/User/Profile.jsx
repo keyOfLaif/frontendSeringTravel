@@ -121,23 +121,7 @@ const Profile = () => {
               }
             </div>
 
-            <div>
-              <h5>Riwayat Trip</h5>
-              <h6>Trip Bromo</h6>
-              <ul className='p-0'>
-                <li>
-                  20 Januari 2019
-                </li>
-                <li>
-                  30 April 2019
-                </li>
-                <li>
-                  20 Maret 2020
-                </li>
-              </ul>
-            </div>
-
-            <div className='atur-akun' onClick={handleShowEditProfile}>
+            <div className='atur-akun mt-3' onClick={handleShowEditProfile}>
               <div className='btn__editProfile'>
                Ubah Akun <i className='ri-arrow-right-s-line'></i>
               </div> 
