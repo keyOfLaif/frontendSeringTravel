@@ -2,6 +2,8 @@ import React from 'react'
 import useFetch from '../../../hooks/useFetch'
 import { BASE_URL } from '../../../utils/config'
 
+import { Table } from 'reactstrap'
+
 const ReportPerSchedule = ({idTrip, idSchedule}) => {
   const {
     data:scheduleReport,
@@ -9,10 +11,28 @@ const ReportPerSchedule = ({idTrip, idSchedule}) => {
     error
   } = useFetch(`${BASE_URL}/report/reportPerSchedule/${idSchedule}`)
 
+  function hitungUmur(tanggalLahir) {
+    const tanggalLahirDate = new Date(tanggalLahir);
+    const tanggalSekarang = new Date();
+    
+    const selisihTahun = tanggalSekarang.getFullYear() - tanggalLahirDate.getFullYear();
+    
+    // Periksa apakah tanggal lahir sudah melewati ulang tahunnya pada tahun ini
+    if (
+      tanggalSekarang.getMonth() < tanggalLahirDate.getMonth() ||
+      (tanggalSekarang.getMonth() === tanggalLahirDate.getMonth() &&
+        tanggalSekarang.getDate() < tanggalLahirDate.getDate())
+    ) {
+      return selisihTahun - 1;
+    }
+    
+    return selisihTahun;
+  }
+
   return (
     <div className='container px-3'>
 
-        <div className='d-flex flex-wrap gy-2'>
+        <div className='d-flex flex-wrap gy-2 mt-5'>
             {/* <div className='totalReport__Card'>
                 <h6>
                     Total Trip
@@ -108,8 +128,76 @@ const ReportPerSchedule = ({idTrip, idSchedule}) => {
                     {scheduleReport.income}
                 </h5>
                 <i className="ri-wallet-2-fill iconCard"></i>
+                {
+                    console.log("DAta Peserta : ", scheduleReport.participantsData)
+                }
             </div>
         </div>
+
+        <div className='table__container bg-black'>
+        <h5>Data Peserta</h5>
+        <Table color='black'
+                bordered
+                hover
+                responsive
+                >
+                <thead>
+                    <tr>
+                    <th>
+                        No
+                    </th>
+                    <th>
+                        Nama
+                    </th>
+                    <th>
+                        Umur
+                    </th>
+                    <th>
+                        Tanggal Lahir
+                    </th>
+                    <th>
+                        P/L
+                    </th>
+                    <th>
+                        Pekerjaan
+                    </th>
+                    <th>
+                        City
+                    </th>
+                    </tr>
+                </thead>
+                <tbody>
+                  {
+                  scheduleReport.participantsData.map((participant, pIndex) => (
+                      
+                      <tr key={pIndex}>
+                        <th scope="row">
+                          {pIndex+1}
+                        </th>
+                        <td>
+                          {participant.name}
+                        </td>
+                        <td>
+                            {hitungUmur(participant.birthDay)}
+                          
+                        </td>
+                        <td>
+                          {participant.birthDay}
+                        </td>
+                        <td>
+                          {participant.gender}
+                        </td>
+                        <td>
+                          {participant.job}
+                        </td>
+                        <td>
+                          {participant.city}
+                        </td>
+                      </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
         
 
     </div>

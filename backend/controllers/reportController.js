@@ -131,7 +131,7 @@ export const getReportPerTrip = async(req,res)=>{
       res.status(200).json({
           success: true,
           message: "Berhasil memuat report trip",
-          data: trip,
+          data: {trip,
           totalSchedule,
           totalProfit,
           totalReview,
@@ -139,7 +139,7 @@ export const getReportPerTrip = async(req,res)=>{
           totalUpcomingSchedules,
           totalMaleParticipants,
           totalFemaleParticipants,
-          totalParticipants
+          totalParticipants}
       })
       
   } catch (err) {
@@ -162,6 +162,7 @@ export const getReportPerSchedule = async(req,res)=>{
         let participantsSet = new Set();
         let genderCounts = { male: 0, female: 0 };
         let cityCounts = {};
+        const participantsData = scheduleTrip.participants
 
         scheduleTrip.participants.forEach((participant) => {
         // Gunakan email peserta sebagai identifier untuk memeriksa duplikasi
@@ -193,7 +194,8 @@ export const getReportPerSchedule = async(req,res)=>{
             totalFemaleParticipants,
             totalParticipants,
             totalCity,
-            cityCounts
+            cityCounts,
+            participantsData
           }
       })
       
