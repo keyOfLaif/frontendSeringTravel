@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 
 import { Form, FormGroup, Button, Collapse, Input } from 'reactstrap'
 import useFetch from '../../hooks/useFetch'
@@ -7,12 +7,20 @@ import { BASE_URL } from '../../utils/config'
 import './tripsmanagement.css'
 
 const Tripsmanagement = () => {
+  const [trips, setTrips] = useState(null);
 
     const {
-        data:trips, 
+        data:fetchedTrips, 
         loading:loadingFetching, 
-        error:errorFetching
+        error:errorFetching,
       } = useFetch(`${BASE_URL}/trips`)
+
+      useEffect(() => {
+        if (!loadingFetching && !errorFetching) {
+          setTrips(fetchedTrips);
+        }
+      }, [fetchedTrips, loadingFetching, errorFetching]);
+
     
       const [isOpen, setIsOpen] = useState(false);
     
@@ -159,7 +167,8 @@ const Tripsmanagement = () => {
               }
             });
             const dataReponse = await response.json();
-            return alert(dataReponse.message);
+            alert(dataReponse.message);
+            setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== e));
           }
         } catch (error) {
           console.error(error);

@@ -149,9 +149,9 @@ const ReportPerSchedule = ({idTrip, idSchedule}) => {
                     <th>
                         Nama
                     </th>
-                    <th>
+                    {/* <th>
                         Umur
-                    </th>
+                    </th> */}
                     <th>
                         Tanggal Lahir
                     </th>
@@ -168,7 +168,7 @@ const ReportPerSchedule = ({idTrip, idSchedule}) => {
                 </thead>
                 <tbody>
                   {
-                  scheduleReport.participantsData.map((participant, pIndex) => (
+                  scheduleReport.participantsData?.map((participant, pIndex) => (
                       
                       <tr key={pIndex}>
                         <th scope="row">
@@ -177,10 +177,9 @@ const ReportPerSchedule = ({idTrip, idSchedule}) => {
                         <td>
                           {participant.name}
                         </td>
-                        <td>
+                        {/* <td>
                             {hitungUmur(participant.birthDay)}
-                          
-                        </td>
+                        </td> */}
                         <td>
                           {participant.birthDay}
                         </td>

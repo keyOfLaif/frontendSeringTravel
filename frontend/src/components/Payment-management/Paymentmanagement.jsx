@@ -1,13 +1,16 @@
-import React, {useEffect, useState} from 'react'
-import { Form, FormGroup, Table, Label, Input } from 'reactstrap'
+import React, {useContext, useEffect, useState} from 'react'
+import { Form, FormGroup, Table, Label, Input, Button } from 'reactstrap'
 
 import { BASE_URL } from '../../utils/config'
 import useFetch from '../../hooks/useFetch'
 import './details__booking.css'
 import ImagePrev from '../ImagePreviewComp/ImagePrev'
+import { AuthContext } from '../../context/AuthContext'
 
 
 const Paymentmanagement = () => {
+
+    const {user, dispatch} = useContext(AuthContext)
 
     const {
         data:bookings, 
@@ -142,7 +145,7 @@ const Paymentmanagement = () => {
                         Bukti Pembayaran
                     </th>
                     <th>
-                        Pembayaran
+                        Username Pemesan
                     </th>
                     <th>
                         Aksi
@@ -151,7 +154,12 @@ const Paymentmanagement = () => {
                 </thead>
                 <tbody>
                 {
-                    bookings.map((booking, index) =>
+                    bookings.filter((booking) => {
+                        if (user.role === 'admin') {
+                          return booking.bookingComplete === false;
+                        }
+                        return true; // Tampilkan semua jika user.role bukan 'admin'
+                      }).map((booking, index) =>
                     <tr key={booking._id}>
                     <th scope="row">
                         {/* {   
@@ -175,7 +183,7 @@ const Paymentmanagement = () => {
                         } 
                     </td>
                     <td>
-                    <Form>
+                    {/* <Form>
                         <FormGroup
                         check
                         inline
@@ -205,12 +213,14 @@ const Paymentmanagement = () => {
                             Pelunasan
                         </Label>
                         </FormGroup>
-                    </Form>
+                    </Form> */}
+                        {booking.userBooking.username}
+                        {console.log("data booking : ", booking)}
                     </td>
                     <td>
-                        <button onClick={()=>handleCompleteBooking(booking._id)}>
+                        <Button onClick={()=>handleCompleteBooking(booking._id)} disabled={booking.fullPaymentProofs === ''}>
                             Selesai
-                        </button>
+                        </Button>
                     </td>
                     </tr>
                     )

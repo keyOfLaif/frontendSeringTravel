@@ -92,7 +92,7 @@ export const  getBooking = async(req,res)=>{
 export const getAllBooking = async(req,res)=>{
 
     try {
-        const books = await Booking.find({})
+        const books = await Booking.find({}).populate('userBooking')
 
         res.status(200).json({
             success: true,
