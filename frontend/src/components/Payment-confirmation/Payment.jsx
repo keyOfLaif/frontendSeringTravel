@@ -35,13 +35,15 @@ const Payment = ({dataBookingProcessSent, onPaymentComplete}) => {
 
   const handleSubmit = async () => {
     const formData = new FormData();
+    const imageDirectory = "../frontend/public/paymentProofs";
     formData.append('paymentType', paymentType);
-    formData.append('paymentProof', selectedImage);
+    formData.append('imageDirectory', imageDirectory);
+    formData.append('proofsImage', selectedImage);
     
     try {
       const confirmed = window.confirm("Apakah ini sudah benar?");
       if(confirmed){
-        const response = await fetch(`${BASE_URL}/bookings/${dataBookingProcessSent._id}`, {
+        const response = await fetch(`${BASE_URL}/bookings/sendPaymentProofs/${dataBookingProcessSent._id}`, {
           method: 'PUT',
           body: formData,
         });

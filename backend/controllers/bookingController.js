@@ -340,3 +340,71 @@ export const completeBooking = async(req, res) => {
     return res.status(500).json({success:false, message:"Gagal"})
   }
 }
+
+export const changeBookingProofs = async(req, res) =>{
+  const idBooking = req.params.idBooking
+  const typeProofs = req.params.typeProofs
+
+  try {
+    const updatedBooking = await Booking.findById(idBooking)
+
+    if(!updatedBooking){
+      return res.status(404).json({success:false, message:"Booking Tidak Ditemukan"})
+    }
+
+    if(!req.file){
+      return res.status(400).json({success:false, message:"Error, tidak ada file gambar yang diunggah"})
+    }
+
+    const newProofs = `/paymentProofs/${req.file.filename}`
+
+    if(typeProofs === 'dp'){
+      fs.unlinkSync(`../frontend/public${updatedBooking.dpProofs}`)
+      updatedBooking.dpProofs = newProofs
+      updatedBooking.save()
+    }else if(typeProofs === 'fullPayment'){
+      fs.unlinkSync(`../frontend/public${updatedBooking.fullPaymentProofs}`)
+      updatedBooking.fullPaymentProofs = newProofs
+      updatedBooking.save()
+    }else{
+      return res.status(404).json({success:false, message:`Tidak ada variabel bukti pembayaran ${typeProofs}`})
+    }
+
+    res.status(200).json({success:true, message:`Berhasil mengganti bukti pembayaran ${typeProofs}`, data:newProofs})
+  } catch (error) {
+    res.status(500).json({success:false, message:"Error", data:error})
+  }
+}
+
+export const sendPaymentProofs = async(req, res) => {
+  const idBooking = req.params.idBooking
+  const typeProofs = req.body.paymentType
+  try {
+    if(!req.file){
+      return res.status(404).json({success:false, message:"File gambar tidak ditemukan, gagal mengupload"})
+    }
+
+    const uploadedProofs = req.file.filename;
+
+    const updatedBooking = await Booking.findById(idBooking)
+
+    if(!updatedBooking){
+      return res.status(404).json({success:false, message:"Data pesanan tidak ditemukan"})
+    }
+
+    if(typeProofs === "DP"){
+      updatedBooking.dpProofs = `/paymentProofs/${uploadedProofs}`
+      updatedBooking.save()
+    }else if(typeProofs === "FullPayment"){
+      updatedBooking.fullPaymentProofs = `/paymentProofs/${uploadedProofs}`
+      updatedBooking.save()
+    }else {
+      return res.status(404).json({success:false, message:`Tidak ada variabel ${typeProofs}`})
+    }
+
+    res.status(200).json({success:true, message:`Berhasil mengirimkan bukti ${typeProofs}`, data:uploadedProofs})
+
+  } catch (error) {
+    res.status(500).json({success:true, message:"Gagal, ada yang bermasalah", data:error})
+  }
+}

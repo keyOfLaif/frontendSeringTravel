@@ -72,7 +72,7 @@ const Tripsmanagement = () => {
           formData.append("city", newTrip.city);
           formData.append("address", newTrip.address);
           formData.append("desc", newTrip.desc);
-          formData.append("tripDirectory", newTrip.directory);
+          formData.append("imageDirectory", newTrip.directory);
           formData.append("featured", newTrip.featured);
           formData.append("tripImage", newTrip.tripImage);
 
@@ -103,7 +103,7 @@ const Tripsmanagement = () => {
           formData.append("city", tripDataUpdated.city);
           formData.append("address", tripDataUpdated.address);
           formData.append("desc", tripDataUpdated.desc);
-          formData.append("tripDirectory", tripDataUpdated.directory);
+          formData.append("imageDirectory", tripDataUpdated.directory);
           formData.append("tripImage", tripDataUpdated.tripImage);
 
           const res = await fetch(`${BASE_URL}/trips/${editBox}`, {

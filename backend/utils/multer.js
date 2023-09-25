@@ -4,11 +4,11 @@ import multer from "multer";
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     console.log(req.body)
-    if(!req.body.tripDirectory){
+    if(!req.body.imageDirectory){
       // Mengirim respons kesalahan jika direktori tidak dideklarasikan
       return cb(new Error("Direktori penyimpanan belum dideklarasi"), null);
     }
-    cb(null, req.body.tripDirectory);
+    cb(null, req.body.imageDirectory);
   },
   filename: (req, file, cb) => {
     // Nama file akan menjadi timestamp + nama asli file

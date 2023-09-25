@@ -45,7 +45,7 @@ export const updateTrip = async(req,res)=>{
 
     try {
         const id = req.params.id
-        const { title, city, address, desc, ...restOf } = req.body;
+        const { title, city, address, desc } = req.body;
         const dataForUpdate = {};
         if(title !== ""){
             dataForUpdate.title = title
@@ -61,7 +61,7 @@ export const updateTrip = async(req,res)=>{
         }
 
         const oldTripData = await Trip.findById(id);
-        console.log("datanya : ", req.body)
+        console.log("datanya : ", req.file.filename)
 
         //Jika user tidak merubah gambar trip
         if (!req.file) {
