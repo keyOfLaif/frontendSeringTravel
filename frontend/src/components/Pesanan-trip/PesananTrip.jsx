@@ -12,11 +12,13 @@ import { BASE_URL } from '../../utils/config'
 import './pesananTrip.css'
 
 const PesananTrip = ({user, dispatch}) => {
-  const initialBookingStates = user.bookings.map(() => ({
+  const initialBookingStates = user.bookings.filter(booking => booking.bookingComplete === false)
+  .map(() => ({
     showPayment: false,
     showInputData: false,
     showPaymentProofs: false,
   }));
+
   const [bookingStates, setBookingStates] = useState(initialBookingStates);
 
   const handleSubmitParticipants = async (arrayParticipants, idUpdatedData) =>{
@@ -91,7 +93,7 @@ const PesananTrip = ({user, dispatch}) => {
   return (
     <div>
         {
-            user.bookings.map((trip, index)=>
+            user.bookings.filter(booking => booking.bookingComplete === false).map((trip, index)=>
               (
                 <div key={index} className='d-flex w-100'>
                   <img src={trip.tripBooked.productIdofTrip.photo} alt='tripImage' style={{width:'80px',height:'100px',objectFit:'cover', marginRight:'0.75rem'}} />
@@ -121,6 +123,8 @@ const PesananTrip = ({user, dispatch}) => {
                         </div>
                       </div>
                     </div>
+
+                    {/* Komponen */}
                     <div>
                       <Collapse isOpen={bookingStates[index].showPayment}>
                         <Payment dataBookingProcessSent={trip} onPaymentComplete={() => handleShowPayment(index)}/>
@@ -137,6 +141,7 @@ const PesananTrip = ({user, dispatch}) => {
                         </div>
                       </Collapse>
                     </div>
+
                   </div>
                 </div>
               )

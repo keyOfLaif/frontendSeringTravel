@@ -1,4 +1,5 @@
 import Trip from '../models/Trip.js'
+import Schedule from '../models/Schedule.js';
 import fs from 'fs';
 
 // create new Trip
@@ -231,7 +232,15 @@ export const getTripBySearch = async(req,res)=>{
 export const getFeaturedTrip = async(req,res)=>{
 
     try {
-        const trips = await Trip.find({featured:true}).populate('reviews').populate('schedules').limit(8);
+        const currentDate = new Date();
+        const scheduleIds = await Schedule.find({
+            tripDate: { $gt: currentDate }
+        }).distinct('_id');
+          
+          // Langkah 2: Mencari Trip dengan field schedules yang mengandung ID dari Schedules yang sesuai
+        const trips = await Trip.find({
+        'schedules': { $in: scheduleIds }
+        }).populate('reviews').populate('schedules');
 
         res
         .status(200)

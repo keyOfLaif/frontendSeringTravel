@@ -26,7 +26,7 @@ const Profile = () => {
     },
     {
       title : 'Riwayat',
-      content : <RiwayatPesananTrip/>
+      content : <RiwayatPesananTrip user={user}/>
     }
   ]
 
@@ -73,11 +73,11 @@ const Profile = () => {
 
             
             <div className='ps-0 p-4'>
-              <div className='d-flex g-2'>
+              <div className='d-flex g-2 mb-3'>
                 {
                   profileContent.map((item, index)=>
-                  <div key={index}>
-                    <h5 onClick={()=>setSelectedContent(index)}>{item.title}</h5>
+                  <div style={{cursor:'pointer'}} key={index} className={`me-2 ${index === selectedContent ? 'selectedTabUserProfile' : ''}`} onClick={()=>setSelectedContent(index)}>
+                    {item.title}
                   </div>
                 )}
               </div>

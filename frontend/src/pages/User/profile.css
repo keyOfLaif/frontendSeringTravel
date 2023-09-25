@@ -98,3 +98,9 @@
     border-radius: 50%;
     object-position: 20% 20%;
 }
+
+.selectedTabUserProfile{
+    background-color: white;
+    color: #35abfa;
+    border-bottom: 1px solid #35abfa;
+}
