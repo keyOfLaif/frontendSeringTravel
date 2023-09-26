@@ -201,7 +201,7 @@ export const deleteBooking = async(req,res) =>{
         const deleteBooking = await Booking.findById(bookingId)
 
         if(!deleteBooking){
-            return res.status(400).json({success: false, message: "data pesanan tidak ditemukan"})
+            return res.status(404).json({success: false, message: "data pesanan tidak ditemukan"})
         }
 
         const deleteBookingOnUser = await User.findByIdAndUpdate(deleteBooking.userBooking._id,{

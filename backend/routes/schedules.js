@@ -1,6 +1,6 @@
 
 import express from 'express'
-import { createSchedule, getAllSchedules, updateSchedule } from '../controllers/scheduleController.js'
+import { createSchedule, deleteSchedule, getAllSchedules, updateSchedule } from '../controllers/scheduleController.js'
 
 
 const router = express.Router()
@@ -8,5 +8,6 @@ const router = express.Router()
 router.post('/:tripId', createSchedule)
 router.get('/', getAllSchedules)
 router.put('/:idSchedule', updateSchedule)
+router.delete('/deleteSchedule/:idSchedule', deleteSchedule)
 
 export default router

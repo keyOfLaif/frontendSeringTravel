@@ -159,7 +159,7 @@ const Tripsmanagement = () => {
       
       const deleteTrip = async (e) => {
         try {
-          const confirmed = window.confirm("Apakah Anda yakin ingin menghapus Trip ini ? ", e.username);
+          const confirmed = window.confirm("Apakah Anda yakin ingin menghapus Trip ini?", e.username);
           if(confirmed){
             const response = await fetch(`${BASE_URL}/trips/deleteTrip/${e}`, {
               method: 'DELETE',
@@ -170,6 +170,25 @@ const Tripsmanagement = () => {
             const dataReponse = await response.json();
             alert(dataReponse.message);
             setTrips((prevTrips) => prevTrips.filter((trip) => trip._id !== e));
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      const deleteSchedule = async (e) => {
+        try {
+          const confirmed = window.confirm("Apakah Anda yakin ingin menghapus Jadwal ini?");
+          if(confirmed){
+            const response = await fetch(`${BASE_URL}/schedules/deleteSchedule/${e}`, {
+              method: 'DELETE',
+              headers: {
+                'content-type': 'application/json',
+              }
+            });
+            const dataReponse = await response.json();
+            alert(dataReponse.message);
+            setTrips((prevTrips) => prevTrips.schedules.filter((schedule) => schedule._id !== e));
           }
         } catch (error) {
           console.error(error);
@@ -212,8 +231,8 @@ const Tripsmanagement = () => {
                           <div onClick={()=>toggleEdit(seringTrip._id)} className='btn__editTripData me-2 ms-2'>
                             Ubah<i className="ri-edit-box-fill"></i>
                           </div>
-                          <div className='btn__deleteTrip' onClick={()=>deleteTrip(seringTrip._id)}>
-                            Hapus<i className="ri-delete-bin-2-line"></i>
+                          <div className='btn__deleteTrip' onClick={()=>deleteSchedule(scheduleTrip._id)}>
+                            Hapus Jadwal<i className="ri-delete-bin-2-line"></i>
                           </div>
                         </div>
                       ))

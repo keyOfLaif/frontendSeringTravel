@@ -86,15 +86,30 @@ export const updateSchedule = async(req,res)=>{
 
 //delete Schedule
 export const deleteSchedule = async(req,res)=>{
-    const id = req.params.idSchedule;
+    const scheduleId = req.params.idSchedule;
 
     try {
-        await Schedule.findByIdAndDelete(id)
+        const scheduleToDelete = await Schedule.findByIdAndDelete(scheduleId)
+
+        if(!scheduleToDelete){
+            return res.status(404).json({success: false, message: "data jadwal tidak ditemukan"})
+        }
+
+        const deleteScheduleOnTrip = await Trip.findByIdAndUpdate(scheduleToDelete.productIdofTrip,{
+            $pull : {schedules: scheduleId}
+        })
+  
+        if(!deleteScheduleOnTrip){
+        return res.status(400).json({success: false, message: "data pesanan belum terhapus"})
+        }
+
+        const deletedSchedule = await scheduleToDelete.deleteOne()
 
         res.status(200).json(
             {
                 success: true,
-                message: "Trip berhasil dihapus.",
+                message: "Jadwal berhasil dihapus.",
+                data: deletedSchedule
             })
         
     } catch (err) {
@@ -102,7 +117,7 @@ export const deleteSchedule = async(req,res)=>{
             .status(500)
             .json({
                 success: false,
-                message: "Trip gagal dihapus.",
+                message: "Jadwal gagal dihapus.",
             })
     }
 }
