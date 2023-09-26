@@ -1,5 +1,5 @@
 import express from 'express'
-import { createBooking, getAllBooking, getBooking, updateBookingStatus, deleteBooking, payBooking, updateBookers, completeBooking, changeBookingProofs, sendPaymentProofs } from '../controllers/bookingController.js';
+import { createBooking, getAllBooking, getBooking, updateBookingStatus, deleteBooking, updateBookers, completeBooking, changeBookingProofs, sendPaymentProofs } from '../controllers/bookingController.js';
 import { verifyAdmin, verifyUser } from '../utils/verifyToken.js'
 import multer from 'multer';
 import { upload } from '../utils/multer.js';
@@ -13,7 +13,6 @@ router.get('/', getAllBooking)
 router.delete('/:idBooking', deleteBooking)
 router.put('/updateBookingStatus/:idBooking/:paymentStage', updateBookingStatus)
 router.put('/completeBooking/:idBooking', completeBooking)
-router.put('/:idBooking', payBooking)
 router.put('/sendPaymentProofs/:idBooking', upload.single('proofsImage'), sendPaymentProofs)
 router.put('/updateBookers/:idBooking', updateBookers)
 router.put('/changeBookingProofs/:idBooking/:typeProofs', upload.single('proofsImage'), changeBookingProofs)

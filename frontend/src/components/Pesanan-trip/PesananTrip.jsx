@@ -4,14 +4,36 @@ import {
   Row,
   Col,
   Container,
-  Collapse
+  Collapse,
+  Button
 } from 'reactstrap';
 import Payment from '../Payment-confirmation/Payment';
 import BiographyForm from '../Biography-form/BiographyForm';
 import { BASE_URL } from '../../utils/config'
 import './pesananTrip.css'
+import ImagePreview from '../InputImagePreview/ImagePreview';
 
 const PesananTrip = ({user, dispatch}) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState('');
+
+
+  const handleImageInputted = (event) =>{
+    const file = event.target.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    const maxSizeInBytes = 5 * 1024 * 100 ; // 500 Kb
+
+    if (file && allowedTypes.includes(file.type) && file.size <= maxSizeInBytes) {
+      setSelectedImage(file);
+      setErrorMessage('');
+    } else {
+      setSelectedImage(null);
+      setErrorMessage('Please select a valid image file (JPEG or PNG) within 200Kb.');
+    }
+
+  }
+
+
   const initialBookingStates = user.bookings.filter(booking => booking.bookingComplete === false)
   .map(() => ({
     showPayment: false,
@@ -64,6 +86,55 @@ const PesananTrip = ({user, dispatch}) => {
     };
     setBookingStates(updatedBookingStates);
   }
+
+  const handleChangePaymentProofs = async (idBookingToChange, paymentTypeToChange) => {
+    try {
+      const formData = new FormData();
+      formData.append('paymentTypeToChange', paymentTypeToChange);
+      formData.append('proofsImage', selectedImage);
+  
+      const confirmed = window.confirm("Apakah anda yakin akan mengganti bukti pembayaran?");
+      if (confirmed) {
+        const response = await fetch(`${BASE_URL}/bookings/changeBookingProofs/${idBookingToChange}/${paymentTypeToChange}`, {
+          method: 'PUT',
+          body: formData, // Menggunakan formData untuk mengirim file
+        });
+  
+        if (response.ok) {
+          const dataResponse = await response.json();
+          const updatedBookings = user.bookings.map((booking) => {
+            if (booking._id === idBookingToChange) {
+              if (paymentTypeToChange === 'dp') {
+                return {
+                  ...booking,
+                  dpProofs: dataResponse.updatedProofsURL,
+                };
+              } else if (paymentTypeToChange === 'full') {
+                return {
+                  ...booking,
+                  fullPaymentProofs: dataResponse.updatedProofsURL,
+                };
+              }
+            }
+            return booking;
+          });
+  
+          const userDataUpdated = {
+            ...user,
+            bookings: updatedBookings,
+          };
+  
+          dispatch({ type: 'UPDATE_USER_DATA', payload: userDataUpdated });
+          alert(dataResponse.message);
+        } else {
+          alert("Gagal mengganti bukti pembayaran.");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Terjadi kesalahan saat mengganti bukti pembayaran.");
+    }
+  };
 
   const deleteBooking = async (e) => {
     try {
@@ -135,11 +206,28 @@ const PesananTrip = ({user, dispatch}) => {
                       <Collapse isOpen={bookingStates[index].showPaymentProofs}>
                         <div>
                           <h6>Bukti DP</h6>
-                          <img style={{maxWidth:'400px'}} src={trip.dpProofs} alt="" />
+                          <img style={{ maxWidth: '400px' }} src={trip.dpProofs} alt="Bukti DP" />
+                          <div>
+                            <input type="file" accept="image/*" onChange={(e) => handleImageInputted(e, 'dp')} />
+                            <ImagePreview selectedImage={selectedImage.dp} />
+                            <Button disabled={!selectedImage.dp} onClick={() => handleChangePaymentProofs(trip._id, 'dp')}>
+                              Ganti Bukti DP
+                            </Button>
+                          </div>
+
                           <h6>Bukti Pelunasan</h6>
-                          <img style={{maxWidth:'400px'}} src={trip.fullPaymentProofs} alt="" />
+                          <img style={{ maxWidth: '400px' }} src={trip.fullPaymentProofs} alt="Bukti Pelunasan" />
+                          <div>
+                            <input type="file" accept="image/*" onChange={(e) => handleImageInputted(e, 'full')} />
+                            <ImagePreview selectedImage={selectedImage.full} />
+                            <Button disabled={!selectedImage.full} onClick={() => handleChangePaymentProofs(trip._id, 'full')}>
+                              Ganti Bukti Pelunasan
+                            </Button>
+                          </div>
                         </div>
                       </Collapse>
+
+
                     </div>
 
                   </div>

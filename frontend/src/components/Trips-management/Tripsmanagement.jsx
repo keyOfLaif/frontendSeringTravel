@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react'
 
-import { Form, FormGroup, Button, Collapse, Input } from 'reactstrap'
-import useFetch from '../../hooks/useFetch'
-import { BASE_URL } from '../../utils/config'
+import { Form, FormGroup, Button, Collapse, Input } from 'reactstrap';
+import useFetch from '../../hooks/useFetch';
+import { BASE_URL } from '../../utils/config';
+import FormatDate from '../../shared/FormatDate';
 
-import './tripsmanagement.css'
+import './tripsmanagement.css';
+
 
 const Tripsmanagement = () => {
   const [trips, setTrips] = useState(null);
@@ -52,16 +54,16 @@ const Tripsmanagement = () => {
       const [maxParticipant, setMaxParticipant] = useState(null);
       const [price, setPrice] = useState(null);
     
-      const [editBox, setEditBox] = useState(null);
-      const [editSchedule, setEditSchedule] = useState(null);
+      const [editTrip, setEditTrip] = useState(null);
+      const [addNewSchedule, setAddNewSchedule] = useState(null);
       const [errorUploadImageTrip, setErrorFetching] = useState('')
       
-      const toggleEditSchedule = (content) =>  {
-          setEditSchedule(content === editSchedule ? null : content);
+      const toggleAddNewSchedule = (content) =>  {
+          setAddNewSchedule(content === addNewSchedule ? null : content);
       };
     
       const toggleEdit = (content) =>  {
-          setEditBox(content === editBox ? null : content);
+          setEditTrip(content === editTrip ? null : content);
       };
 
       const createNewTrip = async e => {
@@ -92,7 +94,7 @@ const Tripsmanagement = () => {
           setErrorFetching(err.message);
           alert(err.message);
         }
-        setEditBox(null);
+        setEditTrip(null);
       }
   
       const submitUpdate = async e => {
@@ -106,7 +108,7 @@ const Tripsmanagement = () => {
           formData.append("imageDirectory", tripDataUpdated.directory);
           formData.append("tripImage", tripDataUpdated.tripImage);
 
-          const res = await fetch(`${BASE_URL}/trips/${editBox}`, {
+          const res = await fetch(`${BASE_URL}/trips/${editTrip}`, {
             method: 'put',
             body: formData
           })
@@ -121,9 +123,8 @@ const Tripsmanagement = () => {
         } catch (err) {
           alert(err.message)
         }
-        setEditBox(null);
+        setEditTrip(null);
       }
-    
     
       const submitNewTripDate = async e => {
         e.preventDefault()
@@ -134,7 +135,7 @@ const Tripsmanagement = () => {
             maxParticipants : maxParticipant,
             price : price,
           }
-          const res = await fetch(`${BASE_URL}/schedules/${editSchedule}`,{
+          const res = await fetch(`${BASE_URL}/schedules/${addNewSchedule}`,{
             method: 'post',
             headers: {
               'content-type':'application/json'
@@ -155,7 +156,7 @@ const Tripsmanagement = () => {
         }
         
       }
-
+      
       const deleteTrip = async (e) => {
         try {
           const confirmed = window.confirm("Apakah Anda yakin ingin menghapus Trip ini ? ", e.username);
@@ -177,65 +178,70 @@ const Tripsmanagement = () => {
 
     return (
       <div className='p-3'>
-        <h4>Trips</h4>
+        <div>
+          <h4>Trips</h4>
           {
-            trips?.map(trip => (
-              <div key={trip._id} lg='3' md='6' sm='6' className='mb-4'>
-                <div className='d-flex align-items-baseline'>
-                  <div className='trip__photo me-2'>
-                    <img src={trip.photo} alt="" />
+            trips?.map((seringTrip, index) => (
+              <div className='border-bottom mb-3'>
+                <div key={index} className='d-flex mb-3'>
+                  <div className='d-flex flex-column'>
+                    <img style={{width:'200px',height:'100px',objectFit:'fill'}} src={seringTrip.photo} alt="" srcset="" />
+                    <div>
+                      <h6>{seringTrip.title}</h6>
+                    </div>
+
+                    <div className='d-flex me-4'>
+                      <div onClick={()=>toggleEdit(seringTrip._id)} className='btn__editTripData me-2'>
+                        Ubah<i className="ri-edit-box-fill"></i>
+                      </div>
+
+                      <div className='btn__addScheduleTrip me-2' onClick={()=>toggleAddNewSchedule(seringTrip._id)}>
+                        Tambah<i className="ri-add-line"></i>
+                      </div>
+
+                      <div className='btn__deleteTrip' onClick={()=>deleteTrip(seringTrip._id)}>
+                        Hapus<i className="ri-delete-bin-2-line"></i>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <h6 className='m-0'>{trip.title}</h6>
+                  <div className='schedule__Columns'>
                     {
-                      trip.schedules && trip.schedules.length > 0 ? (
-                        <p>Jadwal Trip: {trip.schedules.length}</p>
-                        ) : (
-                        <p>Tidak ada jadwal untuk trip ini.</p>
-                      )
+                      seringTrip.schedules?.map((scheduleTrip, indexS)=>(
+                        <div key={indexS} style={{color:'white'}} className='d-flex'>
+                          <FormatDate dateString={scheduleTrip.tripDate}/>
+                          <div onClick={()=>toggleEdit(seringTrip._id)} className='btn__editTripData me-2 ms-2'>
+                            Ubah<i className="ri-edit-box-fill"></i>
+                          </div>
+                          <div className='btn__deleteTrip' onClick={()=>deleteTrip(seringTrip._id)}>
+                            Hapus<i className="ri-delete-bin-2-line"></i>
+                          </div>
+                        </div>
+                      ))
                     }
                   </div>
-                  <div className='d-flex ms-4'>
-                    <div onClick={()=>toggleEdit(trip._id)} className='btn__editTripData me-2'>
-                      Ubah<i className="ri-edit-box-fill"></i>
-                    </div>
-
-                    <div className='btn__addScheduleTrip me-2' onClick={()=>toggleEditSchedule(trip._id)}>
-                      Tambah<i className="ri-add-line"></i>
-                    </div>
-
-                    <div className='btn__deleteTrip' onClick={()=>deleteTrip(trip._id)}>
-                      Hapus<i className="ri-delete-bin-2-line"></i>
-                    </div>
-
-
-                  </div>
                 </div>
-
-              
-                {/*form for showing the current data and inputting the new updated data*/}
                 {
-                    editBox === trip._id && (
+                    editTrip === seringTrip._id && (
                     <form onSubmit={submitUpdate}>
                       <div className="mb-3">
                         <label htmlFor="judulTrip" className="form-label">Judul Trip</label>
-                        <input type="text" className="form-control" id="title" placeholder={trip.title} aria-describedby="emailHelp" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, title: e.target.id === 'title' && e.target.value === "" ? (trip.title) : (e.target.value) })}/>
+                        <input type="text" className="form-control" id="title" placeholder={seringTrip.title} aria-describedby="emailHelp" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, title: e.target.id === 'title' && e.target.value === "" ? (seringTrip.title) : (e.target.value) })}/>
                         <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="daerahTrip" className="form-label">Daerah Tujuan Trip</label>
-                        <input type="text" className="form-control" placeholder={trip.city} id="city" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, city: e.target.id === 'city' && e.target.value === "" ? (trip.city) : (e.target.value) })}/>
+                        <input type="text" className="form-control" placeholder={seringTrip.city} id="city" onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, city: e.target.id === 'city' && e.target.value === "" ? (seringTrip.city) : (e.target.value) })}/>
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="alamatTrip" className="form-label">Alamat Tujuan Trip</label>
-                        <input type="text" className="form-control" id="address" placeholder={trip.address} onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, address: e.target.id === 'address' && e.target.value === "" ? (trip.address) : (e.target.value) })}/>
+                        <input type="text" className="form-control" id="address" placeholder={seringTrip.address} onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, address: e.target.id === 'address' && e.target.value === "" ? (seringTrip.address) : (e.target.value) })}/>
                       </div>
 
                       <div className="mb-3">
                         <label htmlFor="deskripsiTrip" className="form-label">Deskripsi Trip</label>
-                        <input type="text" className="form-control" id="desc" placeholder={trip.desc} onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, desc: e.target.id === 'desc' && e.target.value === "" ? (trip.desc) : (e.target.value) })}/>
+                        <input type="text" className="form-control" id="desc" placeholder={seringTrip.desc} onChange={(e) => setTripDataUpdated({ ...tripDataUpdated, desc: e.target.id === 'desc' && e.target.value === "" ? (seringTrip.desc) : (e.target.value) })}/>
                       </div>
 
                       <div className="mb-3">
@@ -248,7 +254,7 @@ const Tripsmanagement = () => {
                     )
                 }
                 {
-                    editSchedule === trip._id && (
+                    addNewSchedule === seringTrip._id && (
                       //Jadwal Baru
                     <Form onSubmit={submitNewTripDate}>
                     <div className='row row-cols-4 gap-2'>
@@ -283,7 +289,7 @@ const Tripsmanagement = () => {
                         <Button size='sm' className="btn secondary__btn auth__btn" type="submit">
                         Add
                         </Button>
-                        <Button onClick={()=>toggleEditSchedule(trip._id)} size='sm' className="btn secondary__btn auth__btn" type='reset'>
+                        <Button onClick={()=>toggleAddNewSchedule(seringTrip._id)} size='sm' className="btn secondary__btn auth__btn" type='reset'>
                         Cancel
                         </Button>
                         </div>
@@ -291,11 +297,10 @@ const Tripsmanagement = () => {
                     </Form>
                     )
                 }
-              
               </div>
-              )
-            )
+            ))
           }
+        </div>
           
          
             <div style={{width:'min-content', margin:'0 auto'}}>

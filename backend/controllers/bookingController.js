@@ -240,67 +240,6 @@ export const deleteBooking = async(req,res) =>{
     }
 }
 
-//sending payment proof
-export const payBooking = async (req, res) => {
-  const bookingId = req.params.idBooking;
-
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, '../frontend/public/paymentProofs'); // Ganti dengan direktori yang sesuai
-    },
-    filename: (req, file, cb) => {
-      // const paymentType = req.body.paymentType;
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      // const paymentProofName = paymentType; // Gunakan paymentType sebagai nama file
-      const fileExtension = file.originalname.split('.').pop();
-      const fileName = `${uniqueSuffix}.${fileExtension}`;
-      cb(null, fileName);
-    },
-  });
-
-  const upload = multer({ storage: storage });
-
-  try {
-    // Handle upload di dalam fungsi payBooking
-    upload.single('paymentProof')(req, res, async (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Error uploading paymentProof' });
-      }
-
-      const paymentProof = req.file.filename;
-
-      // Menentukan objek bukti pembayaran sesuai dengan paymentTypes
-      let updateFields = {};
-      if (req.body.paymentType === 'DP') {
-        updateFields.dpProofs = `/paymentProofs/${paymentProof}`;
-      } else if (req.body.paymentType === 'FullPayment') {
-        updateFields.fullPaymentProofs = `/paymentProofs/${paymentProof}`;
-      }
-
-      try {
-        const updatedBooking = await Booking.findByIdAndUpdate(
-          bookingId,
-          { $set: updateFields },
-          { new: true }
-        );
-
-        console.log("Data yang dirubah ", updateFields)
-
-        if (!updatedBooking) {
-          return res.status(404).json({ message: 'Booking not Found' });
-        }
-          return res.status(200).json({success: true, message: 'Payment processed Successfully', data: updateFields});
-        } catch (err) {
-          return res.status(500).json({ message: 'Error updating booking data' });
-        }
-      });
-    } catch (err) {
-      console.log("Errornya : ", err);
-      return res.status(500).json({ message: 'Internal Server Error' });
-  }
-};
-
 export const completeBooking = async(req, res) => {
   const idBooking = req.params.idBooking;
   const statusBooking = req.body.statusBooking;
